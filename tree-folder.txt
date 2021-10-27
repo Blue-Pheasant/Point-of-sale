@@ -1,0 +1,49 @@
+Folder PATH listing for volume OS
+Volume serial number is 1618-99B0
+C:.
+|   index.php
+|   README.md
+|   tre-foder.txt
+|   tre-folder.txt
+|   tree-folder.txt
+|   
++---.git
+|
++---.idea
+|       .gitignore
+|       modules.xml
+|       thecoffehouse.iml
+|       vcs.xml
+|       workspace.xml
+|       
++---bootstrap
+|   +---css
+|   |
+|   \---js
+|
++---config
+|       config.php
+|       
++---fonts
+|       nucleo-icons.eot
+|       nucleo-icons.ttf
+|       nucleo-icons.woff
+|       nucleo-icons.woff2
+|       
++---img
+|       test.png
+|       
++---js
+|       test.js
+|       
++---migration
+|       m0001_initial.php
+|       m0002_add_password_column.php
+|       
++---models
+|       customer.php
+|       customerclass.php
+|       
+\---views
+        dashboard.php
+        
