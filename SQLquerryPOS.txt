@@ -1,0 +1,170 @@
+use master
+go
+drop database POSdb
+go
+create database POSdb
+go
+use POSdb
+go
+create table Store
+(
+	id char(5) not null primary key,
+	status tinyint default 0,
+	address nvarchar(50),
+	image_url nvarchar(50),
+	created_at smalldatetime not null,
+	updated_at smalldatetime not null
+)
+go
+------------------------------------------------------------------
+create table Administrator
+(
+	id char(5) not null primary key,
+	firstname nvarchar(20),
+	lastname nvarchar(20),
+	username nvarchar(28) not null,
+	password nvarchar(24) not null,
+	position nvarchar(20),
+	created_at smalldatetime not null,
+	updated_at smalldatetime not null
+)
+go
+
+------------------------------------------------------------------
+create table Category
+(
+	id char(5) not null primary key,
+	name nvarchar(30),
+	created_at smalldatetime not null,
+	updated_at smalldatetime not null
+)
+go
+------------------------------------------------------------------
+create table Customer
+(
+	id char(5) not null primary key,
+	firstname nvarchar(20),
+	lastname nvarchar(20),
+	email nvarchar(30) not null,
+	phone_number nvarchar(15) not null,
+	password nvarchar(24) not null,
+	image_url nvarchar(50),
+	address nvarchar(50),
+	province_id char(2),
+	district_id char(3),
+	ward_id char(5),
+	created_at smalldatetime not null,
+	updated_at smalldatetime not null
+)
+go
+------------------------------------------------------------------
+create table Product
+(
+	id char(5) not null primary key,
+	category_id char(5) not null references Category(id),
+	name nvarchar(30) not null,
+	image_url nvarchar(50),
+	price money not null,
+	description nvarchar(500),
+	created_at smalldatetime not null,
+	updated_at smalldatetime not null
+)
+go
+------------------------------------------------------------------
+create table Cart
+(
+	id char(5) not null primary key,
+	customer_id char(5) not null references Customer(id),
+	status tinyint default 0,
+	created_at smalldatetime not null,
+	updated_at smalldatetime not null
+)
+go
+------------------------------------------------------------------
+create table OrderList
+(
+	id char(5) not null primary key,
+	customer_id char(5) not null references Customer(id),
+	payment_method tinyint,
+	status tinyint default 0,
+	created_at smalldatetime not null,
+	updated_at smalldatetime not null
+)
+go
+------------------------------------------------------------------
+create table OrderDetail
+(
+	id char(10) not null primary key,
+	product_id char(5) not null references Product(id),
+	order_id char(5) not null references OrderList(id),
+	quantity int,
+	created_at smalldatetime not null,
+	updated_at smalldatetime not null
+)
+go
+------------------------------------------------------------------
+create table CartDetail
+(
+	id char(10) not null primary key,
+	product_id char(5) not null references Product(id),
+	cart_id char(5) not null references Cart(id),
+	quantity int,
+	note nvarchar(500),
+	created_at smalldatetime not null,
+	updated_at smalldatetime not null
+)
+go
+------------------------------------------------------------------
+create table FeedBack
+(
+	id char(10) not null primary key,
+	customer_id char(5) not null references Customer(id),
+	Product_id char(5) not null references Product(id),
+	star tinyint,
+	comment nvarchar(500),
+	created_at smalldatetime not null
+)
+go
+---------------------------------------------------------
+---------------------------------------------------------
+---------------------------------------------------------
+-- auto update ID
+create function AutoUpdateId5(@Xcount int)
+returns char(5)
+as
+	begin
+		declare @num int
+		declare @id char(5)
+		set @num=@Xcount
+		if (@num=0)
+			begin
+				set @id='10001'
+			end
+		else
+			begin
+				set @num=@num +10001
+				set @id=CAST(@num as char(5))
+			end
+		return @id
+	end
+go
+-- FeedBack update id
+create function AutoUpdateId10(@ProductId char, @CustomerId char)
+returns char(10)
+as
+	begin
+		declare @id char(10)
+		set @id=@ProductId  + @CustomerId
+		return @id
+	end
+go
+
+insert Store values(dbo.AutoUpdateId5((select count(Store.id) from Store)),1,'Ho Chi Minh','','12/2/2012','12/2/2012')
+insert Store values(dbo.AutoUpdateId5((select count(Store.id) from Store)),1,'Ho Chi Minh','','12/2/2012','12/2/2012')
+insert Store values(dbo.AutoUpdateId5((select count(Store.id) from Store)),1,'Ho Chi Minh','','12/2/2012','12/2/2012')
+insert Store values(dbo.AutoUpdateId5((select count(Store.id) from Store)),1,'Ho Chi Minh','','12/2/2012','12/2/2012')
+insert Store values(dbo.AutoUpdateId5((select count(Store.id) from Store)),1,'Ho Chi Minh','','12/2/2012','12/2/2012')
+insert Store values(dbo.AutoUpdateId5((select count(Store.id) from Store)),1,'Ho Chi Minh','','12/2/2012','12/2/2012')
+insert Store values(dbo.AutoUpdateId5((select count(Store.id) from Store)),1,'Ho Chi Minh','','12/2/2012','12/2/2012')
+insert Store values(dbo.AutoUpdateId5((select count(Store.id) from Store)),1,'Ho Chi Minh','','12/2/2012','12/2/2012')
+go
