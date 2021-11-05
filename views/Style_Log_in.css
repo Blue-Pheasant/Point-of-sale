@@ -1,0 +1,125 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP&display=swap');
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: 'Noto Sans JP', sans-serif;
+}
+ul {
+    list-style: none;
+}
+a {
+  text-decoration: none;
+}
+
+.tp {
+  background-color: #FEFBDF ;
+}
+.container {
+  margin: auto;
+  max-width: 1200px;
+}
+.container {
+  padding: 16px;
+}
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  
+}
+.row .logo img {
+  width: 80px;
+  display: inline-block;
+}
+
+.listmember{
+  display: inline-block;
+  width: 80%;
+  transition: 0.5s ease;
+}
+
+.listmem{
+  display: inline-block;
+  margin:  2px 20px;
+  padding: 10px 30px;
+  color: white;
+  font-weight: 700;
+  font-size: large;
+  
+
+}
+
+
+form {
+    border: 3px solid #f1f1f1;
+    padding: 10px 10px 20px 10px;
+    border-radius: 20px;
+    width: 50%;
+    margin: 50px auto;
+    background-color: #FEFBDF;
+  }
+  h1, label{
+    color: DodgerBlue;
+  }
+  /* Full-width inputs */
+  input[type=text], input[type=password] {
+    width: 100%;
+    padding: 15px;
+    margin: 5px 0 22px 0;
+    display: inline-block;
+    border: none;
+    resize: vertical;
+    border-radius:15px;
+    box-shadow:4px 4px 10px rgba(0,0,0,0.2);
+  }
+  
+  /* Set a style for all buttons */
+  button {
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    opacity: 0.9;
+  }
+  .login {
+    background-color: #4CAF50;
+    float: left;
+    width: 100%;
+    border-radius:15px;
+    border:0;
+    box-shadow:4px 4px 10px rgba(0,0,0,0.2);
+    font-size: large;
+  }
+  
+  /* Add a hover effect for buttons */
+  button:hover {
+    opacity: 1;
+  }
+
+.forgotpw {
+    padding: 15px 10px;
+    display: flex;
+    justify-content: center;
+    font-size: small;
+}
+hr{
+    border: 1px solid #f1f1f1;
+    margin-bottom: 25px;
+    height: 2px;
+  }
+.sign_up{
+    text-decoration: none;
+    background-color: #3871B9;
+    border-radius:15px;
+    border:0;
+    box-shadow:4px 4px 10px rgba(0,0,0,0.2);
+    margin: 0 auto;
+    width: 50%;
+    display: block;
+    opacity: 0.9;
+    
+}
+
+
