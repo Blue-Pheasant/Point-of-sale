@@ -6,11 +6,11 @@ use app\core\Application;
 
 abstract class DBModel extends Model
 {
-    abstract public function tableName(): string;
+    abstract public static function tableName(): string;
 
     abstract public function attributes(): array;
 
-    public function primaryKey(): string
+    public static function primaryKey(): string
     {
         return 'id';
     }

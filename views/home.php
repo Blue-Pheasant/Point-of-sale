@@ -1,0 +1,1 @@
+<h1>Welcome to Kaffee store</h1>
