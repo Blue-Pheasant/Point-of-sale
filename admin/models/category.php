@@ -1,0 +1,31 @@
+<!--
+    admin/models/category.php
+-->
+<?php
+function subcategories_delete($id)
+{
+    $id = intval($id);
+    require_once('admin/models/products.php');
+    $options = array(
+        'select' => 'id',
+        'where' => 'sub_category_id=' . $id
+    );
+    $products = get_all('products', $options);
+    foreach ($products as $product) {
+        products_delete($product['id']);
+    }
+    global $linkconnectDB;
+    $sql = "DELETE FROM subcategory WHERE id=$id";
+    mysqli_query($linkconnectDB, $sql) or die(mysqli_error($linkconnectDB));
+}
+function subcategory_update()
+{
+    $subcategory = array(
+        'id' => intval($_POST['sub_category_id']),
+        'sub_category_name' => escape($_POST['name']),
+        'slug' => slug($_POST['name']),
+        'category_id' => intval($_POST['category_id'])
+    );
+    save('subcategory', $subcategory);
+    header('location:admin.php?controller=category');
+}

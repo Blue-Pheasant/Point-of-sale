@@ -6,21 +6,24 @@ use app\core\UserModel;
 
 class User extends UserModel
 {
-    public int $id = 0;
+    public string $id = '';
     public string $firstname = '';
     public string $lastname = '';
     public string $email = '';
     public string $password = '';
     public string $passwordConfirm = '';
+    public string $address = '';
+    public string $phone_number = '';
 
-    public function tableName(): string
+
+    public static function tableName(): string
     {
-        return 'users';
+        return 'customers';
     }
 
     public function attributes(): array
     {
-        return ['firstname', 'lastname', 'email', 'password'];
+        return ['id', 'firstname', 'lastname', 'email', 'password', 'phone_number', 'address'];
     }
 
     public function labels(): array
@@ -30,7 +33,9 @@ class User extends UserModel
             'lastname' => 'Last name',
             'email' => 'Email',
             'password' => 'Password',
-            'passwordConfirm' => 'Password Confirm'
+            'passwordConfirm' => 'Password Confirm',
+            'phone_number' => 'Phone number',
+            'address' => 'Address',
         ];
     }
 
@@ -50,7 +55,7 @@ class User extends UserModel
     public function save()
     {
         $this->password = password_hash($this->password, PASSWORD_DEFAULT);
-
+        $this->id = uniqid();
         return parent::save();
     }
 
