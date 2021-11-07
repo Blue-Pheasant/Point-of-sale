@@ -16,7 +16,7 @@ class Session
         $_SESSION[self::FLASH_KEY] = $flashMessages;
     }
 
-    public function setFlash($key, $message)
+    public static function setFlash($key, $message)
     {
         $_SESSION[self::FLASH_KEY][$key] = [
             'remove' => false,
@@ -24,24 +24,26 @@ class Session
         ];
     }
 
-    public function getFlash($key)
+    public static function getFlash($key)
     {
         return $_SESSION[self::FLASH_KEY][$key]['value'] ?? false;
     }
 
-    public function set($key, $value)
+    public static function set($key, $value)
     {
         $_SESSION[$key] = $value;
     }
 
-    public function get($key)
+    public static function get($key)
     {
         return $_SESSION[$key] ?? false;
     }
 
-    public function remove($key)
+    public static function remove($key)
     {
-        unset($_SESSION[$key]);
+        if(self::exists($key)){
+			unset($_SESSION[$key]);
+		}
     }
 
     public function __destruct()
@@ -49,7 +51,7 @@ class Session
         $this->removeFlashMessages();
     }
 
-    private function removeFlashMessages()
+    private static function removeFlashMessages()
     {
         $flashMessages = $_SESSION[self::FLASH_KEY] ?? [];
         foreach ($flashMessages as $key => $flashMessage) {
@@ -59,4 +61,9 @@ class Session
         }
         $_SESSION[self::FLASH_KEY] = $flashMessages;
     }
+
+    public static function exists($key){
+		return (isset($_SESSION[$key]));
+	}
+
 }

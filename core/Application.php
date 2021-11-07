@@ -2,6 +2,7 @@
 
 namespace app\core;
 
+
 class Application
 {
     const EVENT_BEFORE_REQUEST = 'beforeRequest';
@@ -16,52 +17,54 @@ class Application
     public Router $router;
     public Request $request;
     public Response $response;
+    public Input $input;
     public ?Controller $controller = null;
     public Database $db;
     public Session $session;
     public View $view;
-    public ?UserModel $user;
+    public ?CustomerModel $customer;
 
     public function __construct($rootDir, $config)
     {
 
-        $this->user = null;
-        $this->userClass = $config['userClass'];
+        $this->customer = null;
+        $this->customerClass = $config['customerClass'];
         self::$ROOT_DIR = $rootDir;
         self::$app = $this;
         $this->request = new Request();
         $this->response = new Response();
+        $this->input = new Input();
         $this->router = new Router($this->request, $this->response);
         $this->db = new Database($config['db']);
         $this->session = new Session();
         $this->view = new View();
 
-        $userId = Application::$app->session->get('user');
-        if ($userId) {
-            $key = $this->userClass::primaryKey();
-            $this->user = $this->userClass::findOne([$key => $userId]);
-        }
+        // $customerId = Application::$app->session->get('customer');
+        // if ($customerId) {
+        //     $key = $this->customerClass::primaryKey();
+        //     $this->customer = $this->customerClass::findOne([$key => $customerId]);
+        // }
     }
 
     public static function isGuest()
     {
-        return !self::$app->user;
+        return !self::$app->customer;
     }
 
-    public function login(UserModel $user)
+    public function login(CustomerModel $customer)
     {
-        $this->user = $user;
-        $primaryKey = $user->primaryKey();
-        $value = $user->{$primaryKey};
-        Application::$app->session->set('user', $value);
+        $this->customer = $customer;
+        $primaryKey = $customer->primaryKey();
+        $value = $customer->{$primaryKey};
+        Application::$app->session->set('customer', $value);
 
         return true;
     }
 
     public function logout()
     {
-        $this->user = null;
-        self::$app->session->remove('user');
+        $this->customer = null;
+        self::$app->session->remove('customer');
     }
 
     public function run()
