@@ -4,12 +4,12 @@ namespace app\core;
 
 class Response
 {
-    public function setStateCode(int $code)
+    public static function setStateCode(int $code)
     {
         http_response_code($code);
     }
 
-    public function redirect(string $url)
+    public static function redirect(string $url)
     {
         header('Location: ' . $url);
     }

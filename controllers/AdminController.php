@@ -6,8 +6,11 @@ use app\core\Controller;
 
 class AdminController extends Controller
 {
-    public function __construct()
+    public function __construct() {}
+
+    public function index() 
     {
+        return $this->render('dashboard');
     }
 
     public function products()

@@ -46,6 +46,11 @@ class SiteController extends Controller
         return $this->render('collection');
     }
 
+    public function about()
+    {
+        return $this->render('about');
+    }
+
     public function stores()
     {
         return $this->render('stores');

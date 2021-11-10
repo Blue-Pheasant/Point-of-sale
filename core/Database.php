@@ -3,19 +3,30 @@
 namespace app\core;
 
 use PDO;
+use PDOException;
 
 class Database
 {
     public PDO $pdo;
-
-    public function __construct(array $config)
+    private $dsn;
+    private $user;
+    private $password;
+    public function __construct($config)
     {
-        $dsn = $config['dsn'] ?? '';
-        $user = $config['user'] ?? '';
-        $password = $config['password'] ?? '';
+        $this->dsn = $config['dsn'] ?? '';
+        $this->user = $config['user'] ?? '';
+        $this->password = $config['password'] ?? '';
 
-        $this->pdo = new PDO($dsn, $user, $password);
-        $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        try {
+            $this->pdo = new PDO($this->dsn, $this->user, $this->password);
+            $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        } catch(PDOException $exp) {
+            echo "Connection to database failed: " . $exp->getMessage();
+        }
+    }
+
+    public function CreateConnection() {
+        return $this->dbo;
     }
 
     public function applyMigrations()

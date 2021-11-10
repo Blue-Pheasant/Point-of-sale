@@ -8,7 +8,7 @@ class m0002_importData
     {
 
         $db = Application::$app->db;
-        $sql = "INSERT INTO wp211.stores (id,address,status,image_url,created_at,updated_at,open_time,phone) VALUES
+        $sql = "INSERT INTO thecoffeehouse.stores (id,address,status,image_url,created_at,updated_at,open_time,phone) VALUES
             ('117','114 Đường 9A Khu Dân cư Trung Sơn','hoạt động','https://minio.thecoffeehouse.com/image/admin/store/5b21f8cb1acd4d02032668ea_trung_20son_201.jpeg','2021-10-30 03:15:23','2021-10-30 03:15:23','7:00 - 22:00','02871087088'),
             ('129','93/5 Nguyễn Ảnh Thủ','hoạt động','https://minio.thecoffeehouse.com/image/admin/store/5b21f8cb1acd4d02032668eb_nguyen_20anh_20thu_201.jpeg','2021-10-30 03:15:23','2021-10-30 03:15:23','7:00 - 22:00','02871087088'),
             ('18','141 Nguyễn Thái Bình','hoạt động','https://minio.thecoffeehouse.com/image/admin/store/5b21f8cb1acd4d02032668ee_5b21f8cb1acd4d02032668ee_nguyen_20thai_20binh_201_20.jpeg','2021-10-30 03:15:23','2021-10-30 03:15:23','7:00 - 22:00','02871087088');";
@@ -16,7 +16,7 @@ class m0002_importData
 
 
         $db = Application::$app->db;
-        $sql = "INSERT INTO wp211.category (id,name,created_at,updated_at) VALUES
+        $sql = "INSERT INTO thecoffeehouse.category (id,name,created_at,updated_at) VALUES
             ('1','Cà phê','2021-10-30 02:31:28','2021-10-30 02:31:28'),
             ('18','Thưởng thức tại nhà','2021-10-30 02:31:28','2021-10-30 02:31:28'),
             ('2','Đá Xay - Choco - Matcha','2021-10-30 02:31:28','2021-10-30 02:31:28'),
@@ -25,7 +25,7 @@ class m0002_importData
         $db->pdo->exec($sql);
 
         $db = Application::$app->db;
-        $sql = "INSERT INTO wp211.products (id,category_id,name,image_url,price,description,created_at,updated_at) VALUES
+        $sql = "INSERT INTO thecoffeehouse.products (id,category_id,name,image_url,price,description,created_at,updated_at) VALUES
             ('5b03966a1acd4d5bbd672373','1','Americano Nóng','https://minio.thecoffeehouse.com/image/admin/americano-nong-app_652009.jpg',40000,'Americano được pha chế bằng cách pha thêm nước với tỷ lệ nhất định vào tách cà phê Espresso, từ đó mang lại hương vị nhẹ nhàng và giữ trọn được mùi hương cà phê đặc trưng.','2021-10-30 02:31:49','2021-10-30 02:31:49'),
             ('5b03966a1acd4d5bbd672374','1','Americano Đá','https://minio.thecoffeehouse.com/image/admin/classic-cold-brew_791256.jpg',40000,'Americano được pha chế bằng cách pha thêm nước với tỷ lệ nhất định vào tách cà phê Espresso, từ đó mang lại hương vị nhẹ nhàng và giữ trọn được mùi hương cà phê đặc trưng.','2021-10-30 02:31:49','2021-10-30 02:31:49'),
             ('5b03966a1acd4d5bbd672375','2','Sinh Tố Việt Quất','https://minio.thecoffeehouse.com/image/admin/sinh-to-viet-quoc_145138.jpg',59000,'Mứt Việt Quất chua thanh, ngòn ngọt, phối hợp nhịp nhàng với dòng sữa chua bổ dưỡng. Là món sinh tố thơm ngon mà cả đầu lưỡi và làn da đều thích. 
@@ -39,7 +39,7 @@ class m0002_importData
             ('5b03966a1acd4d5bbd67237c','2','Chocolate Đá Xay','https://minio.thecoffeehouse.com/image/admin/Chocolate-ice-blended_400940.jpg',59000,'Sữa và kem tươi béo ngọt được “cá tính hoá” bởi vị chocolate/sô-cô-la đăng đắng. Dành cho các tín đồ hảo ngọt. Lựa chọn hàng đầu nếu bạn đang cần chút năng lượng tinh thần.','2021-10-30 02:54:53','2021-10-30 02:54:53'),
             ('5b03966a1acd4d5bbd67237e','2','Cookie Đá Xay','https://minio.thecoffeehouse.com/image/admin/Chocolate-ice-blended_183602.jpg',59000,'Những mẩu bánh cookies giòn rụm kết hợp ăn ý với sữa tươi, kem tươi béo ngọt và đá xay mát lành, đem đến cảm giác lạ miệng gây thích thú và không thể cưỡng lại. Một món uống phá cách dễ thương đầy mê hoặc.','2021-10-30 02:54:16','2021-10-30 02:54:16'),
             ('5b03966a1acd4d5bbd67237f','1','Espresso Đá','https://minio.thecoffeehouse.com/image/admin/cfdenda-espressoDa_185438.jpg',45000,'Một tách Espresso nguyên bản được bắt đầu bởi những hạt Arabica chất lượng, phối trộn với tỉ lệ cân đối hạt Robusta, cho ra vị ngọt caramel, vị chua dịu và sánh đặc.','2021-10-30 02:31:49','2021-10-30 02:31:49');
-        INSERT INTO wp211.products (id,category_id,name,image_url,price,description,created_at,updated_at) VALUES
+        INSERT INTO thecoffeehouse.products (id,category_id,name,image_url,price,description,created_at,updated_at) VALUES
             ('5b03966a1acd4d5bbd672380','1','Espresso Nóng','https://minio.thecoffeehouse.com/image/admin/espressoNong_612688.jpg',40000,'Một tách Espresso nguyên bản được bắt đầu bởi những hạt Arabica chất lượng, phối trộn với tỉ lệ cân đối hạt Robusta, cho ra vị ngọt caramel, vị chua dịu và sánh đặc.','2021-10-30 02:31:49','2021-10-30 02:31:49'),
             ('5b03966a1acd4d5bbd672390','1','Latte Nóng','https://minio.thecoffeehouse.com/image/admin/latte_851143.jpg',50000,'Một sự kết hợp tinh tế giữa vị đắng cà phê Espresso nguyên chất hòa quyện cùng vị sữa nóng ngọt ngào, bên trên là một lớp kem mỏng nhẹ tạo nên một tách cà phê hoàn hảo về hương vị lẫn nhãn quan.
 
@@ -54,7 +54,7 @@ class m0002_importData
         ','2021-10-30 02:31:49','2021-10-30 02:31:49'),
             ('5b03966a1acd4d5bbd67239c','5','Trà Đào Cam Sả - Đá','https://minio.thecoffeehouse.com/image/admin/tra-dao-cam-xa_668678.jpg',45000,'Vị thanh ngọt của đào, vị chua dịu của Cam Vàng nguyên vỏ, vị chát của trà đen tươi được ủ mới mỗi 4 tiếng, cùng hương thơm nồng đặc trưng của sả chính là điểm sáng làm nên sức hấp dẫn của thức uống này.','2021-10-30 02:31:49','2021-10-30 02:31:49'),
             ('5b03966a1acd4d5bbd67239d','2','Chocolate Đá','https://minio.thecoffeehouse.com/image/admin/chocolate-da_877186.jpg',59000,'Bột chocolate nguyên chất hoà cùng sữa tươi béo ngậy. Vị ngọt tự nhiên, không gắt cổ, để lại một chút đắng nhẹ, cay cay trên đầu lưỡi.','2021-10-30 02:56:12','2021-10-30 02:56:12');
-        INSERT INTO wp211.products (id,category_id,name,image_url,price,description,created_at,updated_at) VALUES
+        INSERT INTO thecoffeehouse.products (id,category_id,name,image_url,price,description,created_at,updated_at) VALUES
             ('5b03966a1acd4d5bbd67239e','5','Trà Đen Macchiato','https://minio.thecoffeehouse.com/image/admin/tra-den-matchiato_430281.jpg',50000,'Trà đen được ủ mới mỗi ngày, giữ nguyên được vị chát mạnh mẽ đặc trưng của lá trà, phủ bên trên là lớp Macchiato homemade bồng bềnh quyến rũ vị phô mai mặn mặn mà béo béo.','2021-10-30 02:31:49','2021-10-30 02:31:49'),
             ('5b03966a1acd4d5bbd6723a0','1','Cà Phê Đen Nóng','https://minio.thecoffeehouse.com/image/admin/cfden_nong_016851.jpg',35000,'Không ngọt ngào như Bạc sỉu hay Cà phê sữa, Cà phê đen mang trong mình phong vị trầm lắng, thi vị hơn. Người ta thường phải ngồi rất lâu mới cảm nhận được hết hương thơm ngào ngạt, phảng phất mùi cacao và cái đắng mượt mà trôi tuột xuống vòm họng.','2021-10-30 02:31:49','2021-10-30 02:31:49'),
             ('5b03966a1acd4d5bbd6723a1','1','Cà Phê Đen Đá','https://minio.thecoffeehouse.com/image/admin/cfdenda-espressoDa_647698.jpg',32000,'Không ngọt ngào như Bạc sỉu hay Cà phê sữa, Cà phê đen mang trong mình phong vị trầm lắng, thi vị hơn. Người ta thường phải ngồi rất lâu mới cảm nhận được hết hương thơm ngào ngạt, phảng phất mùi cacao và cái đắng mượt mà trôi tuột xuống vòm họng.','2021-10-30 02:31:49','2021-10-30 02:31:49'),
@@ -67,7 +67,7 @@ class m0002_importData
             ('5c3ff3c5acf0d338d22adbaa','5','Trà Hạt Sen - Nóng','https://minio.thecoffeehouse.com/image/admin/tra-sen-nong_025153.jpg',52000,'Nền trà oolong hảo hạng kết hợp cùng hạt sen tươi, bùi bùi thơm ngon. Trà hạt sen là thức uống thanh mát, nhẹ nhàng phù hợp cho cả buổi sáng và chiều tối.','2021-10-30 02:31:49','2021-10-30 02:31:49'),
             ('5c3ff3c5acf0d338d22adbae','5','Trà Hạt Sen - Đá','https://minio.thecoffeehouse.com/image/admin/tra-sen_905594.jpg',45000,'Nền trà oolong hảo hạng kết hợp cùng hạt sen tươi, bùi bùi và lớp foam cheese béo ngậy. Trà hạt sen là thức uống thanh mát, nhẹ nhàng phù hợp cho cả buổi sáng và chiều tối.
         ','2021-10-30 02:31:49','2021-10-30 02:31:49');
-        INSERT INTO wp211.products (id,category_id,name,image_url,price,description,created_at,updated_at) VALUES
+        INSERT INTO thecoffeehouse.products (id,category_id,name,image_url,price,description,created_at,updated_at) VALUES
             ('5ca47f92acf0d3492076b299','1','Cold Brew Sữa Tươi','https://minio.thecoffeehouse.com/image/admin/cold-brew-sua-tuoi_379576.jpg',45000,'Thanh mát và cân bằng với hương vị cà phê nguyên bản 100% Arabica Cầu Đất cùng sữa tươi thơm béo cho từng ngụm tròn vị, hấp dẫn.','2021-10-30 02:31:49','2021-10-30 02:31:49'),
             ('5ca47f92acf0d3492076b29a','1','Cold Brew Truyền Thống','https://minio.thecoffeehouse.com/image/admin/classic-cold-brew_239501.jpg',45000,' Tại Kaffee store, Cold Brew được ủ và phục vụ mỗi ngày từ 100% hạt Arabica Cầu Đất với hương gỗ thông, hạt dẻ, nốt sô-cô-la đặc trưng, thoang thoảng hương khói nhẹ giúp Cold Brew giữ nguyên vị tươi mới.','2021-10-30 02:31:49','2021-10-30 02:31:49'),
             ('5cdb677aacf0d33b682b4b73','2','Chanh Sả Đá Xay','https://minio.thecoffeehouse.com/image/admin/Chanh-sa-da-xay_170980.jpg',49000,'Sự kết hợp hài hoà giữa Chanh & sả - những nguyên liệu mộc mạc rất đỗi quen thuộc cho ra đời một thức uống thanh mát, vị chua chua ngọt ngọt giải nhiệt lại tốt cho sức khỏe.','2021-10-30 02:56:12','2021-10-30 02:56:12'),
@@ -82,7 +82,7 @@ class m0002_importData
             ('5d43bfed073b26003161b693','1','Cold Brew Phúc Bồn Tử','https://minio.thecoffeehouse.com/image/admin/cold-brew-pbt_130351.jpg',50000,'Vị chua ngọt của trái phúc bồn tử, làm dậy lên hương vị trái cây tự nhiên vốn sẵn có trong hạt cà phê, hòa quyện thêm vị đăng đắng, ngọt dịu nhẹ nhàng của Cold Brew 100% hạt Arabica Cầu Đất để mang đến một cách thưởng thức cà phê hoàn toàn mới, vừa thơm lừng hương cà phê quen thuộc, vừa nhẹ nhàng và thanh mát bởi hương trái cây đầy thú vị.','2021-10-30 02:31:49','2021-10-30 02:31:49'),
             ('5e4f9e4316bd0a0018d2e24e','1','Cà Phê Đá Xay-Lạnh','https://minio.thecoffeehouse.com/image/admin/cf-da-xay-(1)_158038.jpg',59000,'Một phiên bản upgrade từ ly cà phê sữa quen thuộc, nhưng lại tỉnh táo và tươi mát hơn bởi lớp đá xay đi kèm. Nhấp 1 ngụm cà phê đá xay là thấy đã, ngụm thứ hai thêm tỉnh táo và cứ thế lôi cuốn bạn đến ngụm cuối cùng.','2021-10-30 02:31:49','2021-10-30 02:31:49'),
             ('5e92fd7dc788bc0011abaa06','5','Trà Sữa Mắc Ca Trân Châu','https://minio.thecoffeehouse.com/image/admin/tra-sua-mac-ca_377522.jpg',50000,'Mỗi ngày với Kaffee store sẽ là điều tươi mới hơn với sữa hạt mắc ca thơm ngon, bổ dưỡng quyện cùng nền trà oolong cho vị cân bằng, ngọt dịu đi kèm cùng Trân châu trắng giòn dai mang lại cảm giác “đã” trong từng ngụm trà sữa.','2021-10-30 02:31:49','2021-10-30 02:31:49');
-        INSERT INTO wp211.products (id,category_id,name,image_url,price,description,created_at,updated_at) VALUES
+        INSERT INTO thecoffeehouse.products (id,category_id,name,image_url,price,description,created_at,updated_at) VALUES
             ('5eb92ae0ee4dc00012633b2b','20','Ly inox ống hút đen nhám','https://minio.thecoffeehouse.com/image/admin/5eb92ae0ee4dc00012633b2b_Binh-inox-ong-hut-den-nham_338437.jpg',280000,'Màu đen ngày nào cũng được khen- Chiếc ly inbox kèm ống hút mang sắc đen ngầu này sẽ là người bạn đồng hành may mắn mỗi ngày bên bạn, nước ngon hơn, nhiều cảm hứng hơn. 
         Dung tích: 500 ml
         Chất liệu: Inox, nhựa','2021-10-30 02:35:48','2021-10-30 02:35:48'),
@@ -110,7 +110,7 @@ class m0002_importData
             ('6014df0e540c0c001894d83d','5','Hồng Trà Sữa Nóng','https://minio.thecoffeehouse.com/image/admin/hong-tra-sua-nong_941687.jpg',50000,'Từng ngụm trà chuẩn gu ấm áp, đậm đà beo béo bởi lớp sữa tươi chân ái hoà quyện.
 
         Trà đen nguyên lá âm ấm dịu nhẹ, quyện cùng lớp sữa thơm béo khó lẫn - hương vị ấm áp chuẩn gu trà, cho từng ngụm nhẹ nhàng, ngọt dịu lưu luyến mãi nơi cuống họng.','2021-10-30 02:31:49','2021-10-30 02:31:49');
-        INSERT INTO wp211.products (id,category_id,name,image_url,price,description,created_at,updated_at) VALUES
+        INSERT INTO thecoffeehouse.products (id,category_id,name,image_url,price,description,created_at,updated_at) VALUES
             ('605da09f717e5d00114a3cdc','5','Hồng Trà Latte Macchiato','https://minio.thecoffeehouse.com/image/admin/hong-tra-latte_618293.jpg',55000,'Sự kết hợp hoàn hảo bởi hồng trà dịu nhẹ và sữa tươi, nhấn nhá thêm lớp macchiato trứ danh của Kaffee store mang đến cho bạn hương vị trà sữa đúng gu tinh tế và healthy.','2021-10-30 02:31:49','2021-10-30 02:31:49'),
             ('60c62c8215234d0011ede49e','18','Cà Phê Sữa Đá Hòa Tan','https://minio.thecoffeehouse.com/image/admin/cpsd-3in1_971575.jpg',44000,'Thật dễ dàng để bắt đầu ngày mới với tách cà phê sữa đá sóng sánh, thơm ngon như cà phê pha phin.
         Vị đắng thanh của cà phê hoà quyện với vị ngọt béo của sữa, giúp bạn luôn tỉnh táo và hứng khởi cho ngày làm việc thật hiệu quả.
