@@ -10,14 +10,6 @@ class AdminController extends Controller
 
     public function index() 
     {
-<<<<<<< HEAD
-        parent::__construct();
-    }
-
-    public function index() 
-    {
-=======
->>>>>>> long
         return $this->render('dashboard');
     }
 

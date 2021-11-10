@@ -4,10 +4,6 @@ namespace app\core;
 
 use PDO;
 use PDOException;
-<<<<<<< HEAD
-=======
-
->>>>>>> long
 class Database
 {
     public PDO $pdo;

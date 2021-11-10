@@ -6,33 +6,6 @@
 namespace app\controllers;
 
 use app\core\Controller;
-<<<<<<< HEAD
-
-class ProductController extends Controller {
-        public function __construct()
-        {
-            parent::__construct();
-        }
-
-        public function index() 
-        {
-            return $this->render('product');    
-        }
-
-        public function add() 
-        {
-
-        }
-
-        public function remove()
-        {
-
-        }
-
-        public function update()
-        {
-
-=======
 use app\models\Product;
 use app\core\Input;
 use app\core\Application;
@@ -125,6 +98,5 @@ class ProductController extends Controller {
                     'model' => $productModel
                 ]);
             }
->>>>>>> long
         }
     }
