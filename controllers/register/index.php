@@ -1,3 +1,0 @@
-<!--
-    controllers/search/index.php
--->

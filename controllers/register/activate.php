@@ -1,3 +1,0 @@
-<!--
-    controllers/register/activate.php
--->
