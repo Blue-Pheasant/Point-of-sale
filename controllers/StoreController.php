@@ -29,7 +29,12 @@ class StoreController extends Controller {
         }
 
         public function update()
+<<<<<<< HEAD
         {
             
+=======
+        {   
+                                                                                                                                                 
+>>>>>>> long
         }
 }

@@ -27,7 +27,7 @@ $app->router->get('/login', [SiteController::class, 'login']);
 $app->router->post('/login', [SiteController::class, 'login']);
 $app->router->get('/logout', [SiteController::class, 'logout']);
 $app->router->get('/contact', [SiteController::class, 'contact']);
-$app->router->get('/about', [AboutController::class, 'index']);
+$app->router->get('/about', [SiteController::class, 'about']);
 $app->router->get('/stores', [SiteController::class, 'stores']);
 $app->router->get('/menu', [SiteController::class, 'menu']);
 $app->router->get('/collection', [SiteController::class, 'collection']);

@@ -27,8 +27,13 @@ class Application
     public function __construct($rootDir, $config)
     {
 
+<<<<<<< HEAD
         $this->customer = null;
         // $this->customerClass = $config['customerClass'];
+=======
+        $this->user = null;
+        // $this->userClass = $config['userClass'];
+>>>>>>> long
         self::$ROOT_DIR = $rootDir;
         self::$app = $this;
         $this->request = new Request();
@@ -39,11 +44,19 @@ class Application
         $this->session = new Session();
         $this->view = new View();
 
+<<<<<<< HEAD
         $customerId = Application::$app->session->get('customer');
         if ($customerId) {
             $key = $this->customerClass::primaryKey();
             $this->customer = $this->customerClass::findOne([$key => $customerId]);
         }
+=======
+        // $userId = Application::$app->session->get('user');
+        // if ($userId) {
+        //     $key = $this->userClass::primaryKey();
+        //     $this->user = $this->userClass::findOne([$key => $userId]);
+        // }
+>>>>>>> long
     }
 
     public static function isGuest()

@@ -3,6 +3,8 @@
 namespace app\core;
 
 use app\core\Application;
+use PDO;
+use PDOException;
 
 abstract class DBModel extends Model
 {
@@ -31,6 +33,16 @@ abstract class DBModel extends Model
 
         $statement->execute();
         return true;
+    }
+
+    public function update()
+    {
+    
+    }
+
+    public function delete()
+    {
+        
     }
 
     public static function prepare($sql)
