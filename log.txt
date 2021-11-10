@@ -1,0 +1,230 @@
+commit 5a48336f6996f593df84889235450f119d5a3568
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Wed Nov 10 09:52:40 2021 +0700
+
+    Updated
+
+commit 8d5070da8c0bb176c4eeddf3a98489ee3717c49d
+Merge: 5881cb0 c0af568
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Wed Nov 10 09:47:15 2021 +0700
+
+    Merged from long
+
+commit c0af568bdbb7b781ab61b05cc59c09fa25f8ce93
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Wed Nov 10 09:35:05 2021 +0700
+
+    Updated
+
+commit c04e985f2fa13d3e1ac517670b5696cf23473b77
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Wed Nov 10 09:32:45 2021 +0700
+
+    Updated
+
+commit 5881cb03d739902552ceb42f6a44c778cc36805d
+Merge: edc068a 5894828
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Wed Nov 10 09:31:22 2021 +0700
+
+    Merge branch 'master' of https://github.com/Blue-Pheasant/POS-SYSTEM
+
+commit 5894828e387f61090e652c6963eebf1ec9b7e30c
+Author: Nhat Nam <nam0968024068@gmail.com>
+Date:   Sun Nov 7 17:10:26 2021 +0700
+
+    Update views folder
+
+commit 7469f4a7d928de0dfc8db7822fbdf8df86ccaf1c
+Author: Nhat Nam <nam0968024068@gmail.com>
+Date:   Sun Nov 7 16:25:07 2021 +0700
+
+    Add image folder
+
+commit edc068a15d8980b5120d006aa14be6979cab05b4
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Sun Nov 7 09:11:30 2021 +0700
+
+    Update
+
+commit 1425544031e4662b7b9902d7d127564cb3a99d39
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Sun Nov 7 08:55:31 2021 +0700
+
+    Delete admin folder
+
+commit 45ccdd9e75374bacaf23aaf57672c69a4dd713fc
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Sun Nov 7 08:54:42 2021 +0700
+
+    Update something about migration
+
+commit 8c546452c67a793f9fcb07f236b659c12279c163
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Sun Nov 7 08:42:15 2021 +0700
+
+    Updated
+
+commit 5b9620515001cb75c27468b5f18f43ac9ba68459
+Merge: a8c3e75 d7b7fa2
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Sun Nov 7 08:32:15 2021 +0700
+
+    Changed something
+
+commit a8c3e75579a9f0f26de422e629fe8c512f0f138d
+Merge: 95ddf23 d2f7682
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Sun Nov 7 08:31:37 2021 +0700
+
+    Merge
+
+commit d2f7682f11d8e23787950bcff3cad6613d4fc0b6
+Merge: d4a075d 3f3e785
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Sun Nov 7 08:31:06 2021 +0700
+
+    merge
+
+commit d7b7fa27054f463a6e24537277bc497c33cc51bf
+Author: Nhat Nam <nam0968024068@gmail.com>
+Date:   Sat Nov 6 12:14:18 2021 +0700
+
+    Update views folder
+
+commit ec7845fbbfb2c6da5068ee1018b42a06a073f148
+Author: Nhat Nam <nam0968024068@gmail.com>
+Date:   Sat Nov 6 12:13:18 2021 +0700
+
+    Update js folder
+
+commit 080d4775fb0d6869b75fc6436a10b87dfa2effbd
+Author: Nhat Nam <nam0968024068@gmail.com>
+Date:   Sat Nov 6 12:12:29 2021 +0700
+
+    Update css folder
+
+commit 95ddf23602e6a69765bf31cb50096c89ff6994d6
+Merge: 4daec99 a38f473
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Sat Nov 6 10:55:37 2021 +0700
+
+    Merge branch 'long'
+
+commit a38f473c094d69550f41ebd94de0243b1d198d59
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Sat Nov 6 10:54:32 2021 +0700
+
+    Update
+
+commit 72e878e6411fd06ab3e4c7262f1f6afab53e7aeb
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Sat Nov 6 10:53:58 2021 +0700
+
+    Update
+
+commit 3f3e78561431b2e4a0dd3c02e71dac3d6925280d
+Author: Nhat Nam <nam0968024068@gmail.com>
+Date:   Fri Nov 5 23:58:56 2021 +0700
+
+    Add views Front_end
+
+commit 4daec99e62ce5dd58f1d0329c736e600924ea2a7
+Merge: e282c62 dc2f9be
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Wed Nov 3 16:49:34 2021 +0700
+
+    Merge branch 'long'
+
+commit dc2f9bea862a59a6217a95138dcb13b06819ef5c
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Wed Nov 3 16:49:11 2021 +0700
+
+    Add config.php
+
+commit e282c6285abf68ae86987ca202bc4c797819cb80
+Merge: 3465154 e73ce69
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Wed Nov 3 15:28:13 2021 +0700
+
+    Merge branch 'long'
+
+commit e73ce694b11721105d71933e54680488849e6509
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Wed Nov 3 15:27:01 2021 +0700
+
+    Move Boostrap and fonts to public
+
+commit 094e0e7256ebde2870ee311533159d457d55b37c
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Wed Nov 3 15:23:40 2021 +0700
+
+    Add core
+
+commit 3465154b94cdbafa5118c1407858b81cd32ad58a
+Merge: f18d796 3065478
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Wed Nov 3 15:12:19 2021 +0700
+
+    Merge branch 'master' of https://github.com/Blue-Pheasant/POS-SYSTEM
+
+commit f18d79672598001b6ce348246bae76cc2290804b
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Wed Nov 3 15:09:45 2021 +0700
+
+    Notthing
+
+commit a3073267e081e71f9b7864da21ff90fc79d8c91c
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Wed Nov 3 15:08:20 2021 +0700
+
+    Add middlewares, exception
+
+commit fa2f11aa75dd2975c13d8682236e3d689384095c
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Tue Nov 2 23:42:55 2021 +0700
+
+    Add some files in controller, models, public and modify config.php in config
+
+commit 16299780ac9cbc015d48d1880be355a30b35c6de
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Fri Oct 29 13:26:50 2021 +0700
+
+    Impleme customer.php customerClass.php
+
+commit 723a34ea3d9936a4ced7c5d58cafeeb41e2bdb1b
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Fri Oct 29 13:12:27 2021 +0700
+
+    impleme config.php
+
+commit 30654780efc962161386e887a5bc4e6a07ebde70
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Wed Oct 27 14:23:44 2021 +0700
+
+    Test
+
+commit d4a075debe90cd0ea7df2c51b414233e1d0cfcf6
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Wed Oct 27 11:16:46 2021 +0700
+
+    Initia a simple template of php mvc
+
+commit 395aabb9c51d7a60a2eace22ec0846373b50c137
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Wed Oct 27 11:06:15 2021 +0700
+
+    Initia a simple template php mvc
+
+commit ca99ae058c3261343754a83b142297ca0ce9f601
+Author: Longvo <long.vo2k1@hcmut.com>
+Date:   Wed Oct 27 10:57:47 2021 +0700
+
+    Initia a simple template of php mvc
+
+commit db37c667372a79229217a6b0dcdd83b7cd24195e
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Wed Oct 20 22:42:00 2021 +0700
+
+    template of asp.net mvc
