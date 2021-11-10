@@ -30,7 +30,6 @@ $app->router->get('/contact', [SiteController::class, 'contact']);
 $app->router->get('/about', [SiteController::class, 'about']);
 $app->router->get('/stores', [SiteController::class, 'stores']);
 $app->router->get('/menu', [SiteController::class, 'menu']);
-$app->router->get('/collection', [SiteController::class, 'collection']);
 $app->router->get('/profile', [SiteController::class, 'profile']);
 $app->router->get('/product', [SiteController::class, 'product']);
 $app->router->get('/cart', [SiteController::class, 'cart']);
