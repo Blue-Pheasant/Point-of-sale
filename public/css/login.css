@@ -1,84 +1,125 @@
-html,body{
-    background-size: cover;
-    background-repeat: no-repeat;
-    height: 100%;
-    font-family: 'Numans', sans-serif;
-    }
-    
-    .container{
-    height: 100%;
-    align-content: center;
-    }
-    
-    .card{
-    height: 370px;
-    margin-top: auto;
-    margin-bottom: auto;
-    width: 400px;
-    background-color: rgba(0,0,0,0.5) !important;
-    }
-    
-    .social_icon span{
-    font-size: 60px;
-    margin-left: 10px;
-    color: #FFC312;
-    }
-    
-    .social_icon span:hover{
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP&display=swap');
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: 'Noto Sans JP', sans-serif;
+}
+ul {
+    list-style: none;
+}
+a {
+  text-decoration: none;
+}
+
+.tp {
+  background-color: #FEFBDF ;
+}
+.container {
+  margin: auto;
+  max-width: 1200px;
+}
+.container {
+  padding: 16px;
+}
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  
+}
+.row .logo img {
+  width: 80px;
+  display: inline-block;
+}
+
+.listmember{
+  display: inline-block;
+  width: 80%;
+  transition: 0.5s ease;
+}
+
+.listmem{
+  display: inline-block;
+  margin:  2px 20px;
+  padding: 10px 30px;
+  color: white;
+  font-weight: 700;
+  font-size: large;
+  
+
+}
+
+
+form {
+    border: 3px solid #f1f1f1;
+    padding: 10px 10px 20px 10px;
+    border-radius: 20px;
+    width: 50%;
+    margin: 50px auto;
+    background-color: #FEFBDF;
+  }
+  h1, label{
+    color: DodgerBlue;
+  }
+  /* Full-width inputs */
+  input[type=text], input[type=password] {
+    width: 100%;
+    padding: 15px;
+    margin: 5px 0 22px 0;
+    display: inline-block;
+    border: none;
+    resize: vertical;
+    border-radius:15px;
+    box-shadow:4px 4px 10px rgba(0,0,0,0.2);
+  }
+  
+  /* Set a style for all buttons */
+  button {
     color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
     cursor: pointer;
-    }
+    width: 100%;
+    opacity: 0.9;
+  }
+  .login {
+    background-color: #4CAF50;
+    float: left;
+    width: 100%;
+    border-radius:15px;
+    border:0;
+    box-shadow:4px 4px 10px rgba(0,0,0,0.2);
+    font-size: large;
+  }
+  
+  /* Add a hover effect for buttons */
+  button:hover {
+    opacity: 1;
+  }
+
+.forgotpw {
+    padding: 15px 10px;
+    display: flex;
+    justify-content: center;
+    font-size: small;
+}
+hr{
+    border: 1px solid #f1f1f1;
+    margin-bottom: 25px;
+    height: 2px;
+  }
+.sign_up{
+    text-decoration: none;
+    background-color: #3871B9;
+    border-radius:15px;
+    border:0;
+    box-shadow:4px 4px 10px rgba(0,0,0,0.2);
+    margin: 0 auto;
+    width: 50%;
+    display: block;
+    opacity: 0.9;
     
-    .card-header h3{
-    color: white;
-    }
-    
-    .social_icon{
-    position: absolute;
-    right: 20px;
-    top: -45px;
-    }
-    
-    .input-group-prepend span{
-    width: 50px;
-    background-color: #FFC312;
-    color: black;
-    border:0 !important;
-    }
-    
-    input:focus{
-    outline: 0 0 0 0  !important;
-    box-shadow: 0 0 0 0 !important;
-    
-    }
-    
-    .remember{
-    color: white;
-    }
-    
-    .remember input
-    {
-    width: 20px;
-    height: 20px;
-    margin-left: 15px;
-    margin-right: 5px;
-    }
-    
-    .login_btn{
-    color: black;
-    background-color: #FFC312;
-    width: 100px;
-    }
-    
-    .login_btn:hover{
-    color: black;
-    background-color: white;
-    }
-    
-    .links{
-    color: white;
-    }
-    
-    .links a{
-    margin-left: 4px;
-    }
+}
+
+
