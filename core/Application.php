@@ -28,7 +28,7 @@ class Application
     {
 
         $this->user = null;
-        $this->userClass = $config['userClass'];
+        // $this->userClass = $config['userClass'];
         self::$ROOT_DIR = $rootDir;
         self::$app = $this;
         $this->request = new Request();
