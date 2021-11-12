@@ -171,3 +171,23 @@ button:hover {
   clear: both;
   display: table;
 }
+/* Contact */
+
+#contact {
+  background-color: red;
+  height: fit-content;
+  padding: 35px 0;
+  position: relative;
+}
+
+#contact .footer {
+  font-size: 18px;
+  color: white;
+  text-align: center;
+  width: fit-content;
+  margin: auto;
+}
+
+#contact span {
+  font-weight: bold;
+}
