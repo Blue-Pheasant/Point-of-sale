@@ -30,9 +30,6 @@ class Record extends RecordModel
     public function getTotalPrice() { return $this->totalPrice; }
     private function setTotalPrice($totalPrice) { $this->totalPrice = $totalPrice; }
 
-    private $create_at;
-    public function getSaleDate () { return $this->create_at; }
-    private function setSaleDate ($create_at) { $this->create_at = $create_at; }
     
     public function __construct(
         $id,
@@ -70,7 +67,7 @@ class Record extends RecordModel
 
     public function save()
     {
-        $productModel = Product::getObject([ 'product' => 'product'], $this->productID);
+        $productModel = Product::get($this->id);
         $this->id = uniqid();
         $this->totalPrice = $productModel->getPrice() * $this->quantity;
         return parent::save();
