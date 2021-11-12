@@ -14,6 +14,13 @@ class Request
         return substr($path, 0, $position);
     }
 
+    public function getParam()
+    {
+        if (isset($_GET['id'])) {
+            return $_GET['id'];
+        }
+    }
+
     public function getMethod()
     {
 

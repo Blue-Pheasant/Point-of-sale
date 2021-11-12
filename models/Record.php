@@ -2,8 +2,12 @@
 
 namespace app\models;
 
+use app\core\Database;
 use app\core\RecordModel;
 use app\models\Product;
+use PDO;
+use PDOException;
+
 class Record extends RecordModel 
 {
     private $id;
@@ -31,18 +35,15 @@ class Record extends RecordModel
     private function setSaleDate ($create_at) { $this->create_at = $create_at; }
     
     public function __construct(
+        $id,
         $userID,
         $productID,
-        $quantity,
-        $totalPrice,
-        $create_at = '',
-        $id = null
+        $quantity
     ) {
+        $this->id = $id;
         $this->userID = $userID;
         $this->productID = $productID;
         $this->quantity = $quantity;
-        $this->create_at = $create_at;
-        $this->id = $id;
     }
     
     public static function tableName(): string
@@ -69,41 +70,51 @@ class Record extends RecordModel
 
     public function save()
     {
-        $productModel = Product::get($this->productID);
+        $productModel = Product::getObject([ 'product' => 'product'], $this->productID);
+        $this->id = uniqid();
         $this->totalPrice = $productModel->getPrice() * $this->quantity;
-        $this->create_at = date("Y-m-d" . " H:i:s",time() + 7 * 3600);
         return parent::save();
     }
 
     public function getDisplayInfo(): string
     {
-        return $this->userID . ' ' . $this->create_at;
+        return $this->userID . ' ' . $this->totalPrice . ' ' . $this->create_at;
     }
 
     public function create()
     {
-
-    }
-
-    public function edit()
-    {
-
+        
     }
 
     public function delete()
     {
-
-    }
-
-    public static function get($id)
-    {
-        $model = null;
-        return $model;
+        $tablename = $this->tableName();
+        $id = $this->id;
+        $sql = "DELETE FROM $tablename WHEHRE ID = :ID";
+        $statement = self::prepare($sql);
+        $statement->bindParam(':ID', $id, PDO::PARAM_INT);
+        $statement->execute();
     }
 
     public static function getAll()
     {
-        $models = [];
-        return $models;
+        $list = [];
+        $db = Database::getInstance();
+        $req = $db->query('SELECT * FROM records');
+
+        foreach ($req->fetchAll() as $item) {
+            $list[] = new Record($item['id'], $item['product_id'], $item['quantity'], $item['price']);
+        }
+
+        return $list;
+    }
+
+    public static function get($id)
+    {
+        $db = Database::getInstance();
+        $req = $db->query('SELECT * FROM products WHERE id = "' . $id . '"');
+        $item = $req->fetchAll()[0];
+        $product = new Record($item['id'], $item['product_id'], $item['quantity'], $item['price']);
+        return $product;
     }
 }
