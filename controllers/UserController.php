@@ -25,7 +25,7 @@ class UserController extends Controller{
             $id = $_REQUEST('id');
             $userModel = User::get($id);
             $userModel->delete();
-            return Application::$app->response->redirect('products');
+            return Application::$app->response->redirect('users');
         } else if($request->getMethod() === 'get') {
             $id = (int)$_REQUEST['id'];
             $userModel = User::get($id);
@@ -56,7 +56,7 @@ class UserController extends Controller{
 
     public function view(Request $request)
     {
-        if($request->getMethod() === 'p')
+        if($request->getMethod() === 'post')
         $id = (int)$_REQUEST['id'];
         $userModel = User::get($id);
         $this->setLayout('main');
