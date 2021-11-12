@@ -1,9 +1,6 @@
 <?php
 
 namespace app\core;
-use app\core\Database;
-use Model\Customer;
-
 
 abstract class Model
 {
@@ -17,11 +14,6 @@ abstract class Model
     abstract public function rules(): array;
 
     public array $errors = [];
-
-    public function __construct()
-    {
-        
-    }
 
     public function loadData($data)
     {
@@ -106,27 +98,4 @@ abstract class Model
     {
         return $this->errors[$attribute][0] ?? false;
     }
-
-    public function fetchAll($condition = null, $params = []){
-		$sql = "SELECT * FROM {$this->table}";
-		if($condition && $params){
-			$sql .= " WHERE {$condition}";
-		}
-		if($this->db->query($sql,$params)){
-			if(count($this->db->_results)) return true;
-			return false;
-		}
-		return false;
-	}
-
-    public function findFirst($condition = null, $params = []){
-		if($this->fetchAll($condition, $params)){
-			return $this->db->_results[0];
-		}
-	}
-
-    public function delete($id){
-		$sql = "DELETE FROM {$this->table} WHERE {$this->primaryKey} = {$id}";
-		return $this->db->query($sql);
-	}
 }

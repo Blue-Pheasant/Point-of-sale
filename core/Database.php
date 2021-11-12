@@ -4,12 +4,29 @@ namespace app\core;
 
 use PDO;
 use PDOException;
+use app\models\Product;
+
 class Database
 {
     public PDO $pdo;
     private $dsn;
     private $user;
     private $password;
+    private static $instance = NULl;
+
+    public static function getInstance()
+    {
+        if (!isset(self::$instance)) {
+            try {
+                self::$instance = new PDO('mysql:host=localhost;dbname=wp211', 'root', 'quan0402');
+                self::$instance->exec("SET NAMES 'utf8'");
+            } catch (PDOException $ex) {
+                die($ex->getMessage());
+            }
+        }
+        return self::$instance;
+    }
+
     public function __construct($config)
     {
         $this->dsn = $config['dsn'] ?? '';
@@ -19,12 +36,13 @@ class Database
         try {
             $this->pdo = new PDO($this->dsn, $this->user, $this->password);
             $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        } catch(PDOException $exp) {
+        } catch (PDOException $exp) {
             echo "Connection to database failed: " . $exp->getMessage();
         }
     }
 
-    public function CreateConnection() {
+    public function CreateConnection()
+    {
         return $this->dbo;
     }
 
@@ -93,5 +111,16 @@ class Database
     public function prepare($sql)
     {
         return $this->pdo->prepare($sql);
+    }
+
+    public function getAllProducts()
+    {
+        $statement = $this->pdo->prepare("SELECT * FROM products");
+        $statement->execute();
+        $result = $statement->fetch();
+        foreach ($result as $item) {
+            $list[] = new Product($item['id'], $item['category_id'], $item['name'], $item['price'], $item['description']);
+        }
+        return $result;
     }
 }

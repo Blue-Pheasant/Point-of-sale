@@ -83,9 +83,4 @@ class Router
         $layoutContent = $this->layoutContent();
         return str_replace('{{content}}', $viewContent, $layoutContent);
     }
-
-    // public function redirect($location) 
-    // {
-
-    // }
 }

@@ -11,6 +11,7 @@ use app\core\Session;
 use app\models\Category;
 use app\core\Application;
 use app\core\UserModel;
+use app\core\Request;
 
     class CategoryController extends Controller {
         public function __construct() {}
@@ -20,40 +21,63 @@ use app\core\UserModel;
             return $this->render('category');    
         }
 
-        public function info()
+        public function info(Request $request)
         {
-            $category_id = Input::get('category_id');
 		    $CategoryModel = new Category;
-		    $category_infor = $CategoryModel->findById($category_id);
-		    return $this->jsonResponse($category_infor);
-        }
+		    if($request->getMethod() === 'post') {
 
-        public function add() 
-        {
-            $CategoryModel = new Category;
-            $CategoryModel->id = uniqid();
-            $CategoryModel->category_name = Input::get('category_name'); 
-            $CategoryModel->create_at = date("d-m-Y",time());
-            $CategoryModel->validate();
-            if ($CategoryModel->validate() && $CategoryModel->save()) {
-                Application::$app->session->setFlash('Success', 'System`s added new product');
-                Application::$app->response->redirect('product');
-            }   
-        }
-
-        public function remove()
-        {
-            $category_id = Input::get('category_id');
-            $CategoryModel = new Category;
-            if($CategoryModel->delete($category_id)) {
-                Session::set('Success', 'Product has id ' . $category_id . ' has been deleted.');
-                Response::redirect('category');
             }
         }
 
-        public function update()
+        public function create(Request $request) 
         {
-            
+            $CategoryModel = new Category;
+            if($request->getMethod() === 'post') {
+                $CategoryModel->loadData($request->getBody());
+                $CategoryModel->create();
+                Application::$app->response->redirect('categories');
+            } else if ($request->getMethod() === 'get') {
+                $Categories = Category::getAll();
+                $this->setLayout('main');
+                return $this->render('category', [
+                    'model' => $Categories
+                ]);
+            }
+        }
+
+        public function delete(Request $request)
+        {
+            if($request->getMethod() === 'post') {
+                $id = (int)$_REQUEST['id'];
+                $CategoryModel = Category::get($id);
+                $CategoryModel->delete();
+                return Application::$app->response->redirect('categories'); 
+            } else if ($request->getMethod() === 'get') {
+                $id = (int)$_REQUEST['id'];
+                $CategoryModel = Category::get($id);
+                $this->setLayout('main');
+                return $this->render('category', [
+                    'model' => $CategoryModel
+                ]);
+            }
+        }
+
+        public function update(Request $request)
+        {
+            if($request->getMethod() === 'post') {
+                $id = $_REQUEST('id');
+                $CategoryModel = Category::get($id);
+                $CategoryModel->loadData($request->getBody());
+                $CategoryModel->update();
+                Application::$app->response->redirect('categories');
+            } else if ($request->getMethod() == 'get') {
+                $id = (int)$_REQUEST['id'];
+                $CategoryModel = Category::get($id); 
+                $this->setLayout('main');
+                return $this->render('category', [
+                    'model' => $CategoryModel
+                ]);
+            }
         }
     }
 

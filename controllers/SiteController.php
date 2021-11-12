@@ -8,8 +8,9 @@ use app\core\Request;
 use app\core\Response;
 
 use app\middlewares\AuthMiddleware;
-use app\models\Customer;
+
 use app\models\LoginForm;
+use app\models\Product;
 use app\models\User;
 
 class SiteController extends Controller
@@ -74,7 +75,7 @@ class SiteController extends Controller
 
     public function register(Request $request)
     {
-        $registerModel = new Customer();
+        $registerModel = new User();
         if ($request->getMethod() === 'post') {
             $registerModel->loadData($request->getBody());
             if ($registerModel->validate() && $registerModel->save()) {
