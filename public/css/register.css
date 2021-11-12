@@ -15,39 +15,80 @@ a {
   text-decoration: none;
 }
 
-.tp {
-    background-color: #FEFBDF ;
-  }
-  .container {
-    margin: auto;
-    max-width: 1200px;
-  }
-  .row {
-    display: flex;
-    flex-wrap: wrap;
-    
-  }
-  .row .logo img {
-    width: 80px;
-    display: inline-block;
-  }
-  
-  .listmember{
-    display: inline-block;
-    width: 80%;
-    transition: 0.5s ease;
-  }
-  
-  .listmem{
-    display: inline-block;
-    margin:  2px 20px;
-    padding: 10px 30px;
-    color: white;
-    font-weight: 700;
-    font-size: large;
-    
-  
-  }
+body {
+  position: relative;
+}
+
+.bg_body {
+  position: fixed;
+  width: 100%;
+  height: 100vh;
+}
+
+
+/* Header */
+#header {
+  z-index: 1001;
+  height: fit-content;
+  position: relative;
+  padding: 15px 0;
+  width: 100%;
+  background-color: red;
+}
+
+.bg_header {
+  background-color: white;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100%;
+}
+
+#header .row>div {
+  width: 100%;
+  margin: 15px 0;
+}
+
+#header .row>div:first-child {
+  margin-top: 5px;
+  height: 70px;
+}
+
+.div_1 img {
+  width: 70px;
+  height: 100%;
+}
+
+#header .thuongHieu {
+  font-size: 40px;
+  color: red;
+  text-align: center;
+  text-shadow: 10px 5px 5px #FFD700;
+  font-family: 'Lobster', cursive;
+  margin-left: 10px;
+  float: left;
+  width: fit-content;
+  transform: rotate(-10deg);
+  -webkit-transform: rotate(-10deg);
+  -ms-transform: rotate(-10deg);
+  -moz-transform: rotate(-10deg);
+}
+
+.inform>div {
+  height: 100%;
+  float: right;
+  width: 300px;
+  padding: 0 15px;
+}
+
+.inform img {
+  margin-right: 10px;
+  width: 40px;
+  height: auto;
+  object-fit: cover;
+  float: left;
+}
+/* End header */
 
 form {
     border: 3px solid #f1f1f1;
@@ -55,7 +96,8 @@ form {
     border-radius: 20px;
     width: 50%;
     margin: 50px auto;
-    background-color: #FEFBDF;
+    background-color: white;
+    position: relative;
 }
 h1, label{
   color: DodgerBlue;
