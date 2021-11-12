@@ -23,7 +23,7 @@ class SiteController extends Controller
     public function home()
     {
         return $this->render('home', [
-            'name' => 'Buy me'
+            'name' => 'Kaffee store'
         ]);
     }
 

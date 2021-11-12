@@ -8,11 +8,7 @@ use app\middlewares\BaseMiddleware;
 class Controller
 {
     public string $layout = 'main';
-<<<<<<< HEAD
-    
-=======
 
->>>>>>> master
     public function render($view, $params = [])
     {
         return Application::$app->router->renderView($view, $params);
