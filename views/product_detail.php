@@ -4,12 +4,10 @@
             <div class="row gx-5">
                 <div class="col-md-12 col-lg-6">
                     <div class="main-image">
-                        <img src="https://minio.thecoffeehouse.com/image/admin/Bottle_oolong_285082.jpg"
-                            alt="image-1" />
+                        <img src="<?php echo $params['product']->image_url ?>" alt="image-1" />
                     </div>
                     <div class="image-list">
-                        <img class="image-option"
-                            src="https://minio.thecoffeehouse.com/image/admin/Bottle_oolong_285082.jpg" alt="image-1"
+                        <img class="image-option" src="<?php echo $params['product']->image_url ?>" alt="image-1"
                             onclick="" />
                         <img class="image-option"
                             src="https://minio.thecoffeehouse.com/image/admin/Bottle_oolong_285082.jpg" alt="image-1"
@@ -23,9 +21,9 @@
                     </div>
                 </div>
                 <div class="col-md-12 col-lg-6 product-detail-right">
-                    <div class="product-detail-name">Trà Sữa Oolong Nướng Trân Châu Chai Fresh 500ML</div>
+                    <div class="product-detail-name"><?php echo $params['product']->name ?></div>
                     <div class="product-detail-footer">
-                        <div>495.000đ</div>
+                        <div id="product-detail-price"><?php echo $params['product']->price ?>đ</div>
                         <div class="product-detail-footer-quantity">
                             <button id="decrease-quantity-button" disabled class="item-button-disabled"
                                 onclick="decreaseQuantity()">
@@ -60,7 +58,7 @@
                         <div class="product-detail-size-body">
                             <div class="form-check form-check-inline">
                                 <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2"
-                                    value="option2" checked>
+                                    value="option1" checked>
                                 <div class="form-check-label" for="exampleRadios2">
                                     Nhỏ
                                 </div>
@@ -91,16 +89,15 @@
                         </div>
                     </div>
                     <div class="product-detail-button">
-                        <button>495.000đ - Thêm vào giỏ hàng</button>
+                        <<<<<<< HEAD <button><?php echo $params['product']->price ?> - Thêm vào giỏ hàng</button>
+                            =======
+                            <button id="addCart">Thêm vào giỏ hàng</button>
+                            >>>>>>> 202b70048350d928fe3bd53ca7cd76ffa0e79311
                     </div>
                 </div>
                 <div class="col-md-12 col-lg-6">
                     <div class="product-detail-description">
-                        Phiên bản chai fresh 500ml mới, The Coffee House tin rằng với diện mạo mới: tiện lợi và phù
-                        hợp với bình thường mới này, các tín đồ trà sữa sẽ được thưởng thức hương vị đậm đà, hòa quyện
-                        với sữa thơm béo mang đến cảm giác mát lạnh ở bất cứ nơi đâu.<br>
-                        *Sản phẩm dùng ngon nhất trong ngày.<br>
-                        *Sản phẩm mặc định mức đường và không đá.<br>
+                        <?php echo $params['product']->description ?>
                     </div>
                 </div>
             </div>

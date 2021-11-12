@@ -14,121 +14,55 @@ $path = str_replace($_SERVER['DOCUMENT_ROOT'], "", $path);
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
-        integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-
-        DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns"
-        crossorigin="anonymous"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Cookie&family=Dancing+Script&family=Raleway:ital@1&family=Zen+Antique+Soft&display=swap"
-        rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Lobster&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+        integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
 
     <link rel="stylesheet" href="/bootstrap/css/bootstrap.css">
-    <link rel="stylesheet" href="../../public/css/home.css">
-    <link rel="stylesheet" href="../../public/css/pos.css">
-    <link rel="stylesheet" href="../../public/css/register.css">
-    <link rel="stylesheet" href="../../public/css/login.css">
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/menu.css">
+    <link rel="stylesheet" href="/css/product_detail.css">
+    <link rel="stylesheet" href="/css/normalize.css">
+    <link rel="stylesheet" href="/css/cart.css">
+    <link rel="stylesheet" href="/css/home.css">
+    <link rel="stylesheet" href="/css/about.css">
+    <link rel="stylesheet" href="/css/stores.css">
 
-    <title>Buy me</title>
+    <title>Kaffee store</title>
 </head>
 
 <body>
-    <img src="../public/images/bg_image.jpg" alt="" class="bg_body">
-    <div class="wrap">
-        <div id="header">
-            <div class="bg_header"></div>
-            <div class="container">
-                <div class="row div_1">
-                    <div class="col-xl-3 col-lg-3 col-md-12">
-                        <img src="../public/images/dish.png" alt="" style="float: left;">
-                        <div class="thuongHieu">Buy Me</div>
-                    </div>
-                    <div class="col-xl-9 col-lg-9 inform">
-                        <div>
-                            <img src="../public/images/address.png" alt="">
-                            123A MyStreet <br>
-                            MyCity, VietNam
-                        </div>
-                        <div>
-                            <img src="../public/images/open.png" alt="">
-                            Mon-Fri: 8h30 - 20h30 <br>
-                            Sat-Sun: 8h00 - 17h30
-                        </div>
-                        <div></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div id="nav">
-            <ul class="navbar-nav nav-ul nav navbar-pill">
-                <li class="nav-item">
-                    <a class="nav-link" href="#header">Home</a>
-                </li>
-                <div class="dropdown-divider"></div>
-                <li class="nav-item">
-                    <a class="nav-link" href="#About_us">About us</a>
-                </li>
-                <div class="dropdown-divider"></div>
-                <li class="nav-item dropdown">
-                    <a class="nav-link" href="#" onclick="show_products();">Products</a>
-                </li>
-                <div class="dropdown-divider hr" id="hr_products"></div>
-                <li id="sub_products" class="menu_small_screen">
-                    <ul>
-                        <li><a href="#products">Món 1</a></li>
-                        <hr>
-                        <li><a href="#products">Món 2</a></li>
-                        <hr>
-                        <li><a href="#products">Món 3</a></li>
-                        <hr>
-                        <li><a href="#products">Nước 1</a></li>
-                        <hr>
-                        <li><a href="#products">Nước 2</a></li>
-                        <hr>
-                        <li><a href="#products">Nước 3</a></li>
-                        <hr>
-                        <li><a href="#products">Món 4</a></li>
-                        <hr>
-                        <li><a href="#products">Món 5</a></li>
-                        <hr>
-                        <li><a href="#products">Món 6</a></li>
-                        <hr>
-                        <li><a href="pos.html">POS</a></li>
-                        <hr>
-                    </ul>
-                </li>
-                <div class="dropdown-divider"></div>
-                <li class="nav-item">
-                    <a class="nav-link" href="#" onclick="show_services();">Services</a>
-                </li>
-                <div class="dropdown-divider hr" id="hr_services"></div>
-                <li id="sub_services" class="menu_small_screen">
-                    <ul>
-                        <li><a href="#services">Order Online Anytime</a></li>
-                        <hr>
-                        <li><a href="#services">Quick-Saving Delivery</a></li>
-                        <hr>
-                        <li><a href="#services">Comfortable Payment</a></li>
-                        <hr>
-                        <li><a href="#services">Listen To Your Feeling</a></li>
-                        <hr>
-                    </ul>
-                </li>
-                <div class="dropdown-divider"></div>
-                <li class="nav-item">
-                    <a class="nav-link" href="#our_company">Our Company</a>
-                </li>
-                <div class="dropdown-divider"></div>
-                <li class="nav-item">
-                    <a class="nav-link" href="#contact">Contact</a>
-                </li>
-                <div class="dropdown-divider"></div>
-            </ul>
+    <div class=" header">
+
+        <nav class="navbar navbar-expand-lg ">
+            <a class="navbar-brand" href="/">
+                <img class="logo" alt="logo" src='/images/logo/logo-4.png'>
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/menu">Menu</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/collection">Tumblr collection</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/stores">Cửa hàng</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/about">Về KAFFEE STORE</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/contact">Liên hệ</a>
+                    </li>
+                </ul>
                 <?php
 
                 use app\core\Application;
@@ -170,16 +104,31 @@ $path = str_replace($_SERVER['DOCUMENT_ROOT'], "", $path);
             {{content}}
         </div>
     </div>
-    <div id="contact">
-            <div class="footer">
-                &copy; Copyright 2021 <span>BUY ME</span>
-                <3 </div>
-            </div>
+    <div class="footer">
+        <div class="footer__inner">
+            <h6>Copyright @ 2021 KAFFEE STORE. All rights reversed.</h6>
         </div>
-        
-        <!-- Optional JavaScript -->
-        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="../public/js/home.js"></script>   
+    </div>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+    integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous">
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+    integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous">
+    </script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+    integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous">
+    </script>
+    <script src="/js/product_detail.js"></script>
+    <script src="/js/addcart.js"></script>;
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"
+        integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous">
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"
+        integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous">
+    </script>
 </body>
 
 </html>
