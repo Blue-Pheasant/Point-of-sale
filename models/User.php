@@ -9,14 +9,15 @@ use PDOException;
 
 class User extends UserModel
 {
-    public string $id;
-    public string $firstname;
-    public string $lastname;
-    public string $email;
-    public string $password;
-    public string $passwordConfirm;
-    public string $address;
-    public string $phone_number;
+    private string $id;
+    private string $firstname;
+    private string $lastname;
+    private string $email;
+    private string $password;
+    private string $passwordConfirm;
+    private string $address;
+    private string $phone_number;
+    private string $role;
 
     public function __construct(
         $id  = '',
@@ -26,7 +27,8 @@ class User extends UserModel
         $password = '',
         $passwordConfirm = '',
         $address= '',
-        $phone_number = ''
+        $phone_number = '',
+        $role = ''
     ) {
         $this->id = $id;
         $this->firstname = $firstname;
@@ -36,7 +38,10 @@ class User extends UserModel
         $this->passwordConfirm = $passwordConfirm;
         $this->address = $address;
         $this->phone_number = $phone_number;
+        $this->role = $role;
     }
+
+    public function getRole() { return $this->role; }
 
     public static function tableName(): string
     {
@@ -45,7 +50,7 @@ class User extends UserModel
 
     public function attributes(): array
     {
-        return ['id', 'firstname', 'lastname', 'email', 'password', 'phone_number', 'address'];
+        return ['id', 'firstname', 'lastname', 'email', 'password', 'phone_number', 'address', 'role'];
     }
 
     public function labels(): array
@@ -58,6 +63,7 @@ class User extends UserModel
             'passwordConfirm' => 'Password Confirm',
             'phone_number' => 'Phone number',
             'address' => 'Address',
+            'role' => 'Role'
         ];
     }
 
@@ -93,7 +99,7 @@ class User extends UserModel
         $req = $db->query('SELECT * FROM users');
 
         foreach ($req->fetchAll() as $item) {
-            $list[] = new User($item['id'], $item['firstname'], $item['lastname'], $item['password'], $item['passwordConfirm'], $item['address'], $item['phone_number']);
+            $list[] = new User($item['id'], $item['firstname'], $item['lastname'], $item['password'], $item['passwordConfirm'], $item['address'], $item['phone_number'], $item['role']);
         }
 
         return $list;
@@ -104,7 +110,7 @@ class User extends UserModel
         $db = Database::getInstance();
         $req = $db->query('SELECT * FROM products WHERE id = "' . $id . '"');
         $item = $req->fetchAll()[0];
-        $product = new User($item['id'], $item['firstname'], $item['lastname'], $item['password'], $item['passwordConfirm'], $item['address'], $item['phone_number']);
+        $product = new User($item['id'], $item['firstname'], $item['lastname'], $item['password'], $item['passwordConfirm'], $item['address'], $item['phone_number'], $item['role']);
         return $product;
     }
 
