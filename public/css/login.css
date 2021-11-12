@@ -126,6 +126,26 @@ input[type=password] {
   display: block;
   opacity: 0.9;
 }
+/* Contact */
+
+#contact {
+  background-color: red;
+  height: fit-content;
+  padding: 35px 0;
+  position: relative;
+}
+
+#contact .footer {
+  font-size: 18px;
+  color: white;
+  text-align: center;
+  width: fit-content;
+  margin: auto;
+}
+
+#contact span {
+  font-weight: bold;
+}
 
 @media only screen and (max-width: 998px) {
   .form_login form {
