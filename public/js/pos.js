@@ -21,7 +21,7 @@ const categoryTitle = document.querySelectorAll('.category-title');
                 categoryTitle[i].classList.remove('active');
             }
             activeItem.classList.add('active');
-        };
+        }
 
         function close_chi_tiet() {
             document.getElementById("chi_tiet").style.display = "none";

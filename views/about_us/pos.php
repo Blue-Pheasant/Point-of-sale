@@ -19,7 +19,7 @@
         href="https://fonts.googleapis.com/css2?family=Cookie&family=Dancing+Script&family=Raleway:ital@1&family=Zen+Antique+Soft&display=swap"
         rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Lobster&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../public/css/pos.css">
+    <link rel="stylesheet" href="../../public/css/pos.css">
 </head>
 
 <body>
@@ -30,7 +30,7 @@
                     <div class="container list_product">
                         <div class="row">
                             <div class="col-xl-12 header">
-                                <a href="index.html"><img src="../public/images/dish.png" alt=""
+                                <a href="index.php"><img src="../../public/image/dish.png" alt=""
                                         style="float: left;"></a>
                                 <div class="thuongHieu">Buy Me</div>
                             </div>
@@ -66,7 +66,7 @@
                                     <div class="weight">150g</div>
                                     <div class="dish">
                                         <div class="price">$1.75</div>
-                                        <img src="../public/images/dish_2.jpg" alt="" class="thumbnail">
+                                        <img src="../../public/image/dish_2.jpg" alt="" class="thumbnail">
                                     </div>
                                 </div>
                             </div>
@@ -76,7 +76,7 @@
                                     <div class="weight">150g</div>
                                     <div class="dish">
                                         <div class="price">$1.75</div>
-                                        <img src="../public/images/dish_1.jpg" alt="" class="thumbnail">
+                                        <img src="../../public/image/dish_1.jpg" alt="" class="thumbnail">
                                     </div>
                                 </div>
                             </div>
@@ -86,7 +86,7 @@
                                     <div class="weight">150g</div>
                                     <div class="dish">
                                         <div class="price">$1.75</div>
-                                        <img src="../public/images/dish_4.jpg" alt="" class="thumbnail">
+                                        <img src="../../public/image/dish_4.jpg" alt="" class="thumbnail">
                                     </div>
                                 </div>
                             </div>
@@ -96,7 +96,7 @@
                                     <div class="weight">150g</div>
                                     <div class="dish">
                                         <div class="price">$1.75</div>
-                                        <img src="../public/images/dish_4.jpg" alt="" class="thumbnail">
+                                        <img src="../../public/image/dish_4.jpg" alt="" class="thumbnail">
                                     </div>
                                 </div>
                             </div>
@@ -106,7 +106,7 @@
                                     <div class="weight">150g</div>
                                     <div class="dish">
                                         <div class="price">$1.75</div>
-                                        <img src="../public/images/drink_2.jpg" alt="" class="thumbnail">
+                                        <img src="../../public/image/drink_2.jpg" alt="" class="thumbnail">
                                     </div>
                                 </div>
                             </div>
@@ -116,7 +116,7 @@
                                     <div class="weight">150g</div>
                                     <div class="dish">
                                         <div class="price">$1.75</div>
-                                        <img src="../public/images/dish_2.jpg" alt="" class="thumbnail">
+                                        <img src="../../public/image/dish_2.jpg" alt="" class="thumbnail">
                                     </div>
                                 </div>
                             </div>
@@ -126,7 +126,7 @@
                                     <div class="weight">150g</div>
                                     <div class="dish">
                                         <div class="price">$1.75</div>
-                                        <img src="../public/images/drink_2.jpg" alt="" class="thumbnail">
+                                        <img src="../../public/image/drink_2.jpg" alt="" class="thumbnail">
                                     </div>
                                 </div>
                             </div>
@@ -136,7 +136,7 @@
                                     <div class="weight">150g</div>
                                     <div class="dish">
                                         <div class="price">$1.75</div>
-                                        <img src="../public/images/dish_4.jpg" alt="" class="thumbnail">
+                                        <img src="../../public/image/dish_4.jpg" alt="" class="thumbnail">
                                     </div>
                                 </div>
                             </div>
@@ -146,7 +146,7 @@
                                     <div class="weight">150g</div>
                                     <div class="dish">
                                         <div class="price">$1.75</div>
-                                        <img src="../public/images/drink_3.jpg" alt="" class="thumbnail">
+                                        <img src="../../public/image/drink_3.jpg" alt="" class="thumbnail">
                                     </div>
                                 </div>
                             </div>
@@ -156,7 +156,7 @@
                                     <div class="weight">150g</div>
                                     <div class="dish">
                                         <div class="price">$1.75</div>
-                                        <img src="../public/images/drink_2.jpg" alt="" class="thumbnail">
+                                        <img src="../../public/image/drink_2.jpg" alt="" class="thumbnail">
                                     </div>
                                 </div>
                             </div>
@@ -166,7 +166,7 @@
                                     <div class="weight">150g</div>
                                     <div class="dish">
                                         <div class="price">$1.75</div>
-                                        <img src="../public/images/drink_1.jpg" alt="" class="thumbnail">
+                                        <img src="../../public/image/drink_1.jpg" alt="" class="thumbnail">
                                     </div>
                                 </div>
                             </div>
@@ -176,7 +176,7 @@
                                     <div class="weight">150g</div>
                                     <div class="dish">
                                         <div class="price">$1.75</div>
-                                        <img src="../public/images/drink_2.jpg" alt="" class="thumbnail">
+                                        <img src="../../public/image/drink_2.jpg" alt="" class="thumbnail">
                                     </div>
                                 </div>
                             </div>
@@ -186,7 +186,7 @@
                                     <div class="weight">150g</div>
                                     <div class="dish">
                                         <div class="price">$1.75</div>
-                                        <img src="../public/images/dish_1.jpg" alt="" class="thumbnail">
+                                        <img src="../../public/image/dish_1.jpg" alt="" class="thumbnail">
                                     </div>
                                 </div>
                             </div>
@@ -196,7 +196,7 @@
                                     <div class="weight">150g</div>
                                     <div class="dish">
                                         <div class="price">$1.75</div>
-                                        <img src="../public/images/dish_2.jpg" alt="" class="thumbnail">
+                                        <img src="../../public/image/dish_2.jpg" alt="" class="thumbnail">
                                     </div>
                                 </div>
                             </div>
@@ -206,7 +206,7 @@
                                     <div class="weight">150g</div>
                                     <div class="dish">
                                         <div class="price">$1.75</div>
-                                        <img src="../public/images/dish_3.jpg" alt="" class="thumbnail">
+                                        <img src="../../public/image/dish_3.jpg" alt="" class="thumbnail">
                                     </div>
                                 </div>
                             </div>
@@ -216,7 +216,7 @@
                                     <div class="weight">150g</div>
                                     <div class="dish">
                                         <div class="price">$1.75</div>
-                                        <img src="../public/images/dish_4.jpg" alt="" class="thumbnail">
+                                        <img src="../../public/image/dish_4.jpg" alt="" class="thumbnail">
                                     </div>
                                 </div>
                             </div>
@@ -226,7 +226,7 @@
                                     <div class="weight">150g</div>
                                     <div class="dish">
                                         <div class="price">$1.75</div>
-                                        <img src="../public/images/dish_2.jpg" alt="" class="thumbnail">
+                                        <img src="../../public/image/dish_2.jpg" alt="" class="thumbnail">
                                     </div>
                                 </div>
                             </div>
@@ -236,7 +236,7 @@
                                     <div class="weight">150g</div>
                                     <div class="dish">
                                         <div class="price">$1.75</div>
-                                        <img src="../public/images/dish_1.jpg" alt="" class="thumbnail">
+                                        <img src="../../public/image/dish_1.jpg" alt="" class="thumbnail">
                                     </div>
                                 </div>
                             </div>
@@ -246,7 +246,7 @@
                                     <div class="weight">150g</div>
                                     <div class="dish">
                                         <div class="price">$1.75</div>
-                                        <img src="../public/images/dish_4.jpg" alt="" class="thumbnail">
+                                        <img src="../../public/image/dish_4.jpg" alt="" class="thumbnail">
                                     </div>
                                 </div>
                             </div>
@@ -256,7 +256,7 @@
                                     <div class="weight">150g</div>
                                     <div class="dish">
                                         <div class="price">$1.75</div>
-                                        <img src="../public/images/dish_4.jpg" alt="" class="thumbnail">
+                                        <img src="../../public/image/dish_4.jpg" alt="" class="thumbnail">
                                     </div>
                                 </div>
                             </div>
@@ -266,7 +266,7 @@
                                     <div class="weight">150g</div>
                                     <div class="dish">
                                         <div class="price">$1.75</div>
-                                        <img src="../public/images/drink_2.jpg" alt="" class="thumbnail">
+                                        <img src="../../public/image/drink_2.jpg" alt="" class="thumbnail">
                                     </div>
                                 </div>
                             </div>
@@ -276,7 +276,7 @@
                                     <div class="weight">150g</div>
                                     <div class="dish">
                                         <div class="price">$1.75</div>
-                                        <img src="../public/images/dish_2.jpg" alt="" class="thumbnail">
+                                        <img src="../../public/image/dish_2.jpg" alt="" class="thumbnail">
                                     </div>
                                 </div>
                             </div>
@@ -286,7 +286,7 @@
                                     <div class="weight">150g</div>
                                     <div class="dish">
                                         <div class="price">$1.75</div>
-                                        <img src="../public/images/drink_2.jpg" alt="" class="thumbnail">
+                                        <img src="../../public/image/drink_2.jpg" alt="" class="thumbnail">
                                     </div>
                                 </div>
                             </div>
@@ -296,7 +296,7 @@
                                     <div class="weight">150g</div>
                                     <div class="dish">
                                         <div class="price">$1.75</div>
-                                        <img src="../public/images/dish_4.jpg" alt="" class="thumbnail">
+                                        <img src="../../public/image/dish_4.jpg" alt="" class="thumbnail">
                                     </div>
                                 </div>
                             </div>
@@ -306,7 +306,7 @@
                                     <div class="weight">150g</div>
                                     <div class="dish">
                                         <div class="price">$1.75</div>
-                                        <img src="../public/images/drink_3.jpg" alt="" class="thumbnail">
+                                        <img src="../../public/image/drink_3.jpg" alt="" class="thumbnail">
                                     </div>
                                 </div>
                             </div>
@@ -316,7 +316,7 @@
                                     <div class="weight">150g</div>
                                     <div class="dish">
                                         <div class="price">$1.75</div>
-                                        <img src="../public/images/drink_2.jpg" alt="" class="thumbnail">
+                                        <img src="../../public/image/drink_2.jpg" alt="" class="thumbnail">
                                     </div>
                                 </div>
                             </div>
@@ -326,7 +326,7 @@
                                     <div class="weight">150g</div>
                                     <div class="dish">
                                         <div class="price">$1.75</div>
-                                        <img src="../public/images/drink_1.jpg" alt="" class="thumbnail">
+                                        <img src="../../public/image/drink_1.jpg" alt="" class="thumbnail">
                                     </div>
                                 </div>
                             </div>
@@ -336,7 +336,7 @@
                                     <div class="weight">150g</div>
                                     <div class="dish">
                                         <div class="price">$1.75</div>
-                                        <img src="../public/images/drink_2.jpg" alt="" class="thumbnail">
+                                        <img src="../../public/image/drink_2.jpg" alt="" class="thumbnail">
                                     </div>
                                 </div>
                             </div>
@@ -346,7 +346,7 @@
                                     <div class="weight">150g</div>
                                     <div class="dish">
                                         <div class="price">$1.75</div>
-                                        <img src="../public/images/dish_1.jpg" alt="" class="thumbnail">
+                                        <img src="../../public/image/dish_1.jpg" alt="" class="thumbnail">
                                     </div>
                                 </div>
                             </div>
@@ -356,7 +356,7 @@
                                     <div class="weight">150g</div>
                                     <div class="dish">
                                         <div class="price">$1.75</div>
-                                        <img src="../public/images/dish_2.jpg" alt="" class="thumbnail">
+                                        <img src="../../public/image/dish_2.jpg" alt="" class="thumbnail">
                                     </div>
                                 </div>
                             </div>
@@ -366,7 +366,7 @@
                                     <div class="weight">150g</div>
                                     <div class="dish">
                                         <div class="price">$1.75</div>
-                                        <img src="../public/images/dish_3.jpg" alt="" class="thumbnail">
+                                        <img src="../../public/image/dish_3.jpg" alt="" class="thumbnail">
                                     </div>
                                 </div>
                             </div>
@@ -376,7 +376,7 @@
                                     <div class="weight">150g</div>
                                     <div class="dish">
                                         <div class="price">$1.75</div>
-                                        <img src="../public/images/dish_4.jpg" alt="" class="thumbnail">
+                                        <img src="../../public/image/dish_4.jpg" alt="" class="thumbnail">
                                     </div>
                                 </div>
                             </div>
@@ -416,7 +416,7 @@
                         </div>
                         <div class="row nv_thungan">
                             <div class="col-xl-12">
-                                <img src="../public/images/avatar.png" alt=""> Nguyễn Văn A
+                                <img src="../../public/image/avatar.png" alt=""> Nguyễn Văn A
                             </div>
                         </div>
                     </div>
@@ -449,7 +449,7 @@
             </div>
         </div>
     </div>
-    <script src="../public/js/pos.js"></script>
+    <script src="../../public/js/pos.js"></script>
 </body>
 
 </html>

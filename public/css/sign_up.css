@@ -1,55 +1,55 @@
-.form_login {
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300&family=Roboto:wght@100;300&display=swap');
+main {
   padding: 20px 0;
 }
 
-.form_login ul {
+main ul {
   list-style: none;
 }
 
-.form_login a {
+main a {
   text-decoration: none;
 }
 
-.form_login .tp {
+main .tp {
   background-color: #FEFBDF;
 }
 
-.form_login .container {
+main .container {
   margin: auto;
-  width: 60%;
+  max-width: 1200px;
 }
 
-.form_login .container {
-  padding: 16px;
-}
-
-.form_login .row {
+main .row {
   display: flex;
   flex-wrap: wrap;
 
 }
 
-.form_login .row .logo img {
+main .row .logo img {
   width: 80px;
   display: inline-block;
 }
 
-.form_login .listmember {
+main .listmember {
   display: inline-block;
   width: 80%;
   transition: 0.5s ease;
 }
 
-.form_login .listmem {
+main .listmem {
   display: inline-block;
   margin: 2px 20px;
   padding: 10px 30px;
   color: white;
   font-weight: 700;
   font-size: large;
+
+
 }
 
-.form_login form {
+main form {
   border: 3px solid #f1f1f1;
   padding: 10px 10px 20px 10px;
   border-radius: 20px;
@@ -58,17 +58,16 @@
   background-color: #FEFBDF;
 }
 
-.form_login h1,
+main h1,
 label {
   color: DodgerBlue;
 }
 
-/* Full-width inputs */
-.form_login input[type=text],
+main input[type=text],
 input[type=password] {
   width: 100%;
   padding: 15px;
-  margin: 5px 0 22px 0;
+  margin: 5px 10px 22px 10px;
   display: inline-block;
   border: none;
   resize: vertical;
@@ -76,8 +75,25 @@ input[type=password] {
   box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2);
 }
 
+main .fnameuser {
+  width: 48%;
+  display: inline-block;
+  margin-right: 15px;
+}
+
+main .lnameuser {
+  width: 48%;
+  display: inline-block;
+}
+
+main hr {
+  border: 1px solid #f1f1f1;
+  margin-bottom: 25px;
+}
+
 /* Set a style for all buttons */
-.form_login button {
+main button {
+  background-color: #4CAF50;
   color: white;
   padding: 14px 20px;
   margin: 8px 0;
@@ -85,56 +101,42 @@ input[type=password] {
   cursor: pointer;
   width: 100%;
   opacity: 0.9;
+  font-size: large;
 }
 
-.form_login .login {
-  background-color: #4CAF50;
+main button:hover {
+  opacity: 1;
+}
+
+/* Float cancel and signup buttons and add an equal width */
+main .signupbtn {
   float: left;
   width: 100%;
   border-radius: 15px;
   border: 0;
   box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2);
-  font-size: large;
 }
 
-/* Add a hover effect for buttons */
-.form_login button:hover {
-  opacity: 1;
+/* Add padding to container elements */
+main .container {
+  padding: 16px;
 }
 
-.form_login .forgotpw {
-  padding: 15px 10px;
-  display: flex;
-  justify-content: center;
-  font-size: small;
+/* Clear floats */
+main .clearfix::after {
+  content: "";
+  clear: both;
+  display: table;
 }
 
-.form_login hr {
-  border: 1px solid #f1f1f1;
-  margin-bottom: 25px;
-  height: 2px;
-}
-
-.form_login .sign_up {
-  text-decoration: none;
-  background-color: #3871B9;
-  border-radius: 15px;
-  border: 0;
-  box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2);
-  margin: 0 auto;
-  width: 50%;
-  display: block;
-  opacity: 0.9;
-}
-
-@media only screen and (max-width: 998px) {
-  .form_login form {
+@media only screen and (max-width: 1100px) {
+  main form {
     width: 70%;
   }
 }
 
-@media only screen and (max-width: 776.5px) {
-  .form_login form {
+@media only screen and (max-width: 800px) {
+  main form {
     width: 90%;
   }
 }

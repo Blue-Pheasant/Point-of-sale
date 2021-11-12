@@ -8,6 +8,12 @@ body {
     height: 100vh;
 }
 
+.wrap {
+    min-height: 100vh;
+    position: relative;
+    padding-bottom: 90px;
+}
+
 /* Header */
 #header {
     z-index: 1001;
@@ -15,7 +21,7 @@ body {
     position: relative;
     padding: 15px 0;
     width: 100%;
-    background-color: red;
+    box-shadow: 1px 1px 8px 1px black;
 }
 
 .bg_header {
@@ -57,10 +63,14 @@ body {
 }
 
 .inform>div {
-    height: 100%;
+    height: fit-content;
     float: right;
-    width: 300px;
+    width: 240px;
     padding: 0 15px;
+}
+
+.inform>div:first-child {
+    width: 190px;
 }
 
 .inform img {
@@ -69,6 +79,16 @@ body {
     height: auto;
     object-fit: cover;
     float: left;
+}
+
+.inform a {
+    color: indianred;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.inform a:hover {
+    color: red;
 }
 
 /* End Header */
@@ -182,7 +202,7 @@ body {
     background-color: orange;
     margin-top: -25px;
     border-radius: 50px;
-    box-shadow: 3px 3px 8px 3px rgb(53, 53, 53);
+    box-shadow: 1px -1px 5px 1px rgb(156, 156, 156);
 }
 
 .div_2 {
@@ -246,7 +266,7 @@ nav a {
     color: red;
 }
 
-nav .active a {
+nav .active>a {
     color: white;
 }
 
@@ -259,12 +279,26 @@ nav .active a {
 }
 
 #carouselExampleIndicators {
-    height: ̃600px;
+    box-sizing: border-box;
+    position: relative;
+    height: calc(100vh - 90px - 110px);
+    margin: 0 10%;
+}
+
+#carouselExampleIndicators .carousel-inner {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    width: 100%;
+    margin: auto;
+    height: calc(100vh - 90px - 110px - 60px);
 }
 
 #carouselExampleIndicators .carousel-inner .img {
     width: 100%;
-    height: 600px;
+    height: 100%;
 }
 
 #carouselExampleIndicators .img img {
@@ -277,16 +311,32 @@ nav .active a {
     color: blue;
 }
 
-#banner .script {
+#carouselExampleIndicators .script {
     width: 100%;
     color: white;
     text-align: center;
-    height: fit-content;
-    padding-top: 100px;
+    height: 100%;
     font-family: 'Lobster', cursive;
 }
 
-#banner button {
+#carouselExampleIndicators .script .inner_script {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+#carouselExampleIndicators .script .inner_inner {
+    position: absolute;
+    height: fit-content;
+    width: fit-content;
+    margin: auto;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+#carouselExampleIndicators button {
     background-color: red;
     color: white;
     border-radius: 15px;
@@ -476,8 +526,7 @@ hr {
 
 #services {
     height: fit-content;
-    padding: 100px 20px;
-    margin-top: 30px;
+    padding: 80px 20px 15px 20px;
 }
 
 #services .title {
@@ -486,6 +535,7 @@ hr {
     font-size: 35px;
     font-family: 'Lobster', cursive;
     margin-bottom: 30px;
+    color: red;
 }
 
 #services .title>div {
@@ -541,8 +591,9 @@ hr {
 /* Our Company */
 
 #our_company {
+    box-sizing: border-box;
     height: fit-content;
-    padding: 50px 0;
+    padding: 80px 0 15px 0;
     position: relative;
 }
 
@@ -626,9 +677,11 @@ hr {
 
 #contact {
     background-color: red;
-    height: fit-content;
-    padding: 35px 0;
-    position: relative;
+    height: 90px;
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    vertical-align: middle;
 }
 
 #contact .footer {
@@ -636,11 +689,24 @@ hr {
     color: white;
     text-align: center;
     width: fit-content;
+    height: 90px;
+    line-height: 90px;
     margin: auto;
 }
 
 #contact span {
     font-weight: bold;
+}
+
+@media only screen and (max-width: 1100px) {
+    #carouselExampleIndicators {
+        margin: 0 3%;
+        height: calc(100vh - 90px - 110px);
+    }
+
+    #carouselExampleIndicators .carousel-inner {
+        height: calc(100vh - 90px - 110px - 200px);
+    }
 }
 
 @media only screen and (max-width: 998px) {
@@ -665,11 +731,12 @@ hr {
     }
 
     #carouselExampleIndicators {
-        height: ̃500px;
+        margin: 0 3%;
+        height: calc(100vh - 90px - 70px);
     }
 
-    #carouselExampleIndicators .carousel-inner .img {
-        height: 500px;
+    #carouselExampleIndicators .carousel-inner {
+        height: calc(100vh - 90px - 70px - 200px);
     }
 
     #banner h1 {
@@ -707,15 +774,23 @@ hr {
     #About_us .script {
         padding-top: 25px;
     }
+
+    #our_company {
+        padding-top: 0;
+    }
+
+    #services {
+        padding-top: 20px;
+    }
 }
 
 @media only screen and (max-width: 767.5px) {
     #carouselExampleIndicators {
-        height: ̃300px;
+        height: calc(100vh - 90px - 110px);
     }
 
-    #carouselExampleIndicators .carousel-inner .img {
-        height: 300px;
+    #carouselExampleIndicators .carousel-inner {
+        height: calc(100vh - 90px - 70px - 300px);
     }
 
     #banner h1 {
