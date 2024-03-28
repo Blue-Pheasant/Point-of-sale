@@ -28,8 +28,9 @@ class Order extends DBModel
         $delivery_phone,
         $delivery_address,
         $display = '',
-        $created_at = '',
-    ) {
+        $created_at = ''
+    ) 
+    {
         $this->id = $id;
         $this->user_id = $user_id;
         $this->payment_method = $payment_method;
