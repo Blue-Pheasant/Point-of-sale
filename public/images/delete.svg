@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>76397B26-4952-4C54-B4CB-D405BA046197</title>
+    <g id="UI" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="UI-Kit-Web" transform="translate(-300.000000, -4296.000000)">
+            <g id="Ic-delete" transform="translate(300.000000, 4296.000000)">
+                <rect id="Rectangle-Copy-2" x="0" y="0" width="16" height="16"></rect>
+                <g transform="translate(0.533333, 1.066667)">
+                    <rect id="Rectangle" x="0" y="0" width="14.9333333" height="14.9333333"></rect>
+                    <g id="trash-can" transform="translate(1.244444, 0.000000)" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.06666667">
+                        <polyline id="Path" stroke="#000000" points="3.91769547 2.36015326 3.91769547 0 8.52674897 0 8.52674897 2.36015326"></polyline>
+                        <line x1="12.4444444" y1="2.36015326" x2="0" y2="2.36015326" id="Path" stroke="#1E1E1E"></line>
+                        <path d="M11.0617284,3.77624521 L10.4468807,12.5928337 C10.4038392,13.2103695 9.90212848,13.6888889 9.29761317,13.6888889 L3.14683128,13.6888889 C2.54231596,13.6888889 2.04060528,13.2103695 1.99756379,12.5928337 L1.38271605,3.77624521" id="Path" stroke="#000000"></path>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

@@ -1,0 +1,22 @@
+{
+    "name": "bluepheasant/pos-system",
+    "authors": [
+        {
+            "name": "VO QUY LONG",
+            "email": "long.vo2k1@hcmut.edu.vn"
+        },
+        {
+            "name": "VU NHAT NAM",
+            "email": "nhatnam@hcmut.edu.vn"
+        }
+    ],
+    "require": {
+        "vlucas/phpdotenv": "^5.3"
+    },
+    "autoload": {
+        "psr-4" : {
+            "app\\" : "./"
+        }
+    }
+
+}

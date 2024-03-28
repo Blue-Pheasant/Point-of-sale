@@ -1,0 +1,21 @@
+.profile-avatar-image {
+    width: 150px;
+    height: 150px;
+}
+
+.profile-avatar {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 50px;
+}
+
+.password-button {
+    background-image: linear-gradient( to right, #f6d365 0%, #fda085 100%);
+    cursor: pointer;
+    padding: 15px 20px;
+    border-radius: 40px;
+    border: none;
+    color: rgb(0, 0, 0);
+}

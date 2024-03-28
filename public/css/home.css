@@ -1,0 +1,49 @@
+.home-image {
+    width: 50%;
+}
+
+.home-poster {
+    display: flex;
+    flex-direction: row;
+}
+
+.home-block {
+    margin: 50px 0;
+}
+
+.carousel {
+    margin-top: 20px;
+}
+
+.home-page .container {
+    margin-top: 0;
+    padding-top: 0;
+}
+
+.home-video {
+    position: relative;
+    width: 100%;
+    margin-bottom: 50px;
+}
+
+#home-video-image {
+    position: absolute;
+    z-index: 5;
+    width: 40%;
+}
+
+.home-video-image {
+    width: 100%;
+}
+
+#topVideo {
+    z-index: 4;
+    position: absolute;
+    width: 100%;
+}
+
+@media screen and (max-width:768px){
+    .home-video {
+      display: none;
+    }
+}

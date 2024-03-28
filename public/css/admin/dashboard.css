@@ -1,0 +1,44 @@
+.card .card-body {
+    padding: 15px 15px 10px 15px;
+}
+.card .card-title {
+    margin: 0;
+    color: #ffffff;
+    font-size: 30px;
+    font-weight: 600;
+    line-height: 1.6;
+    text-align: center;
+}
+.card .card-category {
+    margin-top: 5px;
+    font-size: 20px;
+    font-weight: 400;
+    color: #ffffff;
+    text-align: center;
+    margin-bottom: 0px;
+}
+.card-default {
+    background: #607D8B;
+}
+.card-primary {
+    background: #1D62F0;
+}
+.card-info {
+    background: #23CCEF;
+}
+.card-success {
+    background: #59d05d;
+}
+.card-warning {
+    background: #fbad4c;
+}
+.card-danger {
+    background: #ff646d;
+}
+.card-stats .icon-big {
+  font-size: 3em;
+  min-height: 64px;
+}
+.numbers {
+    color: #ffffff;
+}

@@ -1,0 +1,884 @@
+commit 83775f408ce9802e0691a66c2b64613ae2c1071a
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Sat Dec 4 20:46:45 2021 +0700
+
+    Update sql schema
+
+commit 4a1d2ff0728776183a76dd43c0ffee8ce8bf22ae
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Sat Dec 4 20:44:39 2021 +0700
+
+    Update sql schema
+
+commit 4d379b05242ad70be6fcc512070bbd790cd4db49
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Sat Dec 4 20:42:52 2021 +0700
+
+    Update sql schema
+
+commit d0f41b51375e14eec7e32a08a0b2a23139a95266
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Sat Dec 4 20:18:52 2021 +0700
+
+    Update composer
+
+commit ac2bcab7833f163a7dde8a3c11d86f0db0dfc6d7
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Sat Dec 4 20:14:46 2021 +0700
+
+    Update SQLo
+
+commit dfd7975b6200bf4f19955605667df59e9e9361c3
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Sat Dec 4 20:09:08 2021 +0700
+
+    Update composer
+
+commit c50e1effbe478be67f17a03563c3caa968badc45
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Sat Dec 4 20:07:05 2021 +0700
+
+    change build package
+
+commit 8ca76467096bf397266a46467ae119630544b9f6
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Sat Dec 4 19:44:18 2021 +0700
+
+    Fix logo
+
+commit 712487579b150bdbd497ec0c6374ed9bb963b9e9
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Sat Dec 4 19:28:12 2021 +0700
+
+    Fix logo
+
+commit 8968d391e2406008e62f3fb80c552065d0d5dea1
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Sat Dec 4 19:26:42 2021 +0700
+
+    Fix sql for postgresql
+
+commit b76325016204e978612ce91f6a0e9003262dfe07
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Sat Dec 4 19:02:05 2021 +0700
+
+    Update composer
+
+commit 2f5e75574660f2c8f258062e531c27cd8f03e195
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Sat Dec 4 17:30:59 2021 +0700
+
+    Change exec db
+
+commit c4aecce394b3f90f105aec17af08af3f23f0926b
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Sat Dec 4 17:27:55 2021 +0700
+
+    add procfile
+
+commit 53bbeff620a30b7a40702f81878bad75d871567d
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Sat Dec 4 17:26:29 2021 +0700
+
+    Change exec db
+
+commit 2bc16d3fb769a157ffefe36cd306eba7a508562d
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Sat Dec 4 17:06:01 2021 +0700
+
+    add procfile
+
+commit 0495c3042428b740dc7cbac20ef506b288bfe3b0
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Fri Dec 3 19:01:54 2021 +0700
+
+    update search
+
+commit 3fffb055bbbf9fd6e6eb24f3b9cb6b45cbeabada
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Fri Dec 3 18:55:33 2021 +0700
+
+    Update logo
+
+commit 0fa2b815b424759611d18be10129a48d8aee198d
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Fri Dec 3 18:51:09 2021 +0700
+
+    Update clear button
+
+commit 7e9246aaaa0ace434e1bf03c5ee3d3b2182f014f
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Fri Dec 3 18:09:03 2021 +0700
+
+    Update intro
+
+commit 603be66d3ebd6409a282bb51e97b7f6d9ed16899
+Author: Nhat Nam <nam0968024068@gmail.com>
+Date:   Fri Dec 3 00:48:20 2021 +0700
+
+    Change some css
+
+commit 03f836d58a1a9ef08fba4bf89aa2af9efb6d66e9
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Wed Dec 1 23:03:16 2021 +0700
+
+    Update order detail
+
+commit 091679408b6a0eb490e5f2117ab0832532a464d3
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Wed Dec 1 22:38:08 2021 +0700
+
+    update
+
+commit bfd229df330d5d973e531ad423d2e2a5ede09d2f
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Wed Dec 1 13:44:44 2021 +0700
+
+    Update menu
+
+commit 51189a932b490a6a9e44335db8ae5c27409ca5f6
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Wed Dec 1 13:39:59 2021 +0700
+
+    Update function + fix UI/UX
+
+commit 4741080acd91ee9c2bef1e98ec6eaef3071701e5
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Wed Dec 1 08:37:24 2021 +0700
+
+    changed menu
+
+commit c4e240ce4478538ef737b3d164e0d573553c7d65
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Wed Dec 1 08:18:02 2021 +0700
+
+    Update
+
+commit 22b461b0702ad9984754be01ced02972489cd5d1
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Wed Dec 1 08:13:26 2021 +0700
+
+    Big update
+
+commit 8103d4f0dcc0066ab668e05f27848315a7c468c0
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Mon Nov 29 10:52:46 2021 +0700
+
+    delete collection
+
+commit c6e411ea7f1948c4ea3d015a765cb1d4b671aaa5
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Mon Nov 29 10:11:25 2021 +0700
+
+    Delete getItem
+
+commit 1b0ff2a69fd33e0a7a7afcfafcf29e81cd53704e
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Mon Nov 29 10:10:30 2021 +0700
+
+    Update delete item on menu page
+
+commit d084db02057086e0f70122fd941e1cddef10f661
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Mon Nov 29 10:02:13 2021 +0700
+
+    Update delete cart button
+
+commit 1a5fa1734d1a08a87e6a192a755dd43baf6bb859
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Mon Nov 29 00:30:16 2021 +0700
+
+    fix price in cart and menu, also update serch key word
+
+commit bbedf9b75d6257f2fd52e6d089e769e205c1e126
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Sun Nov 28 23:28:58 2021 +0700
+
+    Update and fix
+
+commit 3b783403cc00ebfb27b5a618baa43ff13e8db2de
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Sun Nov 28 16:09:33 2021 +0700
+
+    Remove avatar function
+
+commit 2acac21706132d03d6ec9477dbcb22220b328041
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Sun Nov 28 10:34:46 2021 +0700
+
+    Fix orders page
+
+commit d7b644da5d7723fd66ca6c238a0e46e97802b232
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Sat Nov 27 22:07:10 2021 +0700
+
+    ADD AVATAR
+
+commit 841ea4469871a068fb89c8eaea3038f5c9d08efb
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Sat Nov 27 21:32:37 2021 +0700
+
+    Big update
+
+commit 465ae2b54a0fd9af2365f974fe67dc87909ebb41
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Sat Nov 27 14:05:04 2021 +0700
+
+    update
+
+commit b2e86adcfb471fc05c0c947f7909eed5515d5194
+Merge: 1ed1d18 e58d838
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Sat Nov 27 14:04:07 2021 +0700
+
+    Update
+
+commit e58d838f78ea03715ac33fb0f8ef088a966b9179
+Author: Nhat Nam <nam0968024068@gmail.com>
+Date:   Sat Nov 27 13:22:13 2021 +0700
+
+    Update css-cart and css-pos for mobile
+
+commit 1ed1d18f7f6d82fc5f0490adceee2f25e72efd64
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Sat Nov 27 12:13:04 2021 +0700
+
+    Update title
+
+commit 2d999f6ba0e885fff0620f01dc172df6d8d30799
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Thu Nov 25 22:08:43 2021 +0700
+
+    Add an image
+
+commit 4155adafe77b5683858a909675af6347cf82acb9
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Thu Nov 25 18:07:52 2021 +0700
+
+    Update database
+
+commit e1a372678459e26415668181c3357d17f36b1ae4
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Thu Nov 25 12:30:01 2021 +0700
+
+    Change image db from thecoffeehouse.com link, if you can't run the website, please drop old db and make a new by import file thecoffeehouse in project
+
+commit 06ae9eadf5e366a68d28250f4e24e8a91a2fe748
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Thu Nov 25 11:01:07 2021 +0700
+
+    fix cart
+
+commit a4f10c1caa5d5f1ba92c31e505883a34bef0b7f5
+Author: Nhat Nam <nam0968024068@gmail.com>
+Date:   Thu Nov 25 00:24:21 2021 +0700
+
+    Fix some errors
+
+commit 94f9dcc00508daa116b1f82f44574db49fe4c45d
+Merge: 1d76519 782fe4c
+Author: Nhat Nam <nam0968024068@gmail.com>
+Date:   Thu Nov 25 00:14:33 2021 +0700
+
+    Update POS and cart
+
+commit 1d76519ba053d91048715bd0ed3a74b1e0004c0f
+Author: Nhat Nam <nam0968024068@gmail.com>
+Date:   Thu Nov 25 00:13:05 2021 +0700
+
+    Update POS and cart
+
+commit 782fe4cc2c17d52604eae022669a26e7cd91dcd8
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Thu Nov 25 00:12:57 2021 +0700
+
+    update login and register
+
+commit 0323b5d1918fbea007dbb501a883f2b6471741ec
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Wed Nov 24 23:19:28 2021 +0700
+
+    Update menu function
+
+commit feb413fc84421a02f85dbfca7f3e489704c61391
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Wed Nov 24 23:13:17 2021 +0700
+
+    Update register form
+
+commit 6788b67dffaf7b7fbb5fee9eebabebaf9469b3e8
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Wed Nov 24 14:48:17 2021 +0700
+
+    Fix
+
+commit a0eb70578af3b03c79ee65bba8952b017839b53f
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Tue Nov 23 23:52:43 2021 +0700
+
+    Update cart
+
+commit 944a1cf92aa767c7e9dd8a8cccdd545de4db542e
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Tue Nov 23 23:21:23 2021 +0700
+
+    Update cart
+
+commit b820ed7aae531b2f9cb55d597505de8c0f352ac8
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Tue Nov 23 23:10:02 2021 +0700
+
+    Update record
+
+commit b16fbbd00cae9ffc02351054ea0a27be784af4db
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Tue Nov 23 21:44:19 2021 +0700
+
+    Change logo
+
+commit ff406e140f90df034e4d6f709941b0a7ca41af8d
+Merge: c8ccb0e 9b54402
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Tue Nov 23 21:05:53 2021 +0700
+
+    Merge branch 'master' of https://github.com/Blue-Pheasant/POS-SYSTEM
+
+commit 9b54402f8421f5bc5833904fc29f42f4f3406d85
+Author: Nhat Nam <nam0968024068@gmail.com>
+Date:   Tue Nov 23 21:02:44 2021 +0700
+
+    Update POS layout
+
+commit c8ccb0e4e4e9c8d007418333018cc4aaa4a56710
+Merge: a1cb3f9 01f3bda
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Tue Nov 23 20:41:47 2021 +0700
+
+    Merge branch 'master' of https://github.com/Blue-Pheasant/POS-SYSTEM
+
+commit 01f3bda8ca1508f54b3f7dfafbcdaad2942b8b75
+Author: invisible1501 <86916560+invisible1501@users.noreply.github.com>
+Date:   Tue Nov 23 20:31:10 2021 +0700
+
+    Update feedback.php
+    
+    Fix and Update feedback.php
+
+commit a1cb3f92d2770ddea068d2648a30155ff474523b
+Merge: 8275935 514f0bd
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Tue Nov 23 20:29:22 2021 +0700
+
+    Merge branch 'master' of https://github.com/Blue-Pheasant/POS-SYSTEM
+
+commit 514f0bdc5561d5c52b45f471bb577ccfc881f8e6
+Author: invisible1501 <86916560+invisible1501@users.noreply.github.com>
+Date:   Tue Nov 23 20:28:15 2021 +0700
+
+    Update feedback.php
+    
+    Update feedback.php
+
+commit ba86094842007fdcdb2098e3a08b2887f5f854b1
+Author: invisible1501 <86916560+invisible1501@users.noreply.github.com>
+Date:   Tue Nov 23 20:26:48 2021 +0700
+
+    Update Store.php
+    
+    Fix and Update store.php
+
+commit 82231d097e4a004a6b84ecc5eb3672384280a2c9
+Author: invisible1501 <86916560+invisible1501@users.noreply.github.com>
+Date:   Tue Nov 23 20:20:52 2021 +0700
+
+    Update Store.php
+    
+    Update store.php
+
+commit 346c09aaa0e7788f51d0b6b8b69bee5c82ca940a
+Author: PhuongNam321 <92218385+PhuongNam321@users.noreply.github.com>
+Date:   Mon Nov 22 13:00:25 2021 +0700
+
+    Update Category.php
+    
+    fix bug stie model category.php
+
+commit 9b861d9ba1320e1b2670df12b105f14388127d73
+Author: PhuongNam321 <92218385+PhuongNam321@users.noreply.github.com>
+Date:   Mon Nov 22 12:57:09 2021 +0700
+
+    Update cart.php
+    
+    fix bug site model file cart.php
+
+commit 8275935ad8fa80508bc509739def5fc9e816cc36
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Sun Nov 21 14:54:19 2021 +0700
+
+    initial commit
+
+commit 6123d0bac068157657420509b1190c744ae2040e
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Sun Nov 21 11:58:07 2021 +0700
+
+    BIG UPDATE
+
+commit 9826a27cb9bac0617e8166b25d95f99b7f03d93c
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Sat Nov 20 11:02:00 2021 +0700
+
+    ADD view stores page
+
+commit 8570972818dc6d558ed0de2b260ed4b02c533427
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Sat Nov 20 10:58:48 2021 +0700
+
+    Fix stores
+
+commit 56c7d2bfd7e9944fd702dc8f7c937646edc8f7c1
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Sat Nov 20 10:57:02 2021 +0700
+
+    Fix menu
+
+commit 9b5d4a568cd7618c38f4b4d260376588eb701ef3
+Author: quyennguyentuan1112 <90519461+quyennguyentuan1112@users.noreply.github.com>
+Date:   Sat Nov 20 10:17:23 2021 +0700
+
+    Update Category.php
+    
+    Fix bug models
+
+commit f4360d8d5549adb6f0b7a446b12de9c97206e1d6
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Sat Nov 20 10:11:13 2021 +0700
+
+    Update project
+
+commit 51842a23e7084c2f5b3117da239fe92add164861
+Author: manhnq0508 <81633441+manhnq0508@users.noreply.github.com>
+Date:   Sat Nov 20 10:09:52 2021 +0700
+
+    Update SaleController.php
+    
+    Fix index() function
+
+commit 66a4fb861ec66259c65d6bf9cee71fd53a744029
+Author: manhnq0508 <81633441+manhnq0508@users.noreply.github.com>
+Date:   Sat Nov 20 10:07:50 2021 +0700
+
+    Update SiteController.php
+    
+    Fix bug file SiteController
+
+commit 1058a8b856977a1f1e880f7d5b9aee0c5aa74808
+Author: nguyenvubk <92986098+nguyenvubk@users.noreply.github.com>
+Date:   Sat Nov 20 10:04:26 2021 +0700
+
+    Update ProfileController.php
+
+commit 5b76fbc128a7259112cb380b35de8fc286756af3
+Author: nguyenvubk <92986098+nguyenvubk@users.noreply.github.com>
+Date:   Sat Nov 20 10:02:51 2021 +0700
+
+    Update ProductController.php
+
+commit a6d8a5d36bc1941209c1734b9208852ab830e59b
+Author: nguyenvubk <92986098+nguyenvubk@users.noreply.github.com>
+Date:   Sat Nov 20 10:01:43 2021 +0700
+
+    Update ProductController.php
+    
+    modify product
+
+commit 09b17323bc2b1820bfe8b4eeba86a76bfa5622ce
+Author: quyennguyentuan1112 <90519461+quyennguyentuan1112@users.noreply.github.com>
+Date:   Fri Nov 19 22:43:16 2021 +0700
+
+    Update MenuController.php
+    
+    Fix Menu controller
+
+commit 1435add6be0e9a11cfe1f74c533663157f82824c
+Author: quyennguyentuan1112 <90519461+quyennguyentuan1112@users.noreply.github.com>
+Date:   Fri Nov 19 22:41:01 2021 +0700
+
+    Update FeedbackController.php
+    
+    update feedback controller
+
+commit d116c0f097447ae72890618903dceb5e1e90c2e0
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Fri Nov 19 22:30:45 2021 +0700
+
+    Update category
+
+commit 2aac42e56bd03dbc19eeb97d5e55b5f48b723fd9
+Author: nguyenvubk <92986098+nguyenvubk@users.noreply.github.com>
+Date:   Fri Nov 19 22:29:31 2021 +0700
+
+    Update CategoryController.php
+    
+    modify category
+
+commit 2333eaa94aadd5c7f269cddb48d6b517bbb091cb
+Author: nguyenvubk <92986098+nguyenvubk@users.noreply.github.com>
+Date:   Fri Nov 19 22:28:05 2021 +0700
+
+    Update CartController.php
+    
+    modify cart
+
+commit 77ecade38500ca8cdde4ca94661d50b662e73003
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Fri Nov 19 22:13:09 2021 +0700
+
+    Update Admincontroller
+
+commit 8169b997f7f600ca33acd0716c2968fa431f8d5d
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Fri Nov 19 21:27:54 2021 +0700
+
+    Fix database
+
+commit aa9790722afa15a4d4cb0e9c3ca6d8e84648eed3
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Fri Nov 19 00:32:13 2021 +0700
+
+    Update controller and db
+
+commit 55728a8db3b636ccc9e1f92775a570daa0ef8a53
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Fri Nov 12 11:28:17 2021 +0700
+
+    Added:
+    git commit -m Added:
+
+commit 17184a662882b257f37fc228d1552a199fa9c131
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Fri Nov 12 10:52:27 2021 +0700
+
+    Demo
+
+commit 09b1a48583f5263ad73274ba1da1367907b9c984
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Fri Nov 12 10:50:42 2021 +0700
+
+    Notthing
+
+commit f99478a5769577cba1d26f6e94f9f231a835efff
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Fri Nov 12 10:17:36 2021 +0700
+
+    Notthing
+
+commit b9ff54f745ebb502c2d30d215ac45f5db9d015a1
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Fri Nov 12 09:05:19 2021 +0700
+
+    Update some functions to query db
+
+commit cabf2ca3909b652c5a63d7316d6dfc2572fcc44b
+Merge: 337d8a9 41087f5
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Fri Nov 12 09:03:38 2021 +0700
+
+    Merge from master
+
+commit 41087f5d9aee888c0126899fbcc8ca0196489a1c
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Fri Nov 12 09:03:02 2021 +0700
+
+    Updated delete function
+
+commit a93827869d2da7f77c87875e86e621fa7ba8183e
+Author: nguyenvubk <92986098+nguyenvubk@users.noreply.github.com>
+Date:   Thu Nov 11 10:58:15 2021 +0700
+
+    Delete admin
+
+commit 879a81b90b90eb3a9e571a2aece35485b8352a98
+Author: nguyenvubk <92986098+nguyenvubk@users.noreply.github.com>
+Date:   Thu Nov 11 10:57:56 2021 +0700
+
+    Create admin
+
+commit 0fe960a6282238a1dd638e250d60f34a0f73b231
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Thu Nov 11 10:21:16 2021 +0700
+
+    Replace folder front-end
+
+commit 71ba4b6f5b323fc94718ba470891424c25713653
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Thu Nov 11 10:14:41 2021 +0700
+
+    Update and replaced folder front-end
+
+commit 41a778d8bde08a91e5f268cf7f0851c1ab71384d
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Thu Nov 11 09:53:05 2021 +0700
+
+    Replace folder front-end
+
+commit 337d8a9e2ac18ee1de3d83b85b03c5140af45bf6
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Wed Nov 10 14:46:14 2021 +0700
+
+    Changed something in views
+
+commit f5f85d6a6facb92ead676420e969a6362fd62d48
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Wed Nov 10 11:08:19 2021 +0700
+
+    Replaced image/js/css into public folder
+
+commit 72f1f4b511015cdc4559f0f42814a9f984b431ce
+Merge: 84a1c32 f934daa
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Wed Nov 10 10:11:46 2021 +0700
+
+    Merged importData.php from branch Vu
+
+commit f934daa5b2fdde107575aef7ac3c54a713667485
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Wed Nov 10 10:09:45 2021 +0700
+
+    Add importData.php
+
+commit 84a1c327e49567f2ed3b4adf7371290a164f43f7
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Wed Nov 10 09:54:55 2021 +0700
+
+    Added a log.txt to store git log
+
+commit 5a48336f6996f593df84889235450f119d5a3568
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Wed Nov 10 09:52:40 2021 +0700
+
+    Updated
+
+commit 8d5070da8c0bb176c4eeddf3a98489ee3717c49d
+Merge: 5881cb0 c0af568
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Wed Nov 10 09:47:15 2021 +0700
+
+    Merged from long
+
+commit c0af568bdbb7b781ab61b05cc59c09fa25f8ce93
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Wed Nov 10 09:35:05 2021 +0700
+
+    Updated
+
+commit c04e985f2fa13d3e1ac517670b5696cf23473b77
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Wed Nov 10 09:32:45 2021 +0700
+
+    Updated
+
+commit 5881cb03d739902552ceb42f6a44c778cc36805d
+Merge: edc068a 5894828
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Wed Nov 10 09:31:22 2021 +0700
+
+    Merge branch 'master' of https://github.com/Blue-Pheasant/POS-SYSTEM
+
+commit 5894828e387f61090e652c6963eebf1ec9b7e30c
+Author: Nhat Nam <nam0968024068@gmail.com>
+Date:   Sun Nov 7 17:10:26 2021 +0700
+
+    Update views folder
+
+commit 7469f4a7d928de0dfc8db7822fbdf8df86ccaf1c
+Author: Nhat Nam <nam0968024068@gmail.com>
+Date:   Sun Nov 7 16:25:07 2021 +0700
+
+    Add image folder
+
+commit edc068a15d8980b5120d006aa14be6979cab05b4
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Sun Nov 7 09:11:30 2021 +0700
+
+    Update
+
+commit 1425544031e4662b7b9902d7d127564cb3a99d39
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Sun Nov 7 08:55:31 2021 +0700
+
+    Delete admin folder
+
+commit 45ccdd9e75374bacaf23aaf57672c69a4dd713fc
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Sun Nov 7 08:54:42 2021 +0700
+
+    Update something about migration
+
+commit 8c546452c67a793f9fcb07f236b659c12279c163
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Sun Nov 7 08:42:15 2021 +0700
+
+    Updated
+
+commit 5b9620515001cb75c27468b5f18f43ac9ba68459
+Merge: a8c3e75 d7b7fa2
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Sun Nov 7 08:32:15 2021 +0700
+
+    Changed something
+
+commit a8c3e75579a9f0f26de422e629fe8c512f0f138d
+Merge: 95ddf23 d2f7682
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Sun Nov 7 08:31:37 2021 +0700
+
+    Merge
+
+commit d2f7682f11d8e23787950bcff3cad6613d4fc0b6
+Merge: d4a075d 3f3e785
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Sun Nov 7 08:31:06 2021 +0700
+
+    merge
+
+commit d7b7fa27054f463a6e24537277bc497c33cc51bf
+Author: Nhat Nam <nam0968024068@gmail.com>
+Date:   Sat Nov 6 12:14:18 2021 +0700
+
+    Update views folder
+
+commit ec7845fbbfb2c6da5068ee1018b42a06a073f148
+Author: Nhat Nam <nam0968024068@gmail.com>
+Date:   Sat Nov 6 12:13:18 2021 +0700
+
+    Update js folder
+
+commit 080d4775fb0d6869b75fc6436a10b87dfa2effbd
+Author: Nhat Nam <nam0968024068@gmail.com>
+Date:   Sat Nov 6 12:12:29 2021 +0700
+
+    Update css folder
+
+commit 95ddf23602e6a69765bf31cb50096c89ff6994d6
+Merge: 4daec99 a38f473
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Sat Nov 6 10:55:37 2021 +0700
+
+    Merge branch 'long'
+
+commit a38f473c094d69550f41ebd94de0243b1d198d59
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Sat Nov 6 10:54:32 2021 +0700
+
+    Update
+
+commit 72e878e6411fd06ab3e4c7262f1f6afab53e7aeb
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Sat Nov 6 10:53:58 2021 +0700
+
+    Update
+
+commit 3f3e78561431b2e4a0dd3c02e71dac3d6925280d
+Author: Nhat Nam <nam0968024068@gmail.com>
+Date:   Fri Nov 5 23:58:56 2021 +0700
+
+    Add views Front_end
+
+commit 4daec99e62ce5dd58f1d0329c736e600924ea2a7
+Merge: e282c62 dc2f9be
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Wed Nov 3 16:49:34 2021 +0700
+
+    Merge branch 'long'
+
+commit dc2f9bea862a59a6217a95138dcb13b06819ef5c
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Wed Nov 3 16:49:11 2021 +0700
+
+    Add config.php
+
+commit e282c6285abf68ae86987ca202bc4c797819cb80
+Merge: 3465154 e73ce69
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Wed Nov 3 15:28:13 2021 +0700
+
+    Merge branch 'long'
+
+commit e73ce694b11721105d71933e54680488849e6509
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Wed Nov 3 15:27:01 2021 +0700
+
+    Move Boostrap and fonts to public
+
+commit 094e0e7256ebde2870ee311533159d457d55b37c
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Wed Nov 3 15:23:40 2021 +0700
+
+    Add core
+
+commit 3465154b94cdbafa5118c1407858b81cd32ad58a
+Merge: f18d796 3065478
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Wed Nov 3 15:12:19 2021 +0700
+
+    Merge branch 'master' of https://github.com/Blue-Pheasant/POS-SYSTEM
+
+commit f18d79672598001b6ce348246bae76cc2290804b
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Wed Nov 3 15:09:45 2021 +0700
+
+    Notthing
+
+commit a3073267e081e71f9b7864da21ff90fc79d8c91c
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Wed Nov 3 15:08:20 2021 +0700
+
+    Add middlewares, exception
+
+commit fa2f11aa75dd2975c13d8682236e3d689384095c
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Tue Nov 2 23:42:55 2021 +0700
+
+    Add some files in controller, models, public and modify config.php in config
+
+commit 16299780ac9cbc015d48d1880be355a30b35c6de
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Fri Oct 29 13:26:50 2021 +0700
+
+    Impleme customer.php customerClass.php
+
+commit 723a34ea3d9936a4ced7c5d58cafeeb41e2bdb1b
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Fri Oct 29 13:12:27 2021 +0700
+
+    impleme config.php
+
+commit 30654780efc962161386e887a5bc4e6a07ebde70
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Wed Oct 27 14:23:44 2021 +0700
+
+    Test
+
+commit d4a075debe90cd0ea7df2c51b414233e1d0cfcf6
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Wed Oct 27 11:16:46 2021 +0700
+
+    Initia a simple template of php mvc
+
+commit 395aabb9c51d7a60a2eace22ec0846373b50c137
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Wed Oct 27 11:06:15 2021 +0700
+
+    Initia a simple template php mvc
+
+commit ca99ae058c3261343754a83b142297ca0ce9f601
+Author: Longvo <long.vo2k1@hcmut.com>
+Date:   Wed Oct 27 10:57:47 2021 +0700
+
+    Initia a simple template of php mvc
+
+commit db37c667372a79229217a6b0dcdd83b7cd24195e
+Author: Blue-Pheasant <BluePheasant@users.noreply.github.com>
+Date:   Wed Oct 20 22:42:00 2021 +0700
+
+    template of asp.net mvc

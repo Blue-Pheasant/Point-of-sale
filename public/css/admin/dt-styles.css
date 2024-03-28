@@ -1,0 +1,15 @@
+@media (min-width: 768px) {
+    .navbar {
+        border-radius: 0px;
+    }
+}
+
+ul.sidebar-nav li a.active {
+    text-decoration: none;
+    color: #fff;
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.m-top15 {
+    margin-top: 15px;
+}

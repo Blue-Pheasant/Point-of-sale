@@ -1,0 +1,38 @@
+.alive {
+    background: #CB356B;
+    background: -webkit-linear-gradient(#CB356B, #BD3F32);
+    background: -moz-linear-gradient(#CB356B, #BD3F32);
+    background: -o-linear-gradient(#CB356B, #BD3F32);
+    background: linear-gradient(#CB356B, #BD3F32); 
+}
+.stellar {
+    background: #7474BF;
+    background: -webkit-linear-gradient(#7474BF, #348AC7);
+    background: -moz-linear-gradient(#7474BF, #348AC7);
+    background: -o-linear-gradient(#7474BF, #348AC7);
+    background: linear-gradient(#7474BF, #348AC7); 
+}
+
+.horizon {
+    background: #003973;
+    background: -webkit-linear-gradient(#003973, #E5E5BE);
+    background: -moz-linear-gradient(#003973, #E5E5BE);
+    background: -o-linear-gradient(#003973, #E5E5BE);
+    background: linear-gradient(#003973, #E5E5BE); 
+}
+
+.harmonic {
+    background: #16A085;
+    background: -webkit-linear-gradient(#16A085, #F4D03F);
+    background: -moz-linear-gradient(#16A085, #F4D03F);
+    background: -o-linear-gradient(#16A085, #F4D03F);
+    background: linear-gradient(#16A085, #F4D03F); 
+}
+
+.dawn {
+    background: #314755;
+    background: -webkit-linear-gradient(#314755, #26a0da);
+    background: -moz-linear-gradient(#314755, #26a0da);
+    background: -o-linear-gradient(#314755, #26a0da);
+    background: linear-gradient(#314755, #26a0da); 
+}
