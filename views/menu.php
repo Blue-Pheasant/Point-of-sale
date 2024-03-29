@@ -4,12 +4,6 @@ use app\core\Application;
 use app\models\CartItem;
 
 ?>
-
-<?php
-    // if(Application::isGuest()) {
-    //     Application::$app->response->redirect('/login');
-    // }
-?>
 <script type="text/javascript">
   document.title = 'Menu';
 </script> 
@@ -85,7 +79,7 @@ use app\models\CartItem;
                     foreach ($params['products'] as $param) {
                         echo '
                         <div class="col-xl-3 col-md-6 col-sm-4 col-12 wrapper_product">
-                            <a href="/product?id=' . $param->id . '">
+                            <a href="/product?id=' . $param->getId() . '">
                                 <div class="item-card product">
                                     <img src="' . $param->image_url . '" alt=""
                                         class="item-image" />
@@ -121,7 +115,7 @@ use app\models\CartItem;
             <?php
             foreach ($params['items'] as $parameter) {
                 echo '<div class="cart-page-item">
-                    <form method="post" action="/update?order_detail_id=' . $parameter->order_detail_id . '">
+                    <form method="post" action="/update?cart_item_id=' . $parameter->id . '">
                         <div class="container">
                             <div class="row">
                                 <div class="col-lg-2 col-md-3 col-sm-3 col-2 img_sp">
@@ -143,7 +137,7 @@ use app\models\CartItem;
                                     </div>
                                 </div>
                                 <div class="col-lg-1 col-md-1 col-sm-2 col-1">
-                                    <a href="/cart?action=deletemenu&id=' . $parameter->order_detail_id . '">
+                                    <a href="/cart?action=deletemenu&id=' . $parameter->id . '">
                                         <img src="/images/delete.svg" class="cart-page__delete" />
                                     </a>
                                 </div>
@@ -174,7 +168,7 @@ use app\models\CartItem;
         </div>
         <?php
             $cart_id = Application::$app->cart->id;
-            $cartItem = CartItem::getCartItem($cart_id);
+            $cartItem = CartItem::getCartItems($cart_id);
             $totalPrice = 0;
             foreach($cartItem as $item) {
                 $totalPrice += $item->getTotalPrice();
