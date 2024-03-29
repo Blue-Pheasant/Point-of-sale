@@ -16,33 +16,12 @@ class Order extends DBModel
     public string $delivery_name = '';
     public string $delivery_phone = '';
     public string $delivery_address = '';
+    public $display = '';
     public string $created_at = '';
-    public string $display = '';
 
-    public function __construct(
-        $id,
-        $user_id,
-        $payment_method,
-        $status,
-        $delivery_name,
-        $delivery_phone,
-        $delivery_address,
-        $display = '',
-        $created_at = ''
-    ) 
+    public function __construct($attributes = [])
     {
-        $this->id = $id;
-        $this->user_id = $user_id;
-        $this->payment_method = $payment_method;
-        $this->status = $status;
-        $this->delivery_name = $delivery_name;
-        $this->delivery_phone = $delivery_phone;
-        $this->delivery_address = $delivery_address;
-        $this->display = $display;
-        if ($created_at != '') {
-            $this->created_at = $created_at;
-        }
-        
+        parent::__construct($attributes);
     }
 
     public function getId () { return $this->id; }
@@ -54,9 +33,6 @@ class Order extends DBModel
     public function getDeliveryAddress() { return $this->delivery_address; }
     public function getDeliveryPhone() { return $this->delivery_phone; }
     public function getDateTime() { return $this->created_at; }
-    public function getDisplay() { return $this->display; }
-    public function setDisplay($display) { return $this->display = $display; }
-
 
     public static function tableName(): string
     {
@@ -65,16 +41,8 @@ class Order extends DBModel
 
     public function attributes(): array
     {
-        return [
-            'id',
-            'user_id',
-            'payment_method',
-            'status',
-            'delivery_name',
-            'delivery_phone',
-            'delivery_address',
-            'display',
-        ];
+        $attributes = ['user_id', 'payment_method', 'status', 'delivery_name', 'delivery_phone', 'delivery_address', 'display'];
+        return array_merge($this->defaultAttributes(), $attributes);
     }
 
     public function labels(): array
@@ -107,38 +75,27 @@ class Order extends DBModel
         return parent::save();
     }
 
-    public function delete()
-    {
-        $tablename = $this->tableName();
-        $sql = "DELETE FROM $tablename WHERE id=?";
-        $stmt= self::prepare($sql);
-        $stmt->execute([$this->id]);
-        return true;
-    }
-
-    public function update(Order $orderModel) 
-    {
-        $sql = "UPDATE orders SET status='" . $orderModel->status . "' ,
-                                  display='" . $orderModel->display . "'
-        WHERE id='" . $orderModel->id . "'";
-        $statement = self::prepare($sql);
-        $statement->execute();
-        return true;   
-    }
-
     public static function getTotalPrice()
     {
         $list = [];
         $totalPrice = 0;
         $totalPayment = 0;
         $db = Database::getInstance();
-        $req = $db->query(
-            "select products.price, order_detail.order_id, orders.id, order_detail.size, order_detail.quantity
-            from ((order_detail
-            inner join products on order_detail.product_id = products.id)
-            inner join orders on order_detail.order_id = orders.id) 
-            where orders.status = 'done';"
-        );
+        $req = $db->query("
+            SELECT
+                products.price,
+                order_detail.order_id,
+                orders.id,
+                order_detail.size,
+                order_detail.quantity
+            FROM
+                (
+                    order_detail
+                    INNER JOIN products ON order_detail.product_id = products.id
+                )
+                INNER JOIN orders ON order_detail.order_id = orders.id
+            WHERE
+                orders.status = 'done';");
         
         foreach ($req->fetchAll() as $item) {
             $unitPrice = $item['price'];
@@ -161,17 +118,7 @@ class Order extends DBModel
         $req = $db->query("SELECT * FROM orders where status = '$status' ORDER BY status DESC ,created_at DESC");
 
         foreach ($req->fetchAll() as $item) {
-            $list[] = new Order(
-                $item['id'],
-                $item['user_id'],
-                $item['payment_method'],
-                $item['status'],
-                $item['delivery_name'],
-                $item['delivery_phone'],
-                $item['delivery_address'],
-                $item['display'],
-                $item['created_at'],
-            );
+            $list[] = new Order($item);
         };
 
         return $list;
@@ -184,17 +131,7 @@ class Order extends DBModel
         $req = $db->query("SELECT * FROM orders WHERE user_id = '$id' ORDER BY status DESC ,created_at DESC");
 
         foreach ($req->fetchAll() as $item) {
-            $list[] = new Order(
-                $item['id'],
-                $item['user_id'],
-                $item['payment_method'],
-                $item['status'],
-                $item['delivery_name'],
-                $item['delivery_phone'],
-                $item['delivery_address'],
-                $item['display'],
-                $item['created_at']
-            );
+            $list[] = new Order($item);
         };
 
         return $list;
@@ -206,24 +143,12 @@ class Order extends DBModel
         $db = Database::getInstance();
         $req = $db->query(
             "SELECT *
-            FROM cart_detail JOIN products ON cart_detail.product_id = products.id 
-            WHERE cart_detail.cart_id = '$order_id';"
+            FROM cart_item JOIN products ON cart_item.product_id = products.id 
+            WHERE cart_item.cart_id = '$order_id';"
         );
 
         foreach ($req->fetchAll() as $item) {
-            $list[] = new
-                OrderItem(
-                    $item['product_id'],
-                    $item['cart_id'],
-                    $item['quantity'],
-                    $item['note'],
-                    $item['category_id'],
-                    $item['name'],
-                    $item['price'],
-                    $item['description'],
-                    $item['image_url'],
-                    $item['size']
-                );
+            $list[] = new OrderItem($item);
         }
         return $list;
     }
@@ -233,17 +158,12 @@ class Order extends DBModel
         $db = Database::getInstance();
         $req = $db->query("SELECT * FROM orders WHERE id = '$id'");
         $item = $req->fetchAll()[0];
-        $order = new Order(
-            $item['id'],
-            $item['user_id'],
-            $item['payment_method'],
-            $item['status'],
-            $item['delivery_name'],
-            $item['delivery_phone'],
-            $item['delivery_address'],
-            $item['display'],
-            $item['created_at']
-        );
+        $order = new Order($item);
         return $order;
+    }
+
+    public function getDisplay() : string
+    {
+        return $this->display;
     }
 }

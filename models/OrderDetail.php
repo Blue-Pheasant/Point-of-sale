@@ -16,20 +16,9 @@ class OrderDetail extends DBModel
     public string $note = '';
     public string $size = '';
 
-    public function __construct(
-        $id = '',
-        $product_id = '',
-        $order_id = '',
-        $quantity = '',
-        $note = '',
-        $size = ''
-    ) {
-        $this->id = $id;
-        $this->product_id = $product_id;
-        $this->order_id = $order_id;
-        $this->quantity = $quantity;
-        $this->note = $note;
-        $this->size = $size;
+    public function __construct($attributes = [])
+    {
+        parent::__construct($attributes);
     }
 
     public static function tableName(): string
@@ -39,7 +28,7 @@ class OrderDetail extends DBModel
 
     public function attributes(): array
     {
-        return ['id', 'product_id', 'order_id', 'quantity', 'note', 'size'];
+        return array_merge($this->defaultAttributes(), ['product_id', 'order_id', 'quantity', 'note', 'size']);
     }
 
     public function labels(): array
