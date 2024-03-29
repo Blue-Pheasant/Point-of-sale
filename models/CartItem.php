@@ -13,36 +13,11 @@ class CartItem extends DBModel
     public string $cart_id = '';
     public int $quantity = 0;
     public string $note = '';
-    public string $category_id = '';
     public string $name = '';
-    public float $price = 0;
-    public string $description = '';
-    public string $image_url = '';
 
-    public function __construct(
-        $order_detail_id,
-        $product_id,
-        $cart_id,
-        $quantity,
-        $note,
-        $category_id = '',
-        $name = '',
-        $price = 0,
-        $description = '',
-        $image_url = '',
-        $size = ''
-    ) {
-        $this->order_detail_id = $order_detail_id;
-        $this->product_id = $product_id;
-        $this->cart_id = $cart_id;
-        $this->quantity = $quantity;
-        $this->note = $note;
-        $this->category_id = $category_id;
-        $this->name = $name;
-        $this->price = $price;
-        $this->description = $description;
-        $this->image_url = $image_url;
-        $this->size = $size;
+    public function __construct($attributes = [])
+    {
+        parent::__construct($attributes);
     }
 
     public function getTotalPrice()
@@ -58,19 +33,19 @@ class CartItem extends DBModel
 
     public static function tableName(): string
     {
-        return 'cart_detail';
+        return 'cart_item';
     }
 
     public function attributes(): array
     {
-        return ['order_detail_id', 'product_id', 'cart_id', 'quantity', 'note', 'category_id', 'name', 'price', 'description', 'image_url', 'size'];
+        return array_merge($this->defaultAttributes(), ['product_id', 'cart_id', 'quantity', 'note', 'size']);
     }
 
     public function labels(): array
     {
         return
             [
-                'order_detail_id' => 'Id',
+                'id' => 'Id',
                 'product_id' => 'Product Id',
                 'cart_id' => 'Cart ID',
                 'quantity' => 'Quantity',
@@ -97,46 +72,37 @@ class CartItem extends DBModel
         return $this->list . ' ' . $this->status;
     }
 
-    public static function getCartItem($cart_id)
+    public static function getCartItems($cart_id)
     {
         $list = [];
         $db = Database::getInstance();
-        $req = $db->query(
-            "SELECT *
-            FROM cart_detail JOIN products ON cart_detail.product_id = products.id 
-            WHERE cart_detail.cart_id = '$cart_id';"
-        );
+        $req = $db->query("SELECT 
+            cart_item.id, cart_item.product_id, cart_item.cart_id, cart_item.quantity,
+            cart_item.note, products.image_url, cart_item.size, products.name,
+            products.price, products.description
+            FROM cart_item 
+            JOIN products 
+            ON cart_item.product_id = products.id 
+            WHERE cart_item.cart_id = '$cart_id';"
+        )->fetchAll();
 
-        foreach ($req->fetchAll() as $item) {
-            $list[] = new
-                CartItem(
-                    $item['order_detail_id'],
-                    $item['product_id'],
-                    $item['cart_id'],
-                    $item['quantity'],
-                    $item['note'],
-                    $item['category_id'],
-                    $item['name'],
-                    $item['price'],
-                    $item['description'],
-                    $item['image_url'],
-                    $item['size']
-                );
+        foreach ($req as $item) {
+            $list[] = new CartItem($item);
         }
+
         return $list;
+    }
+
+    public static function getCartItem($itemId)
+    {
+        $db = Database::getInstance();
+        $req = $db->query("SELECT * FROM cart_item WHERE id = '$itemId'")->fetchAll()[0];
+        return new CartItem($req);
     }
 
     public static function deleteItem($id)
     {
-        $sql = "DELETE FROM cart_detail WHERE order_detail_id ='$id'";
-        $stmt = self::prepare($sql);
-        $stmt->execute();
-        return true;
-    }
-
-    public static function update($id, $newNote, $newQuantity)
-    {
-        $sql = "UPDATE cart_detail SET note = '$newNote' , quantity = '$newQuantity' WHERE order_detail_id ='$id'";
+        $sql = "DELETE FROM cart_item WHERE id ='$id'";
         $stmt = self::prepare($sql);
         $stmt->execute();
         return true;

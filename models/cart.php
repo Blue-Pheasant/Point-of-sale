@@ -13,11 +13,9 @@ class Cart extends DBModel
     public string $user_id = '';
     public string $status = '';
 
-    public function __construct($id = '', $user_id = '', $status = '')
+    public function __construct($attributes = [])
     {
-        $this->id = $id;
-        $this->user_id = $user_id;
-        $this->status = $status;
+        parent::__construct($attributes);
     }
 
     public static function tableName(): string
@@ -46,7 +44,7 @@ class Cart extends DBModel
 
     public static function create($id)
     {
-        $cart = new Cart(uniqid(), $id, 'processing');
+        $cart = new Cart(['id' => uniqid(), 'user_id' => $id, 'status' => 'processing']);
         $cart->save();
     }
 
@@ -85,11 +83,7 @@ class Cart extends DBModel
 
 
         foreach ($req->fetchAll() as $item) {
-            $list[] = new Cart(
-                $item['id'],
-                $item['user_id'],
-                $item['status']
-            );
+            $list[] = new Cart($item);
         };
 
         return $list;
