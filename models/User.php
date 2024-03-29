@@ -27,6 +27,11 @@ class User extends UserModel
     public function getPhoneNumer() { return $this->phone_number; }
     public function getAddress() { return $this->address; }
 
+    public function __construct($attributes = [])
+    {
+        parent::__construct($attributes);
+    }
+
     public function load($params)
     {
         $this->id = $params[0];
@@ -89,7 +94,6 @@ class User extends UserModel
         return parent::save();
     }
 
-    // Save này chỉ dùng lưu user, viết lại save khác cho model khác pls
     public function save()
     {
         $this->password = password_hash($this->password, PASSWORD_DEFAULT);
@@ -110,9 +114,7 @@ class User extends UserModel
         $req = $db->query("SELECT * FROM users");
 
         foreach ($req->fetchAll() as $item) {
-            $userModel = new User;
-            $params = array($item['id'], $item['firstname'], $item['lastname'], $item['email'], $item['password'], $item['phone_number'], $item['address'], $item['role']);
-            $userModel->load($params);
+            $userModel = new User($item);
             array_push($list, $userModel);
         }
 
@@ -124,14 +126,7 @@ class User extends UserModel
         $db = Database::getInstance();
         $req = $db->query("SELECT * FROM users WHERE id = '$id'");
         $item = $req->fetchAll()[0];
-        $user = new User();
-        $user->id = $item['id'];
-        $user->firstname = $item['firstname'];
-        $user->lastname = $item['lastname'];
-        $user->email = $item['email'];
-        $user->address = $item['address'];
-        $user->phone_number = $item['phone_number'];
-        $user->role = $item['role'];
+        $user = new User($item);
         return $user;
     }
 
@@ -150,32 +145,4 @@ class User extends UserModel
         $statement->execute();
         return true;
     }
-
-    public function update(User $user)
-    {
-        $statement = self::prepare(
-            "UPDATE users 
-            SET 
-                firstname = '$user->firstname', 
-                lastname = '$user->lastname',
-                email = '$user->email',
-                password = 'password_hash($user->password, PASSWORD_DEFAULT)',
-                phone_number = '$user->phone_number',
-                role = '$user->role',
-                address = '$user->address'
-            WHERE id = '$user->id';
-            "
-        );
-        $statement->execute();
-        return true;
-    }
-
-    public function delete()
-    {
-        $tablename = $this->tableName();
-        $sql = "DELETE FROM $tablename WHERE id=?";
-        $stmt= self::prepare($sql);
-        $stmt->execute([$this->id]);
-        return true;     
-    }   
 }

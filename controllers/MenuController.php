@@ -26,7 +26,7 @@ class MenuController extends SiteController
         }
         $deletedItem = false;
         $updatedItem = false;
-        $items = CartItem::getCartItem($cart_id);
+        $items = CartItem::getCartItems($cart_id);
         $categories = Category::getAllCategories();
 
         return $this->render('menu', [
@@ -43,7 +43,7 @@ class MenuController extends SiteController
         $cart_id = Application::$app->cart->id;
         $deletedItem = false;
         $updatedItem = false;
-        $items = CartItem::getCartItem($cart_id);
+        $items = CartItem::getCartItems($cart_id);
         $categories = Category::getAllCategories();
 
         $body = Application::$app->request->getBody();

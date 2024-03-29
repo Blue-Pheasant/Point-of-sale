@@ -10,12 +10,9 @@ class Category extends DBModel
     public string $id;
     public string $name;
     
-    public function __construct(
-        $id = '',
-        $name = ''
-    ) {
-        $this->name = $name;
-        $this->id = $id;
+    public function __construct($attributes = [])
+    {
+        parent::__construct($attributes);
     }
 
     public function getName() 
@@ -69,24 +66,6 @@ class Category extends DBModel
         return parent::save();
     }
 
-    public function delete()
-    {
-        $tablename = $this->tableName();
-        $sql = "DELETE FROM $tablename WHERE id=?";
-        $stmt= self::prepare($sql);
-        $stmt->execute([$this->id]);
-        return true;
-    }
-
-    public function update($category)
-    {
-        $sql = "UPDATE categories SET name='$category->name' 
-                                    WHERE id='$category->id'";
-        $statement = self::prepare($sql);
-        $statement->execute();
-        return true;         
-    }
-
     public static function getAllCategories()
     {
         $list = [];
@@ -94,7 +73,7 @@ class Category extends DBModel
         $req = $db->query('SELECT * FROM categories');
 
         foreach ($req->fetchAll() as $item) {
-            $list[] = new Category($item['id'], $item['name']);
+            $list[] = new Category($item);
         }
         return $list;
     }
@@ -104,7 +83,7 @@ class Category extends DBModel
         $db = Database::getInstance();
         $req = $db->query("SELECT * FROM categories WHERE id = '$id'");
         $item = $req->fetchAll()[0];
-        $categories = new Category($item['id'], $item['name']);
+        $categories = new Category($item);
         return $categories;
     } 
 }

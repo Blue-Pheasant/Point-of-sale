@@ -20,7 +20,7 @@ function orderStatus($status)
 }
 
 ?>
-<form action="", method="post">
+<form action="/orders/clear", method="post">
     <button type="submit" class="password-button"><h6>Làm trống</h6></button>
 </form>
 <div class="order-page">

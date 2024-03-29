@@ -8,10 +8,10 @@ namespace app\controllers;
 use app\core\Controller;
 use app\core\Application;
 use app\models\Cart;
-use app\models\CartDetail;
 use app\models\CartItem;
 use app\models\Order;
 use app\models\OrderDetail;
+use app\core\Request;
 
 class CartController extends Controller
 {
@@ -40,8 +40,7 @@ class CartController extends Controller
         }
 
         $user = Application::$app->user;
-
-        $items = CartItem::getCartItem($cart_id);
+        $items = CartItem::getCartItems($cart_id);
 
         return $this->render('cart', [
             'items' => $items,
@@ -56,21 +55,21 @@ class CartController extends Controller
         $cart_id = Application::$app->cart->id;
         $user = Application::$app->user;
 
-        $id = Application::$app->request->getParam('order_detail_id');
+        $id = Application::$app->request->getParam('cart_item_id');
         $newNote = Application::$app->request->getBody()['note'];
         $newQuantity = Application::$app->request->getBody()['quantity'];
 
-        $cartDetailModel = CartDetail::getCartDetail($id);
+        $cartDetailModel = CartItem::getCartItem($id);
         $cartDetailModel->note = $newNote;
         $cartDetailModel->quantity = $newQuantity;
 
         if ($cartDetailModel->validate()) {
-            CartItem::update($id, $newNote, $newQuantity);
+            $cartDetailModel->update();
         } else {
             Application::$app->session->setFlash('fail', 'Số lượng đặt hàng phải lớn hơn 0');
         }
 
-        $items = CartItem::getCartItem($cart_id);
+        $items = CartItem::getCartItems($cart_id);
 
         return $this->render('cart', [
             'items' => $items,
@@ -78,36 +77,44 @@ class CartController extends Controller
         ]);
     }
 
-    public function placeOrder()
+    public function placeOrder(Request $request)
     {
         $placedOrder = false;
         $updatedItem = false;
 
         $cart_id = Application::$app->cart->id;
-        $items = CartItem::getCartItem($cart_id);
+        $items = CartItem::getCartItems($cart_id);
 
         $user_id = Application::$app->user->id;
-        $delivery_name = Application::$app->request->getBody()['name'];
-        $delivery_phone = Application::$app->request->getBody()['phone_number'];
-        $delivery_address = Application::$app->request->getBody()['address'];
-        $payment_method = Application::$app->request->getBody()['payment_method'];
-        $order = new Order(uniqid(), $user_id, $payment_method, 'processing', $delivery_name, $delivery_phone, $delivery_address);
+        $delivery_name = $request->getBody()['name'];
+        $delivery_phone = $request->getBody()['phone_number'];
+        $delivery_address = $request->getBody()['address'];
+        $payment_method = $request->getBody()['payment_method'];
+        $order = new Order([
+            'id' => uniqid(), 
+            'user_id' => $user_id, 
+            'payment_method' => $payment_method, 
+            'status' => 'processing', 
+            'delivery_name' => $delivery_name, 
+            'delivery_phone' => $delivery_phone, 
+            'delivery_address' => $delivery_address
+        ]);
         $order->save();
 
         foreach ($items as $item) {
-            $orderDetail = new OrderDetail(
-                uniqid(),
-                $item->product_id,
-                $order->id,
-                $item->quantity,
-                $item->note,
-                $item->size
-            );
+            $orderDetail = new OrderDetail([
+                'id' => uniqid(),
+                'product_id' => $item->product_id,
+                'order_id' => $order->id,
+                'quantity' => $item->quantity,
+                'note' => $item->note,
+                'size' => $item->size
+            ]);
             $orderDetail->save();
         }
 
         foreach ($items as $item) {
-            $this->deleteItem($cart_id, $item->order_detail_id);
+            $this->deleteItem($cart_id, $item->cart_item_id);
         }
 
         Cart::checkoutCart($cart_id);
