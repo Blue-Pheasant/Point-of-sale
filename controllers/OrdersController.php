@@ -49,11 +49,11 @@ class OrdersController extends Controller
 
     public function accept(Request $request)
     {   
-        $orderId = Application::$app->request->getParam('id');
+        $orderId = $request->getParam('id');
         $orderModel = Order::getOrderById($orderId);
         if($request->getMethod() === 'get') {
             $orderModel->setStatus('done');
-            $orderModel->update($orderModel);
+            $orderModel->update();
             Application::$app->response->redirect('/admin/orders');
         } 
     }
@@ -124,6 +124,6 @@ class OrdersController extends Controller
                 $order->update($order);
             }
         }
-        Application::$app->response->redirect('orders');
+        Application::$app->response->redirect('/orders');
     }
 }

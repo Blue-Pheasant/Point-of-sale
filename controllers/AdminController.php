@@ -6,23 +6,25 @@ use app\core\Application;
 use app\core\Controller;
 use app\core\Request;
 use app\middlewares\AdminMiddleware;
-use app\middlewares\AuthMiddleware;
 use app\models\Order;
 use app\models\Product;
 use app\models\User;
+use app\services\ProductService;
 
 
 class AdminController extends Controller
 {
+    protected ProductService $productService;
     public function __construct() 
     {
         Application::$app->controller->registerMiddleware(new AdminMiddleware(['index']));
+        $this->productService = new ProductService();
     }
 
     public function index()
     {
         $orders = Order::getAllOrders('done');
-        $products = Product::getAllProducts();
+        $products = $this->productService->getProductNumber();
         $users = User::getAllUsers();
         $list = Order::getTotalPrice();
 

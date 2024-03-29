@@ -13,23 +13,26 @@ class m0001_initial
             `user_id` varchar(100) COLLATE utf8mb4_vietnamese_ci NOT NULL,
             `status` varchar(100) COLLATE utf8mb4_vietnamese_ci NOT NULL,
             `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-            `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+            `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+            `deleted_at` TIMESTAMP DEFAULT NULL
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_vietnamese_ci;
 
             -- --------------------------------------------------------
 
             --
-            -- Table structure for table `cart_detail`
+            -- Table structure for table `cart_item`
             --
 
-            CREATE TABLE `cart_detail` (
+            CREATE TABLE `cart_item` (
+            `id` varchar(100) COLLATE utf8mb4_vietnamese_ci NOT NULL,
             `product_id` varchar(100) COLLATE utf8mb4_vietnamese_ci NOT NULL,
             `cart_id` varchar(100) COLLATE utf8mb4_vietnamese_ci NOT NULL,
             `quantity` int(11) NOT NULL,
             `size` varchar(100) COLLATE utf8mb4_vietnamese_ci NOT NULL,
             `note` varchar(100) COLLATE utf8mb4_vietnamese_ci NOT NULL,
             `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-            `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+            `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+            `deleted_at` TIMESTAMP DEFAULT NULL
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_vietnamese_ci;
 
             -- --------------------------------------------------------
@@ -42,7 +45,8 @@ class m0001_initial
             `id` varchar(100) COLLATE utf8mb4_vietnamese_ci NOT NULL,
             `name` varchar(100) COLLATE utf8mb4_vietnamese_ci NOT NULL,
             `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-            `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+            `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+            `deleted_at` TIMESTAMP DEFAULT NULL
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_vietnamese_ci;
 
             -- --------------------------------------------------------
@@ -65,7 +69,8 @@ class m0001_initial
             `province_id` varchar(100) COLLATE utf8mb4_vietnamese_ci NOT NULL,
             `role` varchar(100) COLLATE utf8mb4_vietnamese_ci NOT NULL,
             `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-            `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+            `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+            `deleted_at` TIMESTAMP DEFAULT NULL
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_vietnamese_ci;
 
             -- --------------------------------------------------------
@@ -83,7 +88,8 @@ class m0001_initial
             `product_id` varchar(100) COLLATE utf8mb4_vietnamese_ci NOT NULL,
             `stars` int(11) NOT NULL,
             `comment` int(11) NOT NULL,
-            `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+            `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+            `deleted_at` TIMESTAMP DEFAULT NULL
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_vietnamese_ci;
 
             -- --------------------------------------------------------
@@ -96,9 +102,14 @@ class m0001_initial
             `id` varchar(100) COLLATE utf8mb4_vietnamese_ci NOT NULL,
             `user_id` varchar(100) COLLATE utf8mb4_vietnamese_ci NOT NULL,
             `payment_method` varchar(100) COLLATE utf8mb4_vietnamese_ci NOT NULL,
+            `delivery_name` varchar(100) COLLATE utf8mb4_vietnamese_ci NOT NULL,
+            `delivery_phone` varchar(100) COLLATE utf8mb4_vietnamese_ci NOT NULL,
+            `delivery_address` varchar(1000) COLLATE utf8mb4_vietnamese_ci NOT NULL,
             `status` varchar(100) COLLATE utf8mb4_vietnamese_ci NOT NULL,
+            `display` varchar(100) COLLATE utf8mb4_vietnamese_ci DEFAULT NULL,
             `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-            `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+            `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+            `deleted_at` TIMESTAMP DEFAULT NULL
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_vietnamese_ci;
 
             -- --------------------------------------------------------
@@ -108,12 +119,15 @@ class m0001_initial
             --
 
             CREATE TABLE `order_detail` (
+            `id` varchar(100) COLLATE utf8mb4_vietnamese_ci NOT NULL,
             `product_id` varchar(100) COLLATE utf8mb4_vietnamese_ci NOT NULL,
             `order_id` varchar(100) COLLATE utf8mb4_vietnamese_ci NOT NULL,
             `size` varchar(100) COLLATE utf8mb4_vietnamese_ci NOT NULL,
+            `note` varchar(100) COLLATE utf8mb4_vietnamese_ci NOT NULL,
             `quantity` int(11) NOT NULL,
             `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-            `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+            `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+            `deleted_at` TIMESTAMP DEFAULT NULL
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_vietnamese_ci;
 
             -- --------------------------------------------------------
@@ -130,7 +144,8 @@ class m0001_initial
             `price` int(12) NOT NULL,
             `description` varchar(4000) COLLATE utf8mb4_vietnamese_ci NOT NULL,
             `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-            `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+            `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+            `deleted_at` TIMESTAMP DEFAULT NULL
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_vietnamese_ci;
 
             -- --------------------------------------------------------
@@ -147,7 +162,8 @@ class m0001_initial
             `open_time` varchar(100) COLLATE utf8mb4_vietnamese_ci NOT NULL,
             `phone` varchar(100) COLLATE utf8mb4_vietnamese_ci NOT NULL,
             `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-            `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+            `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+            `deleted_at` TIMESTAMP DEFAULT NULL
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_vietnamese_ci;
 
             --
@@ -162,9 +178,9 @@ class m0001_initial
             ADD KEY `cart_user_fk` (`user_id`);
 
             --
-            -- Indexes for table `cart_detail`
+            -- Indexes for table `cart_item`
             --
-            ALTER TABLE `cart_detail`
+            ALTER TABLE `cart_item`
             ADD KEY `cart_fk` (`cart_id`),
             ADD KEY `product_fk` (`product_id`);
 
@@ -226,9 +242,9 @@ class m0001_initial
             ADD CONSTRAINT `cart_user_fk` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
 
             --
-            -- Constraints for table `cart_detail`
+            -- Constraints for table `cart_item`
             --
-            ALTER TABLE `cart_detail`
+            ALTER TABLE `cart_item`
             ADD CONSTRAINT `cart_fk` FOREIGN KEY (`cart_id`) REFERENCES `cart` (`id`),
             ADD CONSTRAINT `product_fk` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`);
 

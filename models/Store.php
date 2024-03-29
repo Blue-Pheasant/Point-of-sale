@@ -15,20 +15,9 @@ class Store extends DBModel
     public string $open_time;
     public string $image_url;
 
-    public function __construct(
-        $id  = '',
-        $address= '',
-        $phone = '',
-        $status = '',
-        $open_time = '',
-        $image_url = ''
-    ) {
-        $this->id = $id;
-        $this->address = $address;
-        $this->phone = $phone;
-        $this->status = $status;
-        $this->open_time = $open_time;
-        $this->image_url = $image_url;
+    public function __construct($attributes = [])
+    {
+        parent::__construct($attributes);
     }
 
     public function getId () { return $this->id; }
@@ -53,7 +42,7 @@ class Store extends DBModel
 
     public function attributes(): array
     {
-        return ['id', 'address', 'status', 'image_url', 'open_time', 'phone'];
+        return array_merge($this->defaultAttributes(), ['address', 'status', 'image_url', 'open_time', 'phone']);
     }
 
     public function labels(): array
@@ -100,24 +89,10 @@ class Store extends DBModel
         $req = $db->query('SELECT * FROM stores');
 
         foreach ($req->fetchAll() as $item) {
-            $list[] = new Store($item['id'], $item['address'], $item['phone'], $item['status'], $item['open_time'], $item['image_url']);
+            $list[] = new Store($item);
         }
 
         return $list;
-    }
-
-    public function update(Store $store)
-    {
-        $sql = "UPDATE stores SET   id='$store->id',
-                                    status='$store->status', 
-                                    address='$store->address',
-                                    phone='$store->phone',  
-                                    image_url='$store->image_url',
-                                    open_time='$store->open_time'
-                                    WHERE id='$store->id'";
-        $statement = self::prepare($sql);
-        $statement->execute();
-        return true;  
     }
 
     public static function get($id)
@@ -125,16 +100,7 @@ class Store extends DBModel
         $db = Database::getInstance();
         $req = $db->query("SELECT * FROM stores WHERE id = '$id'");
         $item = $req->fetchAll()[0];
-        $store = new Store($item['id'], $item['address'], $item['phone'], $item['status'], $item['open_time'], $item['image_url']);
+        $store = new Store($item);
         return $store;
-    }   
-
-    public function delete()
-    {
-        $tablename = $this->tableName();
-        $sql = "DELETE FROM $tablename WHERE id=?";
-        $stmt= self::prepare($sql);
-        $stmt->execute([$this->id]);
-        return true;       
     }
 }

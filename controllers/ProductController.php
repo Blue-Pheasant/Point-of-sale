@@ -10,18 +10,21 @@ use app\models\Product;
 use app\core\Application;
 use app\core\Request;
 use app\models\Cart;
-use app\models\CartDetail;
+use app\models\CartItem;
 use app\models\Record;
-
+use app\Services\ProductService;
+use app\requests\Product\CreateProductRequest;
 class ProductController extends Controller
 {
+    protected ProductService $productService;
     public function __construct()
     {
+        $this->productService = new ProductService();
     }
 
     public function index()
     {
-        $products = Product::getAllProducts();
+        $products = $this->productService->getAllProducts(['limit' => 10, 'page' => 1])['list'];
         $this->setLayout('admin');
         return $this->render('/admin/products/products', [
             'products' => $products
@@ -33,8 +36,12 @@ class ProductController extends Controller
         $productModel = new Product();
         if ($request->getMethod() === 'post') {
             $productModel->loadData($request->getBody());
-            $productModel->save();
-            Application::$app->response->redirect('/admin/products');
+            if ($productModel->validate() && $productModel->save()) {
+                Application::$app->session->setFlash('success', 'Create product successuly');
+                Application::$app->response->redirect('/admin/products');
+            } else {
+                Application::$app->session->setFlash('fail', 'Create product fail');
+            }
         } else if ($request->getMethod() === 'get') {
             $products = Product::getAllProducts();
             $this->setLayout('admin');
@@ -49,7 +56,7 @@ class ProductController extends Controller
     {
         if ($request->getMethod() === 'post') {
             $id = Application::$app->request->getParam('id');
-            $productModel = Product::getProductDetail($id);
+            $productModel = $this->productService->getProductById($id);
             $productModel->delete();
             return Application::$app->response->redirect('/admin/products');
         } else if ($request->getMethod() === 'get') {
@@ -61,7 +68,6 @@ class ProductController extends Controller
             ]);
         }
     }
-
 
     public function update(Request $request)
     {
@@ -84,8 +90,9 @@ class ProductController extends Controller
     public function details(Request $request)
     {
         if ($request->getMethod() === 'get') {
-            $id = Application::$app->request->getParam('id');
-            $productModel = Product::getProductDetail($id);
+            $id = $request->getParam('id');
+            $productModel = $this->productService->getProductById($id);
+            var_dump($productModel);
             $this->setLayout('admin');
             return $this->render('/admin/products/details_product', [
                 'productModel' => $productModel
@@ -95,10 +102,8 @@ class ProductController extends Controller
 
     public function product(Request $request)
     {
-        $product_id = Application::$app->request->getParam('id');
-        $product = Product::getProductDetail($product_id);
-
-
+        $id = $request->getParam('id');
+        $product = $this->productService->getProductById($id);
         $addToCart = false;
 
         if ($request->getMethod() === 'post') {
@@ -106,13 +111,14 @@ class ProductController extends Controller
             $note = $request->getBody()['note'];
             $quantity = $request->getBody()['quantity'];
             $cart_id = Application::$app->cart->id;
-            $cartDetail = new CartDetail(
-                uniqid(),
-                $product_id,
-                $cart_id,
-                $quantity,
-                $note,
-                $size
+            $cartDetail = new CartItem([
+                'id' => uniqid(),
+                'product_id' => $id,
+                'cart_id' => $cart_id,
+                'quantity' => $quantity,
+                'note' => $note,
+                'size' => $size
+            ]
             );
             $cartDetail->save();
 

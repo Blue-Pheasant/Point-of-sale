@@ -99,7 +99,7 @@ class SiteController extends Controller
 
     public function register(Request $request)
     {
-        $registerModel = new User();
+        $registerModel = new User([]);
         if ($request->getMethod() === 'post') {
             $registerModel->loadData($request->getBody());
             if ($registerModel->validate() && $registerModel->save()) {

@@ -55,6 +55,7 @@ $app->router->post('/cart', [CartController::class, 'placeOrder']);
 $app->router->post('/update', [CartController::class, 'update']);
 
 $app->router->get('/orders', [OrdersController::class, 'orders']);
+$app->router->post('/orders/clear', [OrdersController::class, 'clear']);
 $app->router->get('/error', [SiteController::class, 'error']);
 $app->router->get('/order', [OrderDetailController::class, 'orderDetail']);
 
@@ -65,7 +66,6 @@ $app->router->get('/admin/users', [UserController::class, 'index']);
 $app->router->get('/admin/products', [ProductController::class, 'index']);
 $app->router->get('/admin/stores', [StoreController::class, 'index']);
 $app->router->get('/admin/categories', [CategoryController::class, 'index']);
-$app->router->get('/admin/stores', [StoreController::class, 'index']);
 $app->router->get('/admin/profile', [AdminController::class, 'profile']);
 $app->router->post('/admin/profile', [AdminController::class, 'profile']);
 $app->router->post('/admin/sales', [AdminController::class, 'index']);

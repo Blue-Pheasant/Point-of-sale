@@ -79,7 +79,7 @@ function total($params)
                                 foreach ($params['items'] as $param) {
                                     echo '
                                             <div class="cart-page-item">
-                                                <form method="post" action="/update?order_detail_id=' . $param->order_detail_id . '">
+                                                <form method="post" action="/update?cart_item_id=' . $param->id . '">
                                                     <div class="container">
                                                         <div class="row gy-2">
                                                             <div class="col-lg-2 col-md-2 col-sm-4 col-4">
@@ -99,7 +99,7 @@ function total($params)
                                                                 </div>
                                                             </div>
                                                             <div class="col-lg-1 col-md-1 col-sm-4 col-4">
-                                                                <a href="/cart?action=delete&id=' . $param->order_detail_id . '">
+                                                                <a href="/cart?action=delete&id=' . $param->id . '">
                                                                     <img src="/images/delete.svg" class="cart-page__delete" />
                                                                 </a>
 

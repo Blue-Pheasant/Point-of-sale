@@ -38,6 +38,16 @@ class StoreController extends Controller
         }
     }
 
+    public function details(Request $request)
+    {
+        $storeId = $request->getParam('id');
+        $storeModel = Store::get($storeId);
+        $this->setLayout('admin');
+        return $this->render('/admin/stores/details_store', [
+            'model' => $storeModel
+        ]);
+    }
+
     public function delete(Request $request)
     {
         if ($request->getMethod() === 'post') {

@@ -9,9 +9,24 @@ use PDOException;
 
 abstract class DBModel extends Model
 {
+    protected string $id;
+    protected $deleted_at = null;
+
+    protected function __construct($attributes = [])
+    {
+        foreach ($attributes as $key => $value) {
+            $this->{$key} = $value;
+        }
+    }
+
     abstract public static function tableName(): string;
 
     abstract public function attributes(): array;
+
+    protected function defaultAttributes(): array
+    {
+        return ['id', 'deleted_at'];
+    }
 
     public static function primaryKey(): string
     {
@@ -36,6 +51,41 @@ abstract class DBModel extends Model
         return true;
     }
 
+    public function delete() : bool
+    {
+        $tableName = $this->tableName();
+        $id = $this->id;
+
+        $statement = self::prepare("UPDATE $tableName SET deleted_at = NOW() WHERE id = :id");
+        $statement->bindValue(':id', $id);
+
+        $statement->execute();
+        return true;
+    }
+
+    public function update() : bool
+    {
+        $tableName = $this->tableName();
+        $attributes = $this->attributes();
+        $id = $this->id;
+
+        $sql = "UPDATE $tableName SET ";
+        foreach ($attributes as $attribute) {
+            $sql .= "$attribute = :$attribute, ";
+        }
+        $sql = rtrim($sql, ', ') . " WHERE id = :id";
+
+        $statement = self::prepare($sql);
+
+        foreach ($attributes as $attribute) {
+            $statement->bindValue(":$attribute", $this->{$attribute});
+        }
+        $statement->bindValue(':id', $id);
+
+        $statement->execute();
+        return true;
+    }
+
     public static function prepare($sql)
     {
         return Application::$app->db->pdo->prepare($sql);
@@ -51,20 +101,6 @@ abstract class DBModel extends Model
             $statement->bindValue(":$key", $item);
         }
         $statement->execute();
-        return $statement->fetchObject(static::class);
-    }
-
-    public static function getObject($where, $id)
-    {
-        $tableName = static::tableName();
-        $attributes = array_keys($where);
-        $sql = implode("AND", array_map(fn ($attr) => "$attr = :$attr", $attributes));
-        $statement = self::prepare("SELECT * FROM $tableName WHERE $sql");
-        for($i=0; $i<strlen($sql); $i++) {
-            if($sql[$i] == ':') 
-                $sql = substr($sql, $i);
-        }
-        $statement->execute([$sql => $id]);
         return $statement->fetchObject(static::class);
     }
 }

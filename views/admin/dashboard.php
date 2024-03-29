@@ -69,11 +69,7 @@
               <p class="card-category">Sản phẩm</p>
             </a>
                   <?php
-                    $count = 0;
-                    foreach($params['products'] as $product) {
-                      $count ++;
-                    }
-                    echo '<h4 class="card-title"> ' . $count .' </h4>';
+                    echo '<h4 class="card-title"> ' . $params['products'] .' </h4>';
                   ?>
             </div>
           </div>
