@@ -6,6 +6,23 @@ use app\core\Database;
 
 class Query
 {
+    private static $db;
+    
+    public static function prepare(string $query, array $params = []): PDOStatement
+    {
+        if (empty(self::$db)) {
+            self::$db = Database::getInstance();
+        }
+
+        $stmt = self::$db->prepare($query);
+
+        foreach ($params as $key => $value) {
+            $stmt->bindValue(":$key", $value);
+        }
+
+        return $stmt;
+    }
+
     public static function get($table, $columns = [], $where = [], $limit = 0, $offset = 0)
     {
         $query = "SELECT ";
@@ -80,9 +97,19 @@ class Query
         return $query;
     }
 
-    public static function getCount($query) : int
+    public static function getCount(string $query, array $params = []): int
     {
         $db = Database::getInstance();
-        return $db->query("SELECT COUNT(*) FROM ($query) as count")->fetch()[0];
+        $stmt = $db->prepare("SELECT COUNT(*) FROM ($query) AS count");
+        $stmt->execute($params);
+        return (int) $stmt->fetchColumn();
+    }
+
+    public static function getAll(string $query, array $params = []): array
+    {
+        $db = Database::getInstance();
+        $stmt = $db->prepare($query);
+        $stmt->execute($params);
+        return $stmt->fetchAll();
     }
 }
