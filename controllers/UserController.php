@@ -105,4 +105,32 @@ class UserController extends Controller{
             ]);
         }        
     }
+
+    public function profile()
+    {
+        return $this->render('profile');
+    }
+
+    public function updateProfile(Request $request)
+    {
+        $updateSuccess = false;
+        $id = Application::$app->user->id;
+        $user = User::getUserInfo($id);
+        if ($request->getMethod() === 'post') {
+            $user->loadData($request->getBody());
+            if ($user->validateUpdateProfile() && true) {
+                if ($user->updateProfile($user)) {
+                    $updateSuccess = true;
+                }
+            }
+        }
+
+        $user = User::getUserInfo($id);
+        Application::$app->user = $user;
+
+        return $this->render('profile', [
+            'user' => $user,
+            'updateSuccess' => $updateSuccess,
+        ]);
+    }
 }
