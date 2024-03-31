@@ -4,7 +4,6 @@ use app\controllers\SiteController;
 use app\core\Application;
 use app\controllers\ProductController;
 use app\controllers\MenuController;
-use app\controllers\ProfileController;
 use app\controllers\AdminController;
 use app\controllers\StoreController;
 use app\controllers\UserController;
@@ -13,6 +12,7 @@ use app\controllers\SaleController;
 use app\controllers\CartController;
 use app\controllers\OrdersController;
 use app\controllers\OrderDetailController;
+use app\controllers\AuthController;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 $dotenv = Dotenv\Dotenv::createImmutable(dirname(__DIR__));
@@ -30,19 +30,19 @@ $config = [
 $app = new Application(dirname(__DIR__), $config);
 
 $app->router->get('/', [SiteController::class, 'home']);
-$app->router->get('/register', [SiteController::class, 'register']);
-$app->router->post('/register', [SiteController::class, 'register']);
-$app->router->get('/login', [SiteController::class, 'login']);
-$app->router->post('/login', [SiteController::class, 'login']);
-$app->router->get('/logout', [SiteController::class, 'logout']);
+$app->router->get('/register', [AuthController::class, 'register']);
+$app->router->post('/register', [AuthController::class, 'register']);
+$app->router->get('/login', [AuthController::class, 'login']);
+$app->router->post('/login', [AuthController::class, 'login']);
+$app->router->get('/logout', [AuthController::class, 'logout']);
 $app->router->get('/contact', [SiteController::class, 'contact']);
 $app->router->get('/about', [SiteController::class, 'about']);
 $app->router->get('/stores', [StoreController::class, 'stores']);
 $app->router->get('/menu', [MenuController::class, 'menu']);
 $app->router->post('/menu', [MenuController::class, 'search']);
 $app->router->get('/collection', [SiteController::class, 'collection']);
-$app->router->get('/profile', [ProfileController::class, 'profile']);
-$app->router->post('/profile', [ProfileController::class, 'profile']);
+$app->router->get('/profile', [UserController::class, 'profile']);
+$app->router->post('/profile', [UserController::class, 'updateProfile']);
 $app->router->get('/stores', [SiteController::class, 'stores']);
 $app->router->get('/cart/notice', [SiteController::class, 'notice']);
 
