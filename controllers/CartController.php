@@ -15,7 +15,6 @@ use app\core\Request;
 
 class CartController extends Controller
 {
-
     public function deleteItem($cart_id, $id)
     {
         CartItem::deleteItem($id, $cart_id);
@@ -121,5 +120,4 @@ class CartController extends Controller
 
         Application::$app->response->redirect('/cart/notice');
     }
-
 }
