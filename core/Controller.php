@@ -4,6 +4,8 @@ namespace app\core;
 
 use app\core\Application;
 use app\middlewares\BaseMiddleware;
+use app\core\Router;
+use app\core\Response;
 
 class Controller
 {
@@ -31,5 +33,20 @@ class Controller
     public function getMiddlewares(): array
     {
         return $this->middlewares;
+    }
+
+    public function redirect($url)
+    {
+        return  Application::$app->response->redirect($url);
+    }
+
+    public function intended($url)
+    {
+        return Application::$app->router->intended($url);
+    }
+
+    public function setFlash($key, $message)
+    {
+        return Application::$app->session->setFlash($key, $message);
     }
 }

@@ -9,6 +9,7 @@ use app\core\Controller;
 use app\models\Product;
 use app\core\Application;
 use app\core\Request;
+use app\core\Session;
 use app\models\Cart;
 use app\models\CartItem;
 use app\models\Record;
@@ -37,10 +38,10 @@ class ProductController extends Controller
         if ($request->getMethod() === 'post') {
             $productModel->loadData($request->getBody());
             if ($productModel->validate() && $productModel->save()) {
-                Application::$app->session->setFlash('success', 'Create product successuly');
-                Application::$app->response->redirect('/admin/products');
+                $this->setFlash('success', 'Create product successuly');
+                $this->redirect('/admin/products');
             } else {
-                Application::$app->session->setFlash('fail', 'Create product fail');
+                $this->setFlash('fail', 'Create product fail');
             }
         } else if ($request->getMethod() === 'get') {
             $products = Product::getAllProducts();
@@ -51,17 +52,14 @@ class ProductController extends Controller
         }
     }
 
-
     public function delete(Request $request)
     {
+        $id = $request->getParam('id');
+        $productModel = $this->productService->getProductById($id);
         if ($request->getMethod() === 'post') {
-            $id = Application::$app->request->getParam('id');
-            $productModel = $this->productService->getProductById($id);
             $productModel->delete();
-            return Application::$app->response->redirect('/admin/products');
+            return $this->redirect('/admin/products');
         } else if ($request->getMethod() === 'get') {
-            $id = Application::$app->request->getParam('id');
-            $productModel = Product::getProductDetail($id);
             $this->setLayout('admin');
             return $this->render('/admin/products/delete_product', [
                 'productModel' => $productModel
@@ -71,15 +69,13 @@ class ProductController extends Controller
 
     public function update(Request $request)
     {
+        $id = Application::$app->request->getParam('id');
+        $productModel = $this->productService->getProductById($id);
         if ($request->getMethod() === 'post') {
-            $id = Application::$app->request->getParam('id');
-            $productModel = Product::getProductDetail($id);
             $productModel->loadData($request->getBody());
             $productModel->update($productModel);
             Application::$app->response->redirect('/admin/products');
         } else if ($request->getMethod() === 'get') {
-            $id = Application::$app->request->getParam('id');
-            $productModel = Product::getProductDetail($id);
             $this->setLayout('admin');
             return $this->render('/admin/products/edit_product', [
                 'productModel' => $productModel
@@ -89,15 +85,12 @@ class ProductController extends Controller
 
     public function details(Request $request)
     {
-        if ($request->getMethod() === 'get') {
-            $id = $request->getParam('id');
-            $productModel = $this->productService->getProductById($id);
-            var_dump($productModel);
-            $this->setLayout('admin');
-            return $this->render('/admin/products/details_product', [
-                'productModel' => $productModel
-            ]);
-        }
+        $id = $request->getParam('id');
+        $productModel = $this->productService->getProductById($id);
+        $this->setLayout('admin');
+        return $this->render('/admin/products/details_product', [
+            'productModel' => $productModel
+        ]);
     }
 
     public function product(Request $request)
@@ -118,10 +111,9 @@ class ProductController extends Controller
                 'quantity' => $quantity,
                 'note' => $note,
                 'size' => $size
-            ]
-            );
-            $cartDetail->save();
+            ]);
 
+            $cartDetail->save();
             $addToCart = true;
         }
 

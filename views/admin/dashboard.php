@@ -19,11 +19,7 @@
                 <p class="card-category">Thành viên</p>
               </a>
               <?php
-                  $count = 0;
-                  foreach($params['users'] as $user) {
-                    if($user->getRole() === 'client') $count++;
-                  }
-                  echo '<h4 class="card-title"> ' . $count .' </h4>';
+                  echo '<h4 class="card-title"> ' . $params['users'] .' </h4>';
               ?>
             </div>
           </div>
@@ -46,7 +42,7 @@
               <p class="card-category">Doanh thu</p>
             </a>
               <?php
-                  echo '<h4 class="card-title"> ' . number_format($params['list'][0], 0, ',', '.') . ' VNĐ' .' </h4>';
+                  echo '<h4 class="card-title"> ' . number_format($params['income'], 0, ',', '.') . ' VNĐ' .' </h4>';
               ?>
             </div>
           </div>
@@ -92,7 +88,7 @@
               <p class="card-category">Đã bán</p>
             </a>
                 <?php
-                    echo '<h4 class="card-title"> ' . $params['list'][1] .' </h4>';
+                    echo '<h4 class="card-title"> ' . $params['orders'] .' </h4>';
                 ?>
             </div>
           </div>

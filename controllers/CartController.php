@@ -7,40 +7,49 @@ namespace app\controllers;
 
 use app\core\Controller;
 use app\core\Application;
+use app\core\Session;
 use app\models\Cart;
 use app\models\CartItem;
 use app\models\Order;
 use app\models\OrderDetail;
 use app\core\Request;
+use app\core\Response;
+use app\services\CartService;
 
 class CartController extends Controller
 {
+    protected CartService $cartService;
+
+    public function __construct()
+    {
+        $this->cartService = new CartService();
+    }
 
     public function deleteItem($cart_id, $id)
     {
         CartItem::deleteItem($id, $cart_id);
     }
 
-    public function cart()
+    public function cart(Request $request)
     {
-        $cart_id = Application::$app->cart->id;
+        $cartId = Application::$app->cart->id;
         $deletedItem = false;
         $updatedItem = false;
 
         if (isset($_GET['action'])) {
-            $id = Application::$app->request->getParam('id');
+            $id = $request->getParam('id');
             if ($_GET['action'] == 'delete') {
-                $this->deleteItem($cart_id, $id);
+                $this->deleteItem($cartId, $id);
                 $deletedItem = true;
             } else if($_GET['action'] == 'deletemenu') {
-                $this->deleteItem($cart_id, $id);
+                $this->deleteItem($cartId, $id);
                 $deletedItem = true;
-                Application::$app->response->redirect('menu');
+                $this->redirect('menu');
             }
         }
 
         $user = Application::$app->user;
-        $items = CartItem::getCartItems($cart_id);
+        $items = $this->cartService->getCartItems($cartId);
 
         return $this->render('cart', [
             'items' => $items,
@@ -50,26 +59,26 @@ class CartController extends Controller
         ]);
     }
 
-    public function update()
+    public function update(Request $request)
     {
-        $cart_id = Application::$app->cart->id;
+        $cartId = Application::$app->cart->id;
         $user = Application::$app->user;
 
-        $id = Application::$app->request->getParam('cart_item_id');
-        $newNote = Application::$app->request->getBody()['note'];
-        $newQuantity = Application::$app->request->getBody()['quantity'];
+        $id = $request->getParam('cart_item_id');
+        $newNote = $request->getBody()['note'];
+        $newQuantity = $request->getBody()['quantity'];
 
-        $cartDetailModel = CartItem::getCartItem($id);
+        $cartDetailModel = $this->cartService->getCartItem($id);
         $cartDetailModel->note = $newNote;
         $cartDetailModel->quantity = $newQuantity;
 
         if ($cartDetailModel->validate()) {
             $cartDetailModel->update();
         } else {
-            Application::$app->session->setFlash('fail', 'Số lượng đặt hàng phải lớn hơn 0');
+            Session::setFlash('fail', 'Số lượng đặt hàng phải lớn hơn 0');
         }
 
-        $items = CartItem::getCartItems($cart_id);
+        $items = $this->cartService->getCartItems($cartId);
 
         return $this->render('cart', [
             'items' => $items,
@@ -82,8 +91,8 @@ class CartController extends Controller
         $placedOrder = false;
         $updatedItem = false;
 
-        $cart_id = Application::$app->cart->id;
-        $items = CartItem::getCartItems($cart_id);
+        $cartId = Application::$app->cart->id;
+        $items = $this->cartService->getCartItems($cartId);
 
         $user_id = Application::$app->user->id;
         $delivery_name = $request->getBody()['name'];
@@ -114,12 +123,11 @@ class CartController extends Controller
         }
 
         foreach ($items as $item) {
-            $this->deleteItem($cart_id, $item->cart_item_id);
+            $this->deleteItem($cartId, $item->cart_item_id);
         }
 
-        Cart::checkoutCart($cart_id);
+        $this->cartService->checkoutCart($cartId);
 
-        Application::$app->response->redirect('/cart/notice');
+        Response::redirect('/cart/notice');
     }
-
 }
