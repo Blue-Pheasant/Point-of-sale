@@ -119,4 +119,61 @@ class OrderService
             return false;
         }
     }
+
+    public function getTotalOrderNumber($status = ''): int
+    {
+        $query = "SELECT COUNT(*) FROM users";
+        if ($status) {
+            $query .= " WHERE status = '$status'";
+        }
+        $stmt = $this->db->query($query);
+        return $stmt->fetchColumn();
+    }
+
+    public function getTotalInCome(): int
+    {
+        $query = "
+            SELECT
+                products.price,
+                order_detail.quantity,
+                order_detail.size
+            FROM
+                order_detail
+                INNER JOIN products ON order_detail.product_id = products.id
+                INNER JOIN orders ON order_detail.order_id = orders.id
+            WHERE
+                orders.status = 'done'";
+    
+        $stmt = $this->db->query($query);
+        $req = $stmt->fetchAll();
+        $totalIncome = 0;
+    
+        foreach ($req as $item) {
+            $unitPrice = $item['price'];
+            if($item['size'] == 'Medium') {
+                $unitPrice += 3000;
+            } else if($item['size'] == 'Large') {
+                $unitPrice += 6000;
+            }
+            $totalIncome += $unitPrice * $item['quantity'];
+        }
+    
+        return $totalIncome;
+    }
+
+    public function getOrderItemsByOrderId($orderId)
+    {
+        $list = [];
+        $req = $this->db->query(
+            "SELECT *
+            FROM order_detail JOIN products ON order_detail.product_id = products.id 
+            WHERE order_detail.order_id = '$orderId';"
+        )->fetchAll();
+
+        foreach ($req as $item) {
+            $list[] = new OrderItem($item);
+        }
+
+        return $list;
+    }
 }
