@@ -19,9 +19,9 @@ use app\models\Product;
 use app\models\Order;
 use app\services\OrderService;
 
-class OrdersController extends Controller
+class OrderController extends Controller
 {
-    protected OrderService $orderService;
+    private OrderService $orderService;
 
     public function __construct()
     {
@@ -132,5 +132,30 @@ class OrdersController extends Controller
             }
         }
         Application::$app->response->redirect('/orders');
+    }
+
+    public function orderDetail(Request $request)
+    {
+        $user = Application::$app->user;
+        $orderId = $request->getParam('id');
+        $order = $this->orderService->getOrderById($orderId);
+        $items =$this->orderService->getOrderItemsByOrderId($orderId);
+
+        return $this->render('order_detail', [
+            'order' => $order,
+            'user' => $user,
+            'items' => $items
+        ]);
+    }
+
+    public function orderDetails(Request $request)
+    {
+        $orderId = $request->getParam('id');
+        $items = $this->orderService->getOrderItemsByOrderId($orderId);
+
+        $this->setLayout('admin');
+        return $this->render('/admin/orders/details', [
+            'model' => $items
+        ]);
     }
 }

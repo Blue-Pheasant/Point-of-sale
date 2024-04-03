@@ -185,4 +185,11 @@ class UserService
             throw $e;
         }
     }
+
+    public function getTotalUserNumber(): int
+    {
+        $query = "SELECT COUNT(*) FROM users";
+        $stmt = $this->db->query($query);
+        return $stmt->fetchColumn();
+    }
 }
