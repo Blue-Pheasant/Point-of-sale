@@ -10,8 +10,7 @@ use app\controllers\UserController;
 use app\controllers\CategoryController;
 use app\controllers\SaleController;
 use app\controllers\CartController;
-use app\controllers\OrdersController;
-use app\controllers\OrderDetailController;
+use app\controllers\OrderController;
 use app\controllers\AuthController;
 
 require_once __DIR__ . '/../vendor/autoload.php';
@@ -40,7 +39,6 @@ $app->router->get('/about', [SiteController::class, 'about']);
 $app->router->get('/stores', [StoreController::class, 'stores']);
 $app->router->get('/menu', [MenuController::class, 'menu']);
 $app->router->post('/menu', [MenuController::class, 'search']);
-$app->router->get('/collection', [SiteController::class, 'collection']);
 $app->router->get('/profile', [UserController::class, 'profile']);
 $app->router->post('/profile', [UserController::class, 'updateProfile']);
 $app->router->get('/stores', [SiteController::class, 'stores']);
@@ -54,10 +52,10 @@ $app->router->post('/cart', [CartController::class, 'placeOrder']);
 
 $app->router->post('/update', [CartController::class, 'update']);
 
-$app->router->get('/orders', [OrdersController::class, 'orders']);
-$app->router->post('/orders/clear', [OrdersController::class, 'clear']);
+$app->router->get('/orders', [OrderController::class, 'orders']);
+$app->router->post('/orders/clear', [OrderController::class, 'clear']);
 $app->router->get('/error', [SiteController::class, 'error']);
-$app->router->get('/order', [OrderDetailController::class, 'orderDetail']);
+$app->router->get('/order', [OrderController::class, 'orderDetail']);
 
 // admin general
 $app->router->get('/admin', [AdminController::class, 'index']);
@@ -69,7 +67,7 @@ $app->router->get('/admin/categories', [CategoryController::class, 'index']);
 $app->router->get('/admin/profile', [AdminController::class, 'profile']);
 $app->router->post('/admin/profile', [AdminController::class, 'profile']);
 $app->router->post('/admin/sales', [AdminController::class, 'index']);
-$app->router->get('/admin/orders', [OrdersController::class, 'index']);
+$app->router->get('/admin/orders', [OrderController::class, 'index']);
 // product
 $app->router->get('/admin/products/delete', [ProductController::class, 'delete']);
 $app->router->get('/admin/products/edit', [ProductController::class, 'update']);
@@ -119,19 +117,19 @@ $app->router->get('/admin/sales/details', [SaleController::class, 'details']);
 $app->router->post('/admin/sales/delete', [SaleController::class, 'delete']);
 $app->router->post('/admin/sales/details', [SaleController::class, 'details']);
 // order
-$app->router->get('/admin/orders/accept', [OrdersController::class, 'accept']);
-$app->router->get('/admin/orders/reject', [OrdersController::class, 'reject']);
-$app->router->get('/admin/orders/details', [OrderDetailController::class, 'details']);
+$app->router->get('/admin/orders/accept', [OrderController::class, 'accept']);
+$app->router->get('/admin/orders/reject', [OrderController::class, 'reject']);
+$app->router->get('/admin/orders/details', [OrderController::class, 'orderDetails']);
 
-$app->router->get('/admin/orders/accepted', [OrdersController::class, 'accepted']);
-$app->router->get('/admin/orders/rejected', [OrdersController::class, 'rejected']);
+$app->router->get('/admin/orders/accepted', [OrderController::class, 'accepted']);
+$app->router->get('/admin/orders/rejected', [OrderController::class, 'rejected']);
 
-$app->router->get('/admin/orders/rejected/delete', [OrdersController::class, 'delete']);
-$app->router->get('/admin/orders/rejected/details', [OrdersController::class, 'details']);
+$app->router->get('/admin/orders/rejected/delete', [OrderController::class, 'delete']);
+$app->router->get('/admin/orders/rejected/details', [OrderController::class, 'details']);
 
-$app->router->get('/admin/orders/accepted/delete', [OrdersController::class, 'delete']);
-$app->router->get('/admin/orders/accepted/details', [OrdersController::class, 'details']);
+$app->router->get('/admin/orders/accepted/delete', [OrderController::class, 'delete']);
+$app->router->get('/admin/orders/accepted/details', [OrderController::class, 'details']);
 
-$app->router->post('/admin/orders/accepted', [OrdersController::class, 'accepted']);
-$app->router->post('/admin/orders/rejected', [OrdersController::class, 'rejected']);
+$app->router->post('/admin/orders/accepted', [OrderController::class, 'accepted']);
+$app->router->post('/admin/orders/rejected', [OrderController::class, 'rejected']);
 $app->run();
