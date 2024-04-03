@@ -75,42 +75,6 @@ class Order extends DBModel
         return parent::save();
     }
 
-    public static function getTotalPrice()
-    {
-        $list = [];
-        $totalPrice = 0;
-        $totalPayment = 0;
-        $db = Database::getInstance();
-        $req = $db->query("
-            SELECT
-                products.price,
-                order_detail.order_id,
-                orders.id,
-                order_detail.size,
-                order_detail.quantity
-            FROM
-                (
-                    order_detail
-                    INNER JOIN products ON order_detail.product_id = products.id
-                )
-                INNER JOIN orders ON order_detail.order_id = orders.id
-            WHERE
-                orders.status = 'done';");
-        
-        foreach ($req->fetchAll() as $item) {
-            $unitPrice = $item['price'];
-            if($item['size'] == 'medium') {
-                $unitPrice += 3000;
-            } else if($item['size'] == 'large') {
-                $unitPrice += 6000;
-            }
-            $totalPrice += $unitPrice * $item['quantity'];
-            $totalPayment += $item['quantity'];
-        }    
-        array_push($list, $totalPrice, $totalPayment);
-        return $list;
-    }
-
     public static function getAllOrders($status)
     {
         $list = [];
@@ -151,15 +115,6 @@ class Order extends DBModel
             $list[] = new OrderItem($item);
         }
         return $list;
-    }
-
-    public static function getOrderById($id)
-    {
-        $db = Database::getInstance();
-        $req = $db->query("SELECT * FROM orders WHERE id = '$id'");
-        $item = $req->fetchAll()[0];
-        $order = new Order($item);
-        return $order;
     }
 
     public function getDisplay() : string
