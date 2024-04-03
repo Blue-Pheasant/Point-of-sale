@@ -5,6 +5,9 @@ namespace app\controllers;
 use app\core\Application;
 use app\core\Controller;
 use app\core\Request;
+use app\core\Response;
+use app\core\Session;
+use app\core\Route;
 use app\exception\ForbiddenException;
 use app\middlewares\AuthMiddleware;
 use app\services\AuthService;
@@ -32,14 +35,14 @@ class AuthController extends Controller
         if ($request->getMethod() === 'post') {
             $loginForm->loadData($request->getBody());
             if ($loginForm->validate() && $loginForm->login('email')) {
-                $userId = Application::$app->session->get('user');
+                $userId = Session::get('user');
                 $userModel = $this->userService->getUserById($userId);
                 setcookie("member_login", $userId, time() + 3600 * 24 * 30);
 
                 if ($userModel->getRole() === 'admin') {
-                    return Application::$app->router->intended('/admin');
+                    return $this->intended('/admin');
                 } else {
-                    return Application::$app->router->intended('/');
+                    return $this->intended('/');
                 }
             }
         }
@@ -55,9 +58,8 @@ class AuthController extends Controller
         if ($request->getMethod() === 'post') {
             $registerModel->loadData($request->getBody());
             if ($registerModel->validate() && $registerModel->save()) {
-                Application::$app->session->setFlash('success', 'Thanks for registering');
-                Application::$app->response->redirect('/');
-                return 'Show success page';
+                Session::setFlash('success', 'Thanks for registering');
+                $this->redirect('/');
             }
         }
         $this->setLayout('auth');
@@ -69,6 +71,6 @@ class AuthController extends Controller
     public function logout()
     {
         Application::$app->logout();
-        Application::$app->response->redirect('/');
+        $this->redirect('/');
     }
 }

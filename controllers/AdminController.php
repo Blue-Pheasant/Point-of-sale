@@ -5,48 +5,55 @@ namespace app\controllers;
 use app\core\Application;
 use app\core\Controller;
 use app\core\Request;
+use app\core\Response;
 use app\middlewares\AdminMiddleware;
 use app\models\Order;
 use app\models\Product;
 use app\models\User;
 use app\services\ProductService;
+use app\services\UserService;
+use app\services\OrderService;
 
 
 class AdminController extends Controller
 {
-    protected ProductService $productService;
+    private ProductService $productService;
+    private UserService $userService;
+    private OrderService $orderService;
+
     public function __construct() 
     {
         Application::$app->controller->registerMiddleware(new AdminMiddleware(['index']));
         $this->productService = new ProductService();
+        $this->userService = new UserService();
+        $this->orderService = new OrderService();
     }
 
     public function index()
     {
-        $orders = Order::getAllOrders('done');
+        $orders = $this->orderService->getTotalOrderNumber();
         $products = $this->productService->getProductNumber();
-        $users = User::getAllUsers();
-        $list = Order::getTotalPrice();
+        $users = $this->userService->getTotalUserNumber();
+        $income = $this->orderService->getTotalIncome(); 
 
         $this->setLayout('admin');
         return $this->render('/admin/dashboard', [
             'orders' => $orders,
             'products' => $products,
             'users' => $users,
-            'list' => $list 
+            'income' => $income 
         ]);
     }
 
     public function profile(Request $request)
     {
         $adminId = Application::$app->user->id;
-        $adminModel = User::getUserInfo($adminId);
+        $adminModel = $this->userService->getUserById($adminId);
         if($request->getMethod() === 'post') {
             $adminModel->loadData($request->getBody());
             if ($adminModel->validateUpdateProfile() && true) {
                 if ($adminModel->updateProfile($adminModel)) {
-                    Application::$app->response->redirect('/admin/profile');
-                    return 'Show success page';
+                    Response::redirect('/admin/profile');
                 }
             }
         }

@@ -31,21 +31,6 @@ class SiteController extends Controller
         return $this->render('permission');
     }
 
-    public function cart()
-    {
-        return $this->render('cart');
-    }
-
-    public function product()
-    {
-        return $this->render('product_detail');
-    }
-
-    public function menu()
-    {
-        return $this->render('menu');
-    }
-
     public function about()
     {
         return $this->render('about');

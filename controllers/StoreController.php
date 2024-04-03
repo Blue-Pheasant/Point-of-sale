@@ -29,7 +29,7 @@ class StoreController extends Controller
         if($request->getMethod() === 'post') {
             $storeModel->loadData($request->getBody());
             $storeModel->save();
-            Application::$app->response->redirect('/admin/stores');
+            $this->redirect('/admin/stores');
         } else if($request->getMethod() === 'get') {
             $this->setLayout('admin');
             return $this->render('/admin/stores/create_store',  [
@@ -50,14 +50,12 @@ class StoreController extends Controller
 
     public function delete(Request $request)
     {
+        $id = $request->getParam('id');
+        $storeModel = Store::get($id);
         if ($request->getMethod() === 'post') {
-            $id = Application::$app->request->getParam('id');
-            $storeModel = Store::get($id);
             $storeModel->delete();
-            return Application::$app->response->redirect('/admin/stores');
+            return $this->redirect('/admin/stores');
         } else if ($request->getMethod() === 'get') {
-            $id = Application::$app->request->getParam('id');
-            $storeModel = Store::get($id);
             $this->setLayout('admin');
             return $this->render('/admin/stores/delete_store', [
                 'storeModel' => $storeModel
@@ -67,15 +65,13 @@ class StoreController extends Controller
 
     public function update(Request $request)
     {
+        $id = $request->getParam('id');
+        $storeModel = Store::get($id);
         if ($request->getMethod() === 'post') {
-            $id = Application::$app->request->getParam('id');
-            $storeModel = Store::get($id);
             $storeModel->loadData($request->getBody());
             $storeModel->update($storeModel);
-            Application::$app->response->redirect('/admin/stores');
+            $this->redirect('/admin/stores');
         } else if ($request->getMethod() === 'get') {
-            $id = Application::$app->request->getParam('id');
-            $storeModel = Store::get($id);
             $this->setLayout('admin');
             return $this->render('/admin/stores/edit_store', [
                 'storeModel' => $storeModel

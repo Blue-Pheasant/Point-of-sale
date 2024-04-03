@@ -9,10 +9,16 @@ use app\core\Application;
 use app\core\Request;
 use app\middlewares\AdminMiddleware;
 use app\models\User;
+use app\services\UserService;
 
-class UserController extends Controller{
-    public function __construct() {
+class UserController extends Controller
+{
+    private UserService $userService;
+    
+    public function __construct() 
+    {
         Application::$app->controller->registerMiddleware(new AdminMiddleware(['index', 'create', 'delete', 'update', 'details']));
+        $this->userService = new UserService();
     }
 
     public function index() 
@@ -26,14 +32,14 @@ class UserController extends Controller{
 
     public function create(Request $request)
     {
-        $userModel = new User;
+        $userModel = new User();
         if($request->getMethod() === 'post') {
             $userModel->loadData($request->getBody());
             if($userModel->getRole() === 'client') {
                 $userModel->saveAdmin($userModel->getRole());
             }
             else $userModel->save();
-            Application::$app->response->redirect('/admin/users');
+            $this->redirect('/admin/users');
         } else if($request->getMethod() === 'get') {
             $this->setLayout('admin');
             return $this->render('/admin/users/create_user',  [
@@ -44,14 +50,12 @@ class UserController extends Controller{
 
     public function delete(Request $request)
     {
+        $id = $request->getParam('id');
+        $userModel = $this->userService->getUserById($id);
         if($request->getMethod() === 'post') {
-            $id = Application::$app->request->getParam('id');
-            $userModel = User::getUserInfo($id);
             $userModel->delete();
-            return Application::$app->response->redirect('/admin/users');
+            return $this->redirect('/admin/users');
         } else if($request->getMethod() === 'get') {
-            $id = Application::$app->request->getParam('id');
-            $userModel = User::getUserInfo($id);
             $this->setLayout('admin');
             return $this->render('/admin/users/delete_user', [
                 'userModel' => $userModel
@@ -61,15 +65,13 @@ class UserController extends Controller{
 
     public function update(Request $request)
     {
+        $id = $request->getParam('id');
+        $userModel = $this->userService->getUserById($id);
         if($request->getMethod() === 'post') {
-            $id = Application::$app->request->getParam('id');
-            $userModel = User::getUserInfo($id);
             $userModel->loadData($request->getBody());
             $userModel->update($userModel);
-            Application::$app->response->redirect('/admin/users');
+            $this->redirect('/admin/users');
         } else if ($request->getMethod() === 'get') {
-            $id = Application::$app->request->getParam('id');
-            $userModel = User::getUserInfo($id);
             $this->setLayout('admin');
             return $this->render('/admin/users/edit_user', [
                 'userModel' => $userModel
@@ -80,8 +82,8 @@ class UserController extends Controller{
     public function details(Request $request)
     {
         if($request->getMethod() === 'get')
-        $id = Application::$app->request->getParam('id');
-        $userModel = User::getUserInfo($id);
+        $id = $request->getParam('id');
+        $userModel = $this->userService->getUserById($id);
         $this->setLayout('admin');
         return $this->render('/admin/users/details_user', [
             'userModel' => $userModel
@@ -90,15 +92,13 @@ class UserController extends Controller{
 
     public function password(Request $request)
     {
+        $id = $request->getParam('id');
+        $userModel = $this->userService->getUserById($id);
         if($request->getMethod() === 'post') {
-            $id = Application::$app->request->getParam('id');
-            $userModel = User::getUserInfo($id);
             $userModel->loadData($request->getBody());
             $userModel->update($userModel);
-            Application::$app->response->redirect('/admin/users');
+            $this->redirect('/admin/users');
         } else if ($request->getMethod() === 'get') {
-            $id = Application::$app->request->getParam('id');
-            $userModel = User::getUserInfo($id);
             $this->setLayout('admin');
             return $this->render('/admin/users/change_password', [
                 'userModel' => $userModel
@@ -115,7 +115,7 @@ class UserController extends Controller{
     {
         $updateSuccess = false;
         $id = Application::$app->user->id;
-        $user = User::getUserInfo($id);
+        $user = $this->userService->getUserById($id);
         if ($request->getMethod() === 'post') {
             $user->loadData($request->getBody());
             if ($user->validateUpdateProfile() && true) {
@@ -125,7 +125,7 @@ class UserController extends Controller{
             }
         }
 
-        $user = User::getUserInfo($id);
+        $user = $this->userService->getUserById($id);
         Application::$app->user = $user;
 
         return $this->render('profile', [
