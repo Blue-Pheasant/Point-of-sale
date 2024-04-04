@@ -21,10 +21,10 @@ class CategoryController extends Controller {
 
     public function index() 
     {
-        $models = Category::getAllCategories();
+        $categories = $this->categoryService->getAllCategories();
         $this->setLayout('admin');
         return $this->render('/admin/categories/categories', [
-            'category' => $models
+            'category' => $categories
         ]);      
     }
 
@@ -42,7 +42,7 @@ class CategoryController extends Controller {
 
     public function create(Request $request) 
     {
-        $categoryModel = new Category;
+        $categoryModel = new Category();
         if($request->getMethod() === 'post') {
             $categoryModel->loadData($request->getBody());
             $categoryModel->save();
@@ -61,7 +61,7 @@ class CategoryController extends Controller {
         $categoryModel = $this->categoryService->getCategoryById($id);
         if($request->getMethod() === 'post') {
             $categoryModel->delete();
-            return Response::redirect('/admin/categories'); 
+            return $this->redirect('/admin/categories'); 
         } else if ($request->getMethod() === 'get') {
             $this->setLayout('admin');
             return $this->render('/admin/categories/delete_category', [
@@ -73,7 +73,7 @@ class CategoryController extends Controller {
     public function update(Request $request)
     {
         $id = $request->getParam('id');
-        $categoryModel = Category::get($id);
+        $categoryModel = $this->categoryService->getCategoryById($id);
         if ($request->getMethod() === 'post') {
             $categoryModel->loadData($request->getBody());
             $categoryModel->update($categoryModel);
