@@ -75,7 +75,7 @@ class CartController extends Controller
         if ($cartDetailModel->validate()) {
             $cartDetailModel->update();
         } else {
-            Session::setFlash('fail', 'Số lượng đặt hàng phải lớn hơn 0');
+            $this->setFlash('fail', 'Số lượng đặt hàng phải lớn hơn 0');
         }
 
         $items = $this->cartService->getCartItems($cartId);

@@ -14,30 +14,16 @@ class CategoryService
         $this->db = Database::getInstance();
     }
 
-    public function getAllCategories($pagerCondition) : array
+    public function getAllCategories() : array
     {
-        $limit = $pagerCondition['limit'];
-        $page = $pagerCondition['page'] ;
-        
-        $totalCount = Query::getCount("SELECT * FROM categories");
-        $pagination = Pagination::paginate($limit, $page, $totalCount);
-        
-        $offset = $pagination['offset'];
-        $query = Query::get('categories', [], [], $limit, $offset);
-        
-        $req = $this->db->query($query)->fetchAll();
+        $req = $this->db->query("SELECT * FROM categories")->fetchAll();
         $list = [];
 
         foreach ($req as $item) {
             $list[] = new Category($item);
         }
 
-        $result = [
-            'list' => $list,
-            'pagination' => $pagination
-        ];
-
-        return $result;
+        return $list;
     }
 
     public function getCategoryById($id): ?Category

@@ -61,7 +61,7 @@ class OrderController extends Controller
         if($request->getMethod() === 'get') {
             $orderModel->setStatus('done');
             $orderModel->update();
-            Application::$app->response->redirect('/admin/orders');
+            $this->redirect('/admin/orders');
         } 
     }
 
@@ -72,7 +72,7 @@ class OrderController extends Controller
         if($request->getMethod() === 'get') {
             $orderModel->setStatus('cancel');
             $orderModel->update();
-            Application::$app->response->redirect('/admin/orders');
+            $this->redirect('/admin/orders');
         }
     }
 
@@ -104,8 +104,10 @@ class OrderController extends Controller
         if($request->getMethod() === 'get') {
             $orderModel->delete();
             if (strpos($path, 'reject')) {
-                Application::$app->response->redirect('/admin/orders/rejected');
-            } else Application::$app->response->redirect('/admin/orders/accepted');
+                $this->redirect('/admin/orders/rejected');
+            } else {
+                $this->redirect('/admin/orders/accepted');
+            }
         }
     }
 
@@ -131,7 +133,7 @@ class OrderController extends Controller
                 $order->update($order);
             }
         }
-        Application::$app->response->redirect('/orders');
+        $this->redirect('/orders');
     }
 
     public function orderDetail(Request $request)
