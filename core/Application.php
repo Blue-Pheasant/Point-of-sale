@@ -76,7 +76,7 @@ class Application
         }
     }
 
-    public function run()
+    public function bootstrap()
     {
         $this->triggerEvent(self::EVENT_BEFORE_REQUEST);
         try {
@@ -110,5 +110,11 @@ class Application
     public function on($eventName, $callback)
     {
         $this->eventListeners[$eventName][] = $callback;
+    }
+
+    public function useRoute(string $routeClass)
+    {
+        $route = new $routeClass();
+        $this->router->register($route->routes());
     }
 }
