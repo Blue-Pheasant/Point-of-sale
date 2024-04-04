@@ -7,7 +7,7 @@ namespace app\core;
 class Router
 {
 
-    protected array $routers = [];
+    protected array $routes = [];
     public Request $request;
     public Response $response;
 
@@ -15,16 +15,14 @@ class Router
     {
         $this->request = $request;
         $this->response = $response;
+        $this->routes['get'] = [];
+        $this->routes['post'] = [];
     }
 
-    public function get($path, $callback)
+    public function register($routes)
     {
-        $this->routers['get'][$path] = $callback;
-    }
-
-    public function post($path, $callback)
-    {
-        $this->routers['post'][$path] = $callback;
+        $this->routes['get'] = array_merge($this->routes['get'], $routes['get']);
+        $this->routes['post'] = array_merge($this->routes['post'], $routes['post']);
     }
 
     public function setIntendedUrl($url)
@@ -45,7 +43,7 @@ class Router
     {
         $path = $this->request->getPath();
         $method = $this->request->getMethod();
-        $callback = $this->routers[$method][$path] ?? false;
+        $callback = $this->routes[$method][$path] ?? false;
         if ($callback === false) {
             $this->response->setStateCode(404);
             Application::$app->controller->layout = 'auth';
