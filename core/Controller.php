@@ -3,7 +3,7 @@
 namespace app\core;
 
 use app\core\Application;
-use app\middlewares\BaseMiddleware;
+use app\core\Middleware;
 use app\core\Router;
 use app\core\Response;
 
@@ -11,9 +11,8 @@ class Controller
 {
     public string $layout = 'main';
     public string $action = '';
-    public BaseMiddleware $middleware;
+    public Middleware $middleware;
 
-    
     public function render($view, $params = [])
     {
         return Application::$app->router->renderView($view, $params);
@@ -24,15 +23,15 @@ class Controller
         $this->layout = $layout;
     }
 
-    public function registerMiddleware(BaseMiddleware $middleware)
+    public function registerMiddleware($middleware, $actions = [])
     {
-        $this->middleware = $middleware;
+        $this->middleware = new $middleware($actions);
         $this->middleware->execute();
     }
 
-    public function getMiddlewares(): array
+    public function getMiddleware()
     {
-        return $this->middlewares;
+        return $this->middleware;
     }
 
     public function redirect($url)

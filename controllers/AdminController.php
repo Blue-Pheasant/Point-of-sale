@@ -23,7 +23,7 @@ class AdminController extends Controller
 
     public function __construct() 
     {
-        Application::$app->controller->registerMiddleware(new AdminMiddleware(['index']));
+        Application::$app->controller->registerMiddleware(AdminMiddleware::class, ['index', 'profile']);
         $this->productService = new ProductService();
         $this->userService = new UserService();
         $this->orderService = new OrderService();

@@ -15,6 +15,7 @@ use app\models\OrderDetail;
 use app\core\Request;
 use app\core\Response;
 use app\services\CartService;
+use app\middlewares\AuthMiddleware;
 
 class CartController extends Controller
 {
@@ -23,6 +24,7 @@ class CartController extends Controller
     public function __construct()
     {
         $this->cartService = new CartService();
+        $this->registerMiddleware(AuthMiddleware::class, ['cart', 'update', 'placeOrder']);
     }
 
     public function deleteItem($cart_id, $id)
