@@ -30,15 +30,10 @@
 use app\core\Application;
 use app\models\User;
 
-// $isGuest = Application::$app->isGuest();
-// if($isGuest) {
-//   Application::$app->response->redirect('/error');
-// }
+
 $userID = Application::$app->session->get('user');
 $userModel = User::getUserInfo($userID);
-// if($userModel->getRole() != 'admin') {
-//   Application::$app->response->redirect('/error');
-// }
+
 ?>
 <body>
   <div id="wrapper" class="toggled">
