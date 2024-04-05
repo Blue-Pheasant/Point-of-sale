@@ -22,7 +22,7 @@ class ProductService
         $limit = $pagerCondition['limit'];
         $page = $pagerCondition['page'] ;
         
-        $totalCount = Query::getCount("SELECT * FROM products");
+        $totalCount = Query::getCount("SELECT * FROM products WHERE deleted_at IS NULL");
         $pagination = Pagination::paginate($limit, $page, $totalCount);
         
         $offset = $pagination['offset'];

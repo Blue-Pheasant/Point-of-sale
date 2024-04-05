@@ -33,7 +33,7 @@ class StoreController extends Controller
         if($request->getMethod() === 'post') {
             $storeModel->loadData($request->getBody());
             $storeModel->save();
-            $this->redirect('/admin/stores');
+            return $this->refresh();
         } else if($request->getMethod() === 'get') {
             $this->setLayout('admin');
             return $this->render('/admin/stores/create_store',  [
@@ -58,7 +58,7 @@ class StoreController extends Controller
         $storeModel = Store::get($id);
         if ($request->getMethod() === 'post') {
             $storeModel->delete();
-            return $this->redirect('/admin/stores');
+            return $this->back();
         } else if ($request->getMethod() === 'get') {
             $this->setLayout('admin');
             return $this->render('/admin/stores/delete_store', [
@@ -74,7 +74,7 @@ class StoreController extends Controller
         if ($request->getMethod() === 'post') {
             $storeModel->loadData($request->getBody());
             $storeModel->update($storeModel);
-            $this->redirect('/admin/stores');
+            return $this->refresh();
         } else if ($request->getMethod() === 'get') {
             $this->setLayout('admin');
             return $this->render('/admin/stores/edit_store', [

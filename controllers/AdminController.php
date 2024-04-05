@@ -53,7 +53,7 @@ class AdminController extends Controller
             $adminModel->loadData($request->getBody());
             if ($adminModel->validateUpdateProfile() && true) {
                 if ($adminModel->updateProfile($adminModel)) {
-                    Response::redirect('/admin/profile');
+                    $this->refresh();
                 }
             }
         }

@@ -39,9 +39,10 @@ class UserController extends Controller
             $userModel->loadData($request->getBody());
             if($userModel->getRole() === 'client') {
                 $userModel->saveAdmin($userModel->getRole());
+            } else {
+                $userModel->save();
             }
-            else $userModel->save();
-            $this->redirect('/admin/users');
+            return $this->refresh();
         } else if($request->getMethod() === 'get') {
             $this->setLayout('admin');
             return $this->render('/admin/users/create_user',  [
@@ -56,7 +57,7 @@ class UserController extends Controller
         $userModel = $this->userService->getUserById($id);
         if($request->getMethod() === 'post') {
             $userModel->delete();
-            return $this->redirect('/admin/users');
+            return $this->back();
         } else if($request->getMethod() === 'get') {
             $this->setLayout('admin');
             return $this->render('/admin/users/delete_user', [
@@ -72,7 +73,7 @@ class UserController extends Controller
         if($request->getMethod() === 'post') {
             $userModel->loadData($request->getBody());
             $userModel->update($userModel);
-            $this->redirect('/admin/users');
+            return $this->refresh();
         } else if ($request->getMethod() === 'get') {
             $this->setLayout('admin');
             return $this->render('/admin/users/edit_user', [
@@ -99,7 +100,7 @@ class UserController extends Controller
         if($request->getMethod() === 'post') {
             $userModel->loadData($request->getBody());
             $userModel->update($userModel);
-            $this->redirect('/admin/users');
+            return $this->refresh();
         } else if ($request->getMethod() === 'get') {
             $this->setLayout('admin');
             return $this->render('/admin/users/change_password', [

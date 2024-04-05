@@ -23,7 +23,7 @@ class OrderService
         $limit = $pagerCondition['limit'];
         $page = $pagerCondition['page'] ;
         
-        $totalCount = Query::getCount("SELECT * FROM orders WHERE status = '$status'");
+        $totalCount = Query::getCount("SELECT * FROM orders WHERE status = '$status' AND deleted_at IS NULL");
         $pagination = Pagination::paginate($limit, $page, $totalCount);
         
         $offset = $pagination['offset'];
@@ -46,7 +46,7 @@ class OrderService
 
     public function getOrderByUserId($userId): array
     {
-        $stmt = $this->db->prepare("SELECT * FROM orders WHERE user_id = :user_id");
+        $stmt = $this->db->prepare("SELECT * FROM orders WHERE user_id = :user_id AND deleted_at IS NULL");
         $stmt->bindValue(':user_id', $userId, PDO::PARAM_STR);
         $stmt->execute();
     

@@ -20,15 +20,11 @@ class AuthService
 
     public function login($email, $password): ?User
     {
-        try {
-            $this->db->beginTransaction();
-        
-            $stmt = $this->db->prepare("SELECT * FROM users WHERE email = :email AND password = :password LIMIT 1");
+        try { 
+            $stmt = $this->db->prepare("SELECT * FROM users WHERE email = :email AND password = :password AND deleted_at IS NULL LIMIT 1");
             $stmt->bindValue(':email', $email, PDO::PARAM_STR);
             $stmt->bindValue(':password', $password, PDO::PARAM_STR);
             $stmt->execute();
-        
-            $this->db->commit();
         } catch (\Exception $e) {
             $this->db->rollBack();
             throw $e;
@@ -69,7 +65,7 @@ class AuthService
                 $userId = $_COOKIE["member_login"];
 
                 try {
-                    $stmt = $this->db->prepare("SELECT * FROM users WHERE id = :id LIMIT 1");
+                    $stmt = $this->db->prepare("SELECT * FROM users WHERE id = :id AND deleted_at IS NULL LIMIT 1");
                     $stmt->bindValue(':id', $userId, PDO::PARAM_INT);
                     $stmt->execute();
 

@@ -13,7 +13,7 @@ use app\core\Session;
 use app\models\Cart;
 use app\models\CartItem;
 use app\models\Record;
-use app\Services\ProductService;
+use app\services\ProductService;
 use app\middlewares\AdminMiddleware;
 use app\middlewares\AuthMiddleware;
 
@@ -43,7 +43,7 @@ class ProductController extends Controller
             $productModel->loadData($request->getBody());
             if ($productModel->validate() && $productModel->save()) {
                 $this->setFlash('success', 'Create product successuly');
-                $this->redirect('/admin/products');
+                $this->redirect('/admin/products/details_product?id=' . $productModel->getId());
             } else {
                 $this->setFlash('fail', 'Create product fail');
             }
@@ -62,7 +62,7 @@ class ProductController extends Controller
         $productModel = $this->productService->getProductById($id);
         if ($request->getMethod() === 'post') {
             $productModel->delete();
-            return $this->redirect('/admin/products');
+            return $this->back();
         } else if ($request->getMethod() === 'get') {
             $this->setLayout('admin');
             return $this->render('/admin/products/delete_product', [
@@ -78,7 +78,7 @@ class ProductController extends Controller
         if ($request->getMethod() === 'post') {
             $productModel->loadData($request->getBody());
             $productModel->update($productModel);
-            Application::$app->response->redirect('/admin/products');
+            return $this->refresh();
         } else if ($request->getMethod() === 'get') {
             $this->setLayout('admin');
             return $this->render('/admin/products/edit_product', [
