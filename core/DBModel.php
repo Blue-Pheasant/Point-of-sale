@@ -9,7 +9,7 @@ use PDOException;
 
 abstract class DBModel extends Model
 {
-    protected string $id;
+    public string $id;
     protected $deleted_at = null;
 
     protected function __construct($attributes = [])
