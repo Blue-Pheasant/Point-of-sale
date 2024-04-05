@@ -13,4 +13,9 @@ class Response
     {
         header('Location: ' . $url);
     }
+
+    public function back()
+    {
+        header('Location: ' . $_SERVER['HTTP_REFERER']);
+    }
 }
