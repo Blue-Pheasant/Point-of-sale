@@ -48,4 +48,20 @@ class Controller
     {
         return Application::$app->session->setFlash($key, $message);
     }
+
+    public function getFlash($key)
+    {
+        return Application::$app->session->getFlash($key);
+    }
+
+    public function refresh()
+    {
+        $currentUrl = Application::$app->request->getReqest();
+        return Application::$app->response->redirect($currentUrl);
+    }
+
+    public function back()
+    {
+        return Application::$app->response->back();
+    }
 }

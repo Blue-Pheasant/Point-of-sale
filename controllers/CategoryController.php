@@ -48,7 +48,7 @@ class CategoryController extends Controller {
         if($request->getMethod() === 'post') {
             $categoryModel->loadData($request->getBody());
             $categoryModel->save();
-            $this->redirect('/admin/categories');
+            $this->redirect('/admin/categories/details_category?id=' . $categoryModel->getId());
         } else if ($request->getMethod() === 'get') {
             $this->setLayout('admin');
             return $this->render('/admin/categories/create_category', [
@@ -63,7 +63,7 @@ class CategoryController extends Controller {
         $categoryModel = $this->categoryService->getCategoryById($id);
         if($request->getMethod() === 'post') {
             $categoryModel->delete();
-            return $this->redirect('/admin/categories'); 
+            return $this->back(); 
         } else if ($request->getMethod() === 'get') {
             $this->setLayout('admin');
             return $this->render('/admin/categories/delete_category', [
@@ -79,7 +79,7 @@ class CategoryController extends Controller {
         if ($request->getMethod() === 'post') {
             $categoryModel->loadData($request->getBody());
             $categoryModel->update($categoryModel);
-            $this->redirect('/admin/categories');
+            $this->refresh();
         } else if ($request->getMethod() === 'get') {
             $this->setLayout('admin');
             return $this->render('/admin/categories/edit_category', [
