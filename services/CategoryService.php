@@ -16,7 +16,7 @@ class CategoryService
 
     public function getAllCategories() : array
     {
-        $req = $this->db->query("SELECT * FROM categories")->fetchAll();
+        $req = $this->db->query("SELECT * FROM categories WHERE deleted_at IS NULL")->fetchAll();
         $list = [];
 
         foreach ($req as $item) {
@@ -28,7 +28,7 @@ class CategoryService
 
     public function getCategoryById($id): ?Category
     {
-        $stmt = $this->db->prepare("SELECT * FROM categories WHERE id = :id");
+        $stmt = $this->db->prepare("SELECT * FROM categories WHERE id = :id AND deleted_at IS NULL LIMIT 1");
         $stmt->bindValue(':id', $id, PDO::PARAM_STR);
         $stmt->execute();
     

@@ -22,7 +22,7 @@ class UserService
         $limit = $pagerCondition['limit'];
         $page = $pagerCondition['page'] ;
         
-        $totalCount = Query::getCount("SELECT * FROM users");
+        $totalCount = Query::getCount("SELECT * FROM users WHERE deleted_at IS NULL");
         $pagination = Pagination::paginate($limit, $page, $totalCount);
         
         $offset = $pagination['offset'];
@@ -45,7 +45,7 @@ class UserService
 
     public function getUserById($id): ?User
     {
-        $stmt = $this->db->prepare("SELECT * FROM users WHERE id = :id LIMIT 1");
+        $stmt = $this->db->prepare("SELECT * FROM users WHERE id = :id AND deleted_at IS NULL LIMIT 1");
         $stmt->bindValue(':id', $id, PDO::PARAM_STR);
         $stmt->execute();
     
@@ -59,7 +59,7 @@ class UserService
         $limit = $pagerCondition['limit'] ?? 10;
         $page = $pagerCondition['page'] ?? 1;
         
-        $totalCount = Query::getCount("SELECT * FROM users WHERE role_id = $roleId");
+        $totalCount = Query::getCount("SELECT * FROM users WHERE role_id = $roleId AND deleted_at IS NULL");
         $pagination = Pagination::paginate($limit, $page, $totalCount);
         
         $offset = $pagination['offset'];
@@ -122,7 +122,7 @@ class UserService
         $page = $pagerCondition['page'] ;
 
         $query = "SELECT * FROM users WHERE name LIKE '%$keyword%'";
-        $totalCount = Query::getCount("SELECT * FROM users WHERE name LIKE '%$keyword%'"); 
+        $totalCount = Query::getCount("SELECT * FROM users WHERE name LIKE '%$keyword%' AND deleted_at IS NULL"); 
         $pagination = Pagination::paginate($limit, $page, $totalCount);
 
         $offset = $pagination['offset'];
@@ -143,7 +143,7 @@ class UserService
 
     public function getUserByEmail($email): ?User
     {
-        $stmt = $this->db->prepare("SELECT * FROM users WHERE email = :email LIMIT 1");
+        $stmt = $this->db->prepare("SELECT * FROM users WHERE email = :email AND deleted_at IS NULL LIMIT 1");
         $stmt->bindValue(':email', $email, PDO::PARAM_STR);
         $stmt->execute();
     
@@ -154,7 +154,7 @@ class UserService
 
     public function getUserByPhone($phone): ?User
     {
-        $stmt = $this->db->prepare("SELECT * FROM users WHERE phone = :phone LIMIT 1");
+        $stmt = $this->db->prepare("SELECT * FROM users WHERE phone = :phone AND deleted_at IS NULL LIMIT 1");
         $stmt->bindValue(':phone', $phone, PDO::PARAM_STR);
         $stmt->execute();
     
@@ -168,7 +168,7 @@ class UserService
         try {
             $this->db->beginTransaction();
         
-            $query = "UPDATE users SET deleted_at = NOW() WHERE id = :id";
+            $query = "UPDATE users SET deleted_at = NOW() WHERE id = :id AND deleted_at IS NULL";
             $statement = $this->db->prepare($query);
             $statement->bindValue(':id', $id);
             $result = $statement->execute();
@@ -188,7 +188,7 @@ class UserService
 
     public function getTotalUserNumber(): int
     {
-        $query = "SELECT COUNT(*) FROM users";
+        $query = "SELECT COUNT(*) FROM users WHERE deleted_at IS NULL";
         $stmt = $this->db->query($query);
         return $stmt->fetchColumn();
     }
