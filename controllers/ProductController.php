@@ -14,13 +14,17 @@ use app\models\Cart;
 use app\models\CartItem;
 use app\models\Record;
 use app\Services\ProductService;
-use app\requests\Product\CreateProductRequest;
+use app\middlewares\AdminMiddleware;
+use app\middlewares\AuthMiddleware;
+
 class ProductController extends Controller
 {
     protected ProductService $productService;
     public function __construct()
     {
         $this->productService = new ProductService();
+        $this->registerMiddleware(AdminMiddleware::class, ['index', 'create', 'delete', 'update', 'details']);
+        $this->registerMiddleware(AuthMiddleware::class, ['product']);
     }
 
     public function index()

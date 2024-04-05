@@ -3,24 +3,17 @@
 namespace app\middlewares;
 
 use app\core\Application;
+use app\core\Middleware;
 use app\exception\ForLoginException;
 
-class AuthMiddleware extends BaseMiddleware
+class AuthMiddleware extends Middleware
 {
-    protected array $actions;
-
-    public function __construct($actions = [])
-    {
-        $this->actions = $actions;
-    }
-
     public function execute()
     {
-        if (Application::isGuest()) {
-            if (!empty($this->actions)) {
-                    if(in_array(Application::$app->controller->action, $this->actions)) {
-                        throw new ForLoginException();
-                }
+        if (Application::isGuest() && !empty($this->actions)) {
+            if(in_array($this->currentAction(), $this->actions)) 
+            {
+                throw new ForLoginException();
             }
         }
     }

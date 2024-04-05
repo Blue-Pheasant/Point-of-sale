@@ -10,6 +10,7 @@ use app\core\Application;
 use app\core\Request;
 use app\core\Response;
 use app\services\CategoryService;
+use app\middlewares\AdminMiddleware;
 
 class CategoryController extends Controller {
     private CategoryService $categoryService;
@@ -17,6 +18,7 @@ class CategoryController extends Controller {
     public function __construct() 
     {
         $this->categoryService = new CategoryService();
+        $this->registerMiddleware(AdminMiddleware::class, ['index', 'create', 'delete', 'update', 'details']);
     }
 
     public function index() 
