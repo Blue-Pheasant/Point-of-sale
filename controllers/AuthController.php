@@ -24,9 +24,8 @@ class AuthController extends Controller
     public function __construct()
     {
         $this->authService = new AuthService();
-        $this->authService->loginWithCookie();
-        $this->registerMiddleware(new AuthMiddleware(['profile']));
         $this->userService = new UserService();
+        $this->authService->loginWithCookie();
     }
 
     public function login(Request $request)

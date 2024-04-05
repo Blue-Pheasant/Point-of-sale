@@ -21,7 +21,7 @@ class MenuController extends SiteController
 
     public function __construct()
     {
-        $this->registerMiddleware(new AuthMiddleware(['menu']));
+        $this->registerMiddleware(AuthMiddleware::class, ['menu', 'search']);
         $this->cartService = new CartService();
         $this->categoryService = new CategoryService();
         $this->productService = new ProductService();

@@ -14,11 +14,6 @@ use app\models\User;
 
 class SiteController extends Controller
 {
-    public function __construct()
-    {
-        $this->registerMiddleware(new AuthMiddleware(['profile']));
-    }
-
     public function home()
     {
         return $this->render('home', [

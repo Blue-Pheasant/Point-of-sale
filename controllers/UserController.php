@@ -8,6 +8,7 @@ use app\core\Controller;
 use app\core\Application;
 use app\core\Request;
 use app\middlewares\AdminMiddleware;
+use app\middlewares\AuthMiddleware;
 use app\models\User;
 use app\services\UserService;
 
@@ -17,7 +18,8 @@ class UserController extends Controller
     
     public function __construct() 
     {
-        Application::$app->controller->registerMiddleware(new AdminMiddleware(['index', 'create', 'delete', 'update', 'details']));
+        $this->registerMiddleware(AdminMiddleware::class, ['index', 'create', 'delete', 'update', 'details']);
+        $this->registerMiddleware(AuthMiddleware::class, ['profile', 'updateProfile', 'password']);
         $this->userService = new UserService();
     }
 

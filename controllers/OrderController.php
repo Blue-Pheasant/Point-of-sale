@@ -18,6 +18,8 @@ use app\models\CartItem;
 use app\models\Product;
 use app\models\Order;
 use app\services\OrderService;
+use app\middlewares\AuthMiddleware;
+use app\middlewares\AdminMiddleware;
 
 class OrderController extends Controller
 {
@@ -26,6 +28,8 @@ class OrderController extends Controller
     public function __construct()
     {
         $this->orderService = new OrderService();
+        $this->registerMiddleware(AuthMiddleware::class, ['orderDetail', 'clear']);
+        $this->registerMiddleware(AdminMiddleware::class, ['index', 'accept', 'reject', 'accepted', 'rejected', 'delete', 'details', 'orderDetails']);
     }
 
     public function index()

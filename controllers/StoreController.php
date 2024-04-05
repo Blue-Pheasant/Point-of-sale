@@ -9,10 +9,14 @@ use app\core\Application;
 use app\core\Controller;
 use app\core\Request;
 use app\models\Store;
+use app\middlewares\AdminMiddleware;
 
 class StoreController extends Controller
 {
-    public function __construct() {}
+    public function __construct() 
+    {
+        $this->registerMiddleware(new AdminMiddleware(['index', 'add', 'delete', 'update']));
+    }
 
     public function index()
     {
