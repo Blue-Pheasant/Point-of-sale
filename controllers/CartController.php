@@ -130,6 +130,6 @@ class CartController extends Controller
 
         $this->cartService->checkoutCart($cartId);
 
-        Response::redirect('/cart/notice');
+        return $this->redirect('/cart/notice');
     }
 }
