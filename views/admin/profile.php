@@ -3,7 +3,7 @@
         <h4 class="text-left">Profile Settings</h4>
     </div><br>
     <a href="/admin">Trở về</a>
-    <?php $form = app\core\Form\Form::begin('', "post") ?><br>
+    <?php $form = App\Core\Form\Form::begin('', "post") ?><br>
     <div class="row">
         <div class="col-md-5 border-right">
             <div class="p-3 py-5">
@@ -35,5 +35,5 @@
             </div>
         </div>
     </div>
-    <?php app\core\form\Form::end() ?>
+    <?php App\Core\form\Form::end() ?>
 </div>

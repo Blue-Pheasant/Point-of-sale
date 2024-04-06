@@ -9,7 +9,7 @@
         <a href="/admin/categories">Trở về</a>
       </header>
       <div class="panel-body">
-        <?php $form = app\core\Form\Form::begin('', "post") ?>
+        <?php $form = App\Core\Form\Form::begin('', "post") ?>
             <div class="form-group col-md-4">
               <label for="name">Tên mục</label>
               <input type="text" class="form-control" id="name" name="name" placeholder="Name">
@@ -19,7 +19,7 @@
               <button type="submit" class="btn btn-primary"><i class="fa fa-cart-plus"></i> Tạo </button>
             </div>
           </div>
-        <?php app\core\form\Form::end() ?>
+        <?php App\Core\form\Form::end() ?>
       </div>
     </section>
   </div>

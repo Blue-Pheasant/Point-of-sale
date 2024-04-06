@@ -3,7 +3,7 @@
         <h1>Đăng ký</h1>
     </div>
     <div class="card-body">
-        <?php $form = app\core\Form\Form::begin('', "post") ?>
+        <?php $form = App\Core\Form\Form::begin('', "post") ?>
             <div class="row">
                 <div class="col">
                     <?php echo $form->field($model, 'firstname') ?>
@@ -40,7 +40,7 @@
             <div class="btn">
                 <button type="submit" class="button">Đăng ký</button>
             </div>
-        <?php app\core\form\Form::end() ?>
+        <?php App\Core\form\Form::end() ?>
     </div>
     <div class="card-footer">
         <div class="login">

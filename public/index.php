@@ -1,22 +1,22 @@
 <?php
 
-use app\controllers\SiteController;
-use app\core\Application;
-use app\routes\ProductRoute;
-use app\routes\CategoryRoute;
-use app\routes\OrderRoute;
-use app\routes\UserRoute;
-use app\routes\StoreRoute;
-use app\routes\AdminRoute;
-use app\routes\AuthRoute;
-use app\routes\CustomerRoute;
+use App\Controllers\SiteController;
+use App\Core\Application;
+use App\Routes\ProductRoute;
+use App\Routes\CategoryRoute;
+use App\Routes\OrderRoute;
+use App\Routes\UserRoute;
+use App\Routes\StoreRoute;
+use App\Routes\AdminRoute;
+use App\Routes\AuthRoute;
+use App\Routes\CustomerRoute;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 $dotenv = Dotenv\Dotenv::createImmutable(dirname(__DIR__));
 $dotenv->load();
 
 $config = [
-    'userClass' => \app\models\User::class,
+    'userClass' => \App\Models\User::class,
     'db' => [
         'dsn' => $_ENV['DB_DSN'],
         'user' => $_ENV['DB_USER'],

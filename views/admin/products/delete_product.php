@@ -9,7 +9,7 @@
         <a href="/admin/products">Trở về</a>
       </header>
       <div class="panel-body">
-        <?php $form = app\core\Form\Form::begin('', "post") ?>
+        <?php $form = App\Core\Form\Form::begin('', "post") ?>
           <input type="hidden" name="id" id="id" value="<?= $params['productModel']->getId() ?>" />
           <dl class="dl-horizontal">
             <dt>ID</dt><dd><?= $params['productModel']->getId() ?></dd>
@@ -18,7 +18,7 @@
             <dt>Price</dt><dd><?= $params['productModel']->getPrice() ?></dd>
           </dl>
           <button type="submit" class="btn btn-danger"><i class="fa fa-trash"></i> Xóa mục</button>
-        <?php app\core\form\Form::end() ?>
+        <?php App\Core\form\Form::end() ?>
       </div>
     </section>
   </div>
