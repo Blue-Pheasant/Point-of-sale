@@ -3,7 +3,7 @@ document.title = 'Chi đơn hàng';
 </script>
 <?php
 
-use app\core\Application;
+use App\Core\Application;
 ?>
 <div class="row">
     <div class="col-lg-6">
