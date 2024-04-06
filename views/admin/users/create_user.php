@@ -9,7 +9,7 @@
         <a href="/admin/users">Trở về</a>
       </header>
       <div class="panel-body">
-        <?php $form = app\core\Form\Form::begin('', "post") ?>
+        <?php $form = App\Core\Form\Form::begin('', "post") ?>
             <div class="form-group col-md-4">
                 <?php echo $form->field($userModel, 'firstname') ?>
             </div>
@@ -39,7 +39,7 @@
               <button type="submit" class="btn btn-primary"><i class="fa fa-cart-plus"></i> Lưu </button>
             </div>
           </div>
-        <?php app\core\form\Form::end() ?>
+        <?php App\Core\form\Form::end() ?>
       </div>
     </section>
   </div>

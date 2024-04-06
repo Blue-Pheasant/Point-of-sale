@@ -1,6 +1,6 @@
 <?php
 
-use app\core\Application;
+use App\Core\Application;
 
 class m0002_importData
 {

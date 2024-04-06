@@ -9,7 +9,7 @@
         <a href="/admin/categories">Trở về</a>
       </header>
       <div class="panel-body">
-        <?php $form = app\core\Form\Form::begin('', "post") ?>
+        <?php $form = App\Core\Form\Form::begin('', "post") ?>
             <div class="form-row">
                 <div class="form-group col-md-4">
                     <?php echo $form->field($categoryModel, 'name') ?>
@@ -21,7 +21,7 @@
                 </div>
             </div>
           </div>
-        <?php app\core\form\Form::end() ?>
+        <?php App\Core\form\Form::end() ?>
       </div>
     </section>
   </div>

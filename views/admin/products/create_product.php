@@ -9,7 +9,7 @@
         <a href="/admin/products">Trở về</a>
       </header>
       <div class="panel-body">
-        <?php $form = app\core\Form\Form::begin('', "post") ?>
+        <?php $form = App\Core\Form\Form::begin('', "post") ?>
             <div class="form-group col-md-4">
               <label for="category_id">Tên mục</label>
               <input type="text" class="form-control" id="category_id" name="category_id" placeholder="Tên mục">
@@ -37,7 +37,7 @@
               <button type="submit" class="btn btn-primary"><i class="fa fa-cart-plus"></i> Tạo sản phẩm</button>
             </div>
           </div>
-        <?php app\core\form\Form::end() ?>
+        <?php App\Core\form\Form::end() ?>
       </div>
     </section>
   </div>
