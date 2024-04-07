@@ -1,20 +1,20 @@
 <?php
 
-namespace App\Controllers;
+namespace app\Controllers;
 
-use App\Core\Application;
-use App\Core\Controller;
-use App\Core\Request;
-use App\Core\Response;
-use App\Core\Session;
-use App\Core\Route;
-use App\Exception\ForbiddenException;
-use App\Middlewares\AuthMiddleware;
-use App\Services\AuthService;
-use App\Services\UserService;
+use app\Core\Application;
+use app\Core\Controller;
+use app\Core\Request;
+use app\Core\Response;
+use app\Core\Session;
+use app\Core\Route;
+use app\Exception\ForbiddenException;
+use app\Middlewares\AuthMiddleware;
+use app\Services\AuthService;
+use app\Services\UserService;
 
-use App\Models\LoginForm;
-use App\Models\User;
+use app\Models\LoginForm;
+use app\Models\User;
 
 class AuthController extends Controller
 {

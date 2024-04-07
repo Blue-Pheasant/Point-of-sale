@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Routes;
+namespace app\Routes;
 
-use App\Core\Route;
-use App\Controllers\AuthController;
+use app\Core\Route;
+use app\Controllers\AuthController;
 
 class AuthRoute extends Route
 {

@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Services;
+namespace app\Services;
 
-use App\Core\Database;
-use App\Core\Application;
-use App\Models\User;
-use App\Common\Pagination;
-use App\Common\Query;
+use app\Core\Database;
+use app\Core\Application;
+use app\Models\User;
+use app\Common\Pagination;
+use app\Common\Query;
 use PDO;
 
 class AuthService

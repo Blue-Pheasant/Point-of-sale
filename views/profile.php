@@ -7,7 +7,7 @@ $this->title = 'Profile';
 <div class="profile-avatar">
     <img class="profile-avatar-image" alt="profile-avatar-image" src='/images/avatar.png'>
 </div>
-<?php $form = App\Core\Form\Form::begin('', "post") ?>
+<?php $form = app\Core\Form\Form::begin('', "post") ?>
 <div class="row">
     <div class="col">
         <?php echo $form->field($user, 'firstname') ?>
@@ -20,7 +20,7 @@ $this->title = 'Profile';
 <?php echo $form->field($user, 'phone_number') ?>
 <?php echo $form->field($user, 'address') ?>
 <button type="submit" class="btn btn-primary">Cập nhật</button>
-<?php App\Core\form\Form::end() ?>
+<?php app\Core\form\Form::end() ?>
 
 <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
     <div id="updateProfile" class="toast" role="alert" aria-live="assertive" aria-atomic="true">

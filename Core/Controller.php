@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Core;
+namespace app\Core;
 
-use App\Core\Application;
-use App\Core\Middleware;
-use App\Core\Router;
-use App\Core\Response;
+use app\Core\Application;
+use app\Core\Middleware;
+use app\Core\Router;
+use app\Core\Response;
 
 class Controller
 {

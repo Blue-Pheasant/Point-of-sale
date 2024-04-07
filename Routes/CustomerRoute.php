@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Routes;
+namespace app\Routes;
 
-use App\Core\Route;
-use App\Controllers\StoreController;
-use App\Controllers\SiteController;
-use App\Controllers\MenuController;
-use App\Controllers\CartController;
+use app\Core\Route;
+use app\Controllers\StoreController;
+use app\Controllers\SiteController;
+use app\Controllers\MenuController;
+use app\Controllers\CartController;
 
 class CustomerRoute extends Route
 {

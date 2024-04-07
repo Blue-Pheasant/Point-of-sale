@@ -27,8 +27,8 @@
 </head>
 <?php
 
-use App\Core\Application;
-use App\Models\User;
+use app\Core\Application;
+use app\Models\User;
 
 
 $userID = Application::$app->session->get('user');

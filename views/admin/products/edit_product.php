@@ -9,7 +9,7 @@
         <a href="/admin/products">Trở về</a>
       </header>
       <div class="panel-body">
-        <?php $form = App\Core\Form\Form::begin('', "post") ?>
+        <?php $form = app\Core\Form\Form::begin('', "post") ?>
           <div class="form-row">
             <div class="form-group col-md-3">
               <?php echo $form->field($productModel, 'id') ?>
@@ -34,7 +34,7 @@
               <button type="submit" class="btn btn-primary"><i class="fa fa-pencil"></i> Chỉnh sửa sản phẩm</button>
             </div>
           </div>
-        <?php App\Core\form\Form::end() ?>
+        <?php app\Core\form\Form::end() ?>
       </div>
     </section>
   </div>

@@ -9,7 +9,7 @@
         <a href="/admin/stores">Trở về</a>
       </header>
       <div class="panel-body">
-        <?php $form = App\Core\Form\Form::begin('', "post") ?>
+        <?php $form = app\Core\Form\Form::begin('', "post") ?>
           <input type="hidden" name="id" id="id" value="<?= $params['model']->getId() ?>" />
           <dl class="dl-horizontal">
             <dt>Mã cửa hàng</dt><dd><?= $params['model']->getId() ?></dd>
@@ -19,7 +19,7 @@
             <dt>Số điện thoại</dt><dd><?= $params['model']->getHotline() ?></dd>
           </dl>
           <button type="submit" class="btn btn-danger"><i class="fa fa-trash"></i> Xóa cửa hàng</button>
-        <?php App\Core\form\Form::end() ?>
+        <?php app\Core\form\Form::end() ?>
       </div>
     </section>
   </div>

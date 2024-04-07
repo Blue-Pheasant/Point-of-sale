@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Core;
+namespace app\Core;
 
-use App\Core\Application;
-use App\Core\Database;
+use app\Core\Application;
+use app\Core\Database;
 use PDO;
 use PDOException;
 

@@ -1,16 +1,16 @@
 <?php
 
-namespace App\Controllers;
+namespace app\Controllers;
 
-use App\Core\Application;
-use App\Core\Controller;
-use App\Core\Request;
-use App\Exception\ForbiddenException;
-use App\Middlewares\AuthMiddleware;
+use app\Core\Application;
+use app\Core\Controller;
+use app\Core\Request;
+use app\Exception\ForbiddenException;
+use app\Middlewares\AuthMiddleware;
 
-use App\Models\LoginForm;
-use App\Models\Store;
-use App\Models\User;
+use app\Models\LoginForm;
+use app\Models\Store;
+use app\Models\User;
 
 class SiteController extends Controller
 {

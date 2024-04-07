@@ -3,19 +3,19 @@
     controllers/category/index.php
 */
 
-namespace App\Controllers;
+namespace app\Controllers;
 
-use App\Core\Controller;
-use App\Core\Application;
-use App\Core\Session;
-use App\Models\Cart;
-use App\Models\CartItem;
-use App\Models\Order;
-use App\Models\OrderDetail;
-use App\Core\Request;
-use App\Core\Response;
-use App\Services\CartService;
-use App\Middlewares\AuthMiddleware;
+use app\Core\Controller;
+use app\Core\Application;
+use app\Core\Session;
+use app\Models\Cart;
+use app\Models\CartItem;
+use app\Models\Order;
+use app\Models\OrderDetail;
+use app\Core\Request;
+use app\Core\Response;
+use app\Services\CartService;
+use app\Middlewares\AuthMiddleware;
 
 class CartController extends Controller
 {

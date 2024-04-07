@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Common;
+namespace app\Common;
 
-use App\Core\Database;
+use app\Core\Database;
 
 class Query
 {

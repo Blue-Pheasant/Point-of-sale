@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Routes;
+namespace app\Routes;
 
-use App\Core\Route;
-use App\Controllers\StoreController;
+use app\Core\Route;
+use app\Controllers\StoreController;
 
 class StoreRoute extends Route
 {
