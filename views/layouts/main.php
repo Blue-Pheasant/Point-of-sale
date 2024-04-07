@@ -84,7 +84,7 @@ header("Content-type: text/html; charset=utf-8");
                 </ul>
                 <?php
 
-                use App\Core\Application;
+                use app\Core\Application;
 
                 if (Application::isGuest() == 1) : ?>
                 <ul class="navbar-nav ml-auto">
@@ -135,13 +135,13 @@ header("Content-type: text/html; charset=utf-8");
 
     <div class="main">
         <div class="container">
-            <?php if (App\Core\Application::$app->session->getFlash('success')) : ?>
+            <?php if (app\Core\Application::$app->session->getFlash('success')) : ?>
             <div class="alert alert-success">
-                <p><?php echo App\Core\Application::$app->session->getFlash('success') ?></p>
+                <p><?php echo app\Core\Application::$app->session->getFlash('success') ?></p>
             </div>
-            <?php elseif(App\Core\Application::$app->session->getFlash('fail')) : ?>
+            <?php elseif(app\Core\Application::$app->session->getFlash('fail')) : ?>
                 <div class="alert alert-danger">
-                <p><?php echo App\Core\Application::$app->session->getFlash('fail') ?></p>
+                <p><?php echo app\Core\Application::$app->session->getFlash('fail') ?></p>
             </div>
             <?php endif; ?>
             {{content}}

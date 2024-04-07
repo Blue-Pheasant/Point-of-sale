@@ -1,17 +1,17 @@
 <?php
 
-namespace App\Controllers;
+namespace app\Controllers;
 
-use App\Controllers\SiteController;
-use App\Models\Category;
-use App\Models\Product;
-use App\Core\Request;
-use App\Core\Application;
-use App\Middlewares\AuthMiddleware;
-use App\Models\CartItem;
-use App\Services\CartService;
-use App\Services\CategoryService;
-use App\Services\ProductService;
+use app\Controllers\SiteController;
+use app\Models\Category;
+use app\Models\Product;
+use app\Core\Request;
+use app\Core\Application;
+use app\Middlewares\AuthMiddleware;
+use app\Models\CartItem;
+use app\Services\CartService;
+use app\Services\CategoryService;
+use app\Services\ProductService;
 
 class MenuController extends SiteController
 {

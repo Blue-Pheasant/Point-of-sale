@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Middlewares;
+namespace app\Middlewares;
 
-use App\Core\Application;
-use App\Core\Middleware;
-use App\Exception\ForLoginException;
+use app\Core\Application;
+use app\Core\Middleware;
+use app\Exception\ForLoginException;
 
 class AuthMiddleware extends Middleware
 {

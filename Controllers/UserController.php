@@ -2,15 +2,15 @@
 /*
     controllers/user.php
 */
-namespace App\Controllers;
+namespace app\Controllers;
 
-use App\Core\Controller;
-use App\Core\Application;
-use App\Core\Request;
-use App\Middlewares\AdminMiddleware;
-use App\Middlewares\AuthMiddleware;
-use App\Models\User;
-use App\Services\UserService;
+use app\Core\Controller;
+use app\Core\Application;
+use app\Core\Request;
+use app\Middlewares\AdminMiddleware;
+use app\Middlewares\AuthMiddleware;
+use app\Models\User;
+use app\Services\UserService;
 
 class UserController extends Controller
 {

@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Routes;
+namespace app\Routes;
 
-use App\Core\Route;
-use App\Controllers\UserController;
+use app\Core\Route;
+use app\Controllers\UserController;
 
 class UserRoute extends Route
 {

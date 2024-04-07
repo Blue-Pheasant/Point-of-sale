@@ -2,15 +2,15 @@
 /*
     controllers/categories/index.php
 */
-namespace App\Controllers;
+namespace app\Controllers;
 
-use App\Core\Controller;
-use App\Models\Category;
-use App\Core\Application;
-use App\Core\Request;
-use App\Core\Response;
-use App\Services\CategoryService;
-use App\Middlewares\AdminMiddleware;
+use app\Core\Controller;
+use app\Models\Category;
+use app\Core\Application;
+use app\Core\Request;
+use app\Core\Response;
+use app\Services\CategoryService;
+use app\Middlewares\AdminMiddleware;
 
 class CategoryController extends Controller {
     private CategoryService $categoryService;

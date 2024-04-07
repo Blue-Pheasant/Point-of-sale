@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Models;
+namespace app\Models;
 
-use App\Core\Database;
-use App\Core\UserModel;
+use app\Core\Database;
+use app\Core\UserModel;
 
 
 class User extends UserModel

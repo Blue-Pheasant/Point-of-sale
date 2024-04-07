@@ -1,7 +1,7 @@
 <?php
 
-namespace App\Core;
-use App\Models\Cart;
+namespace app\Core;
+use app\Models\Cart;
 
 class Application
 {

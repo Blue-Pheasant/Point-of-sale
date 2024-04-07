@@ -1,5 +1,5 @@
 <div class="container">
-    <?php $form = App\Core\Form\Form::begin('', "post") ?>
+    <?php $form = app\Core\Form\Form::begin('', "post") ?>
     <div class="d-flex justify-content-center h-100">
         <div class="card">
             <div class="card-header">
@@ -24,5 +24,5 @@
             </div>
         </div>
     </div>
-    <?php App\Core\form\Form::end() ?>
+    <?php app\Core\form\Form::end() ?>
 </div>

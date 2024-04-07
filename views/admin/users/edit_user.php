@@ -14,7 +14,7 @@
         </div><br>
       </header>
       <div class="panel-body">
-        <?php $form = App\Core\Form\Form::begin('', "post") ?>
+        <?php $form = app\Core\Form\Form::begin('', "post") ?>
             <div class="form-group col-md-4">
               <?php echo $form->field($userModel, 'firstname') ?>
             </div>
@@ -38,7 +38,7 @@
                 <button type="submit" class="btn btn-primary"><i class="fa fa-cart-plus"></i>Lưu</button>
                 </div>
             </div>
-        <?php App\Core\form\Form::end() ?>
+        <?php app\Core\form\Form::end() ?>
       </div>
     </section>
   </div>

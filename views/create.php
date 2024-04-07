@@ -1,5 +1,5 @@
     <!-- Create an account buy admin
-    <?php $form = App\Core\Form\Form::begin('', "post") ?>
+    <?php $form = app\Core\Form\Form::begin('', "post") ?>
     
     <?php echo $form->field($model, 'firstname') ?>
     <?php echo $form->field($model, 'lastname') ?>
@@ -9,7 +9,7 @@
     <?php echo $form->field($model, 'role') ?>    
     <?php echo $form->field($model, 'password')->passwordField() ?>
     <?php echo $form->field($model, 'passwordConfirm')->passwordField() ?>
-    <?php App\Core\form\Form::end() ?>   -->
+    <?php app\Core\form\Form::end() ?>   -->
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
