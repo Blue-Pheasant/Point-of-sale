@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Models;
+namespace app\Models;
 
-use App\Core\CartModel;
-use App\Core\Database;
-use App\Core\DBModel;
+use app\Core\CartModel;
+use app\Core\Database;
+use app\Core\DBModel;
 
 class CartItem extends DBModel
 {

@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Core\Form;
+namespace app\Core\Form;
 
-use App\Core\Model;
-use App\Models\User;
+use app\Core\Model;
+use app\Models\User;
 
 class Field
 {

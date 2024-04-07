@@ -9,7 +9,7 @@
         <a href="/admin/users">Trở về</a>
       </header>
       <div class="panel-body">
-        <?php $form = App\Core\Form\Form::begin('', "post") ?>
+        <?php $form = app\Core\Form\Form::begin('', "post") ?>
           <input type="hidden" name="id" id="id" value="<?= $params['userModel']->getId() ?>" />
           <dl class="dl-horizontal">
           <dt>Mã người dùng</dt><dd><?= $params['userModel']->getId() ?></dd>
@@ -20,7 +20,7 @@
           <dt>Địa chỉ</dt><dd><?= $params['userModel']->getAddress() ?></dd>
           </dl>
           <button type="submit" class="btn btn-danger"><i class="fa fa-trash"></i> Xóa </button>
-        <?php App\Core\form\Form::end() ?>
+        <?php app\Core\form\Form::end() ?>
       </div>
     </section>
   </div>

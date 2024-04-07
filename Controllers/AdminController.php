@@ -1,18 +1,18 @@
 <?php
 
-namespace App\Controllers;
+namespace app\Controllers;
 
-use App\Core\Application;
-use App\Core\Controller;
-use App\Core\Request;
-use App\Core\Response;
-use App\Middlewares\AdminMiddleware;
-use App\Models\Order;
-use App\Models\Product;
-use App\Models\User;
-use App\Services\ProductService;
-use App\Services\UserService;
-use App\Services\OrderService;
+use app\Core\Application;
+use app\Core\Controller;
+use app\Core\Request;
+use app\Core\Response;
+use app\Middlewares\AdminMiddleware;
+use app\Models\Order;
+use app\Models\Product;
+use app\Models\User;
+use app\Services\ProductService;
+use app\Services\UserService;
+use app\Services\OrderService;
 
 
 class AdminController extends Controller

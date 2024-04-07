@@ -1,7 +1,7 @@
 <?php
 
-use App\Core\Application;
-use App\Models\CartItem;
+use app\Core\Application;
+use app\Models\CartItem;
 
 ?>
 <script type="text/javascript">
@@ -10,7 +10,7 @@ use App\Models\CartItem;
 <div class="row menu_sp">
     <div class="menu col-xl-8 col-md-7">
         <div class="menu__search">
-            <?php $form = App\Core\Form\Form::begin('', "post") ?>
+            <?php $form = app\Core\Form\Form::begin('', "post") ?>
                 <div class="form-floating mb-3">
                     <input type="keyword" name="keyword" class="form-control" id="floatingInput" placeholder="Tìm kiếm theo tên sản phẩm bạn quan tâm">
                     <label for="floatingInput">Tìm kiếm theo tên sản phẩm bạn quan tâm</label>
@@ -19,7 +19,7 @@ use App\Models\CartItem;
                                 id="button-addon1">Tìm</button>
                     </div>
                 </div>
-            <?php App\Core\form\Form::end() ?>
+            <?php app\Core\form\Form::end() ?>
         </div>
 
         <div class="menu__options">
@@ -190,9 +190,9 @@ use App\Models\CartItem;
                     echo '<div class="cart-page-total"><h6> ' . number_format($totalPrice) . 'đ' . ' </h6></div>'
                 ?>
             </div>
-            <?php $form = App\Core\Form\Form::begin('/cart', "") ?>    
+            <?php $form = app\Core\Form\Form::begin('/cart', "") ?>    
                 <button type="submit" class="checkout-button">Đặt hàng</button>
-            <?php App\Core\form\Form::end() ?>
+            <?php app\Core\form\Form::end() ?>
         </div>
     </div>
     <script>

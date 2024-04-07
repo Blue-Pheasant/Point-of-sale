@@ -3,23 +3,23 @@
     controllers/category/index.php
 */
 
-namespace App\Controllers;
+namespace app\Controllers;
 
-use App\Core\Controller;
-use App\Core\Input;
-use App\Core\Response;
-use App\Core\Session;
-use App\Core\Application;
-use App\Core\CartSession;
-use App\Core\Database;
-use App\Core\Request;
-use App\Models\Cart;
-use App\Models\CartItem;
-use App\Models\Product;
-use App\Models\Order;
-use App\Services\OrderService;
-use App\Middlewares\AuthMiddleware;
-use App\Middlewares\AdminMiddleware;
+use app\Core\Controller;
+use app\Core\Input;
+use app\Core\Response;
+use app\Core\Session;
+use app\Core\Application;
+use app\Core\CartSession;
+use app\Core\Database;
+use app\Core\Request;
+use app\Models\Cart;
+use app\Models\CartItem;
+use app\Models\Product;
+use app\Models\Order;
+use app\Services\OrderService;
+use app\Middlewares\AuthMiddleware;
+use app\Middlewares\AdminMiddleware;
 
 class OrderController extends Controller
 {

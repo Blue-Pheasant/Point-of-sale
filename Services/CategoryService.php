@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Services;
+namespace app\Services;
 
-use App\Models\Category;
-use App\Core\Database;
+use app\Models\Category;
+use app\Core\Database;
 use PDO;
 
 class CategoryService

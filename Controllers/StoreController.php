@@ -3,13 +3,13 @@
     controllers/store.php
 */
 
-namespace App\Controllers;
+namespace app\Controllers;
 
-use App\Core\Application;
-use App\Core\Controller;
-use App\Core\Request;
-use App\Models\Store;
-use App\Middlewares\AdminMiddleware;
+use app\Core\Application;
+use app\Core\Controller;
+use app\Core\Request;
+use app\Models\Store;
+use app\Middlewares\AdminMiddleware;
 
 class StoreController extends Controller
 {

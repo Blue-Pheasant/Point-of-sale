@@ -1,7 +1,7 @@
 <?php
 
-use App\Core\Application;
-use App\Models\User;
+use app\Core\Application;
+use app\Models\User;
 
 $user = User::getUserInfo(Application::$app->user->id);
 ?>

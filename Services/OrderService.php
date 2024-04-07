@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Services;
+namespace app\Services;
 
-use App\Core\Database;
-use App\Models\Order;
-use App\Models\OrderItem;
-use App\Common\Pagination;
-use App\Common\Query;
+use app\Core\Database;
+use app\Models\Order;
+use app\Models\OrderItem;
+use app\Common\Pagination;
+use app\Common\Query;
 use PDO;
 
 class OrderService

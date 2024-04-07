@@ -1,6 +1,6 @@
 <?php
 
-use App\Core\Application;
+use app\Core\Application;
 
 if (Application::isGuest()) {
     Application::$app->response->redirect('/login');

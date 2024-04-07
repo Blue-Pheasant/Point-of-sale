@@ -3,19 +3,19 @@
     controllers/product.php
 */
 
-namespace App\Controllers;
+namespace app\Controllers;
 
-use App\Core\Controller;
-use App\Models\Product;
-use App\Core\Application;
-use App\Core\Request;
-use App\Core\Session;
-use App\Models\Cart;
-use App\Models\CartItem;
-use App\Models\Record;
-use App\Services\ProductService;
-use App\Middlewares\AdminMiddleware;
-use App\Middlewares\AuthMiddleware;
+use app\Core\Controller;
+use app\Models\Product;
+use app\Core\Application;
+use app\Core\Request;
+use app\Core\Session;
+use app\Models\Cart;
+use app\Models\CartItem;
+use app\Models\Record;
+use app\Services\ProductService;
+use app\Middlewares\AdminMiddleware;
+use app\Middlewares\AuthMiddleware;
 
 class ProductController extends Controller
 {
