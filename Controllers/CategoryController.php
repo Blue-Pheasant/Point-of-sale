@@ -11,6 +11,7 @@ use app\Core\Request;
 use app\Core\Response;
 use app\Services\CategoryService;
 use app\Middlewares\AdminMiddleware;
+use app\Auth\AuthUser;
 
 class CategoryController extends Controller {
     private CategoryService $categoryService;

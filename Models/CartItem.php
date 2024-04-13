@@ -10,7 +10,7 @@ class CartItem extends DBModel
 {
     public string $id = '';
     public string $product_id = '';
-    public string $cart_id = '';
+    public string $cartId = '';
     public int $quantity = 0;
     public string $note = '';
     public string $name = '';
@@ -72,7 +72,7 @@ class CartItem extends DBModel
         return $this->list . ' ' . $this->status;
     }
 
-    public static function getCartItems($cart_id)
+    public static function getCartItems($cartId)
     {
         $list = [];
         $db = Database::getInstance();
@@ -83,7 +83,7 @@ class CartItem extends DBModel
             FROM cart_item 
             JOIN products 
             ON cart_item.product_id = products.id 
-            WHERE cart_item.cart_id = '$cart_id';"
+            WHERE cart_item.cart_id = '$cartId';"
         )->fetchAll();
 
         foreach ($req as $item) {

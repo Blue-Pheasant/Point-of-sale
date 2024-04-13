@@ -16,6 +16,7 @@ use app\Models\Record;
 use app\Services\ProductService;
 use app\Middlewares\AdminMiddleware;
 use app\Middlewares\AuthMiddleware;
+use app\Auth\AuthUser;
 
 class ProductController extends Controller
 {
@@ -73,7 +74,7 @@ class ProductController extends Controller
 
     public function update(Request $request)
     {
-        $id = Application::$app->request->getParam('id');
+        $id = $request->getParam('id');
         $productModel = $this->productService->getProductById($id);
         if ($request->getMethod() === 'post') {
             $productModel->loadData($request->getBody());
@@ -107,11 +108,11 @@ class ProductController extends Controller
             $size = $request->getBody()['size'];
             $note = $request->getBody()['note'];
             $quantity = $request->getBody()['quantity'];
-            $cart_id = Application::$app->cart->id;
+            $cartId = Session::get('cart_id');
             $cartDetail = new CartItem([
                 'id' => uniqid(),
                 'product_id' => $id,
-                'cart_id' => $cart_id,
+                'cart_id' => $cartId,
                 'quantity' => $quantity,
                 'note' => $note,
                 'size' => $size

@@ -4,6 +4,11 @@ $path = str_replace("\\", "/", "http://" . $_SERVER['SERVER_NAME'] . __DIR__ . "
 $path = str_replace($_SERVER['DOCUMENT_ROOT'], "", $path);
 
 header("Content-type: text/html; charset=utf-8");
+
+use app\Auth\AuthUser;
+use app\Core\Session;
+
+$currentUser = AuthUser::authUser();
 ?>
 
 <!doctype html:5>
@@ -84,9 +89,7 @@ header("Content-type: text/html; charset=utf-8");
                 </ul>
                 <?php
 
-                use app\Core\Application;
-
-                if (Application::isGuest() == 1) : ?>
+                if ($currentUser == null) : ?>
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item active">
                         <a class="login__button nav-link" href="/login">Đăng nhập</a>
@@ -103,7 +106,7 @@ header("Content-type: text/html; charset=utf-8");
                             <div class="header-image header-image-user">
                                 <img class="header-image-icon" src="/images/user.png" />
                             </div>
-                            Chào <?php echo Application::$app->user->getDisplayName() ?>
+                            Chào <?php echo $currentUser->getDisplayName() ?>
                         </a>
                     </li>
                     <li class="nav-item active">
@@ -135,13 +138,13 @@ header("Content-type: text/html; charset=utf-8");
 
     <div class="main">
         <div class="container">
-            <?php if (app\Core\Application::$app->session->getFlash('success')) : ?>
+            <?php if (Session::getFlash('success')) : ?>
             <div class="alert alert-success">
-                <p><?php echo app\Core\Application::$app->session->getFlash('success') ?></p>
+                <p><?php echo Session::getFlash('success') ?></p>
             </div>
-            <?php elseif(app\Core\Application::$app->session->getFlash('fail')) : ?>
+            <?php elseif(Session::getFlash('fail')) : ?>
                 <div class="alert alert-danger">
-                <p><?php echo app\Core\Application::$app->session->getFlash('fail') ?></p>
+                <p><?php echo Session::getFlash('fail') ?></p>
             </div>
             <?php endif; ?>
             {{content}}

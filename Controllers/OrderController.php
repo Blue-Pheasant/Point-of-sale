@@ -20,6 +20,7 @@ use app\Models\Order;
 use app\Services\OrderService;
 use app\Middlewares\AuthMiddleware;
 use app\Middlewares\AdminMiddleware;
+use app\Auth\AuthUser;
 
 class OrderController extends Controller
 {
@@ -29,7 +30,11 @@ class OrderController extends Controller
     {
         $this->orderService = new OrderService();
         $this->registerMiddleware(AuthMiddleware::class, ['orderDetail', 'clear']);
-        $this->registerMiddleware(AdminMiddleware::class, ['index', 'accept', 'reject', 'accepted', 'rejected', 'delete', 'details', 'orderDetails']);
+        $this->registerMiddleware(
+            AdminMiddleware::class, 
+            ['index', 'accept', 'reject', 'accepted', 'rejected', 'delete', 'details', 'orderDetails'], 
+            AuthRequest::class
+        );
     }
 
     public function index()
@@ -44,7 +49,7 @@ class OrderController extends Controller
 
     public function orders()
     {
-        $userId = Application::$app->user->id;
+        $userId = AuthUser::authUser()->id;
         $orders = $this->orderService->getOrderByUserId($userId);
 
         foreach($orders as $key => $order) {
@@ -71,7 +76,7 @@ class OrderController extends Controller
 
     public function reject(Request $request)
     {
-        $orderId = Application::$app->request->getParam('id');
+        $orderId = $request->getParam('id');
         $orderModel = $this->orderService->getOrderById($orderId);
         if($request->getMethod() === 'get') {
             $orderModel->setStatus('cancel');
@@ -103,7 +108,7 @@ class OrderController extends Controller
     public function delete(Request $request)
     {
         $path = Application::$app->request->getPath();
-        $orderId = Application::$app->request->getParam('id');
+        $orderId = $request->getParam('id');
         $orderModel = $this->orderService->getOrderById($orderId);
         if($request->getMethod() === 'get') {
             $orderModel->delete();
@@ -113,7 +118,7 @@ class OrderController extends Controller
 
     public function details()
     {
-        $orderId = Application::$app->request->getParam('id');
+        $orderId = $request->getParam('id');
         $orderModel = $this->orderService->getOrderById($orderId);
 
         $this->setLayout('admin');
@@ -124,7 +129,7 @@ class OrderController extends Controller
 
     public function clear()
     {
-        $userId = Application::$app->user->id;
+        $userId = AuthUser::authUser()->id;
         $orders = $this->orderService->getOrderByUserId($userId);
         
         foreach($orders as $order) {
@@ -138,7 +143,7 @@ class OrderController extends Controller
 
     public function orderDetail(Request $request)
     {
-        $user = Application::$app->user;
+        $user = AuthUser::authUser();
         $orderId = $request->getParam('id');
         $order = $this->orderService->getOrderById($orderId);
         $items =$this->orderService->getOrderItemsByOrderId($orderId);

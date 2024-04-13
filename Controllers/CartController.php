@@ -16,6 +16,7 @@ use app\Core\Request;
 use app\Core\Response;
 use app\Services\CartService;
 use app\Middlewares\AuthMiddleware;
+use app\Auth\AuthUser;
 
 class CartController extends Controller
 {
@@ -27,30 +28,31 @@ class CartController extends Controller
         $this->registerMiddleware(AuthMiddleware::class, ['cart', 'update', 'placeOrder']);
     }
 
-    public function deleteItem($cart_id, $id)
+    public function deleteItem($cartId, $id)
     {
-        CartItem::deleteItem($id, $cart_id);
+        CartItem::deleteItem($id, $cartId);
     }
 
     public function cart(Request $request)
     {
-        $cartId = Application::$app->cart->id;
+        $cartId = Session::get('cart_id');
         $deletedItem = false;
         $updatedItem = false;
 
-        if (isset($_GET['action'])) {
+        $action = $request->getParam('action');
+        if ($action) {
             $id = $request->getParam('id');
-            if ($_GET['action'] == 'delete') {
+            if ($action == 'delete') {
                 $this->deleteItem($cartId, $id);
                 $deletedItem = true;
-            } else if($_GET['action'] == 'deletemenu') {
+            } else if($action == 'deletemenu') {
                 $this->deleteItem($cartId, $id);
                 $deletedItem = true;
                 $this->redirect('menu');
             }
         }
 
-        $user = Application::$app->user;
+        $user = AuthUser::authUser();
         $items = $this->cartService->getCartItems($cartId);
 
         return $this->render('cart', [
@@ -63,9 +65,10 @@ class CartController extends Controller
 
     public function update(Request $request)
     {
-        $cartId = Application::$app->cart->id;
-        $user = Application::$app->user;
+        $cartId = Session::get('cart_id');
+        $user = AuthUser::authUser();
 
+        // Get the order information
         $id = $request->getParam('cart_item_id');
         $newNote = $request->getBody()['note'];
         $newQuantity = $request->getBody()['quantity'];
@@ -93,25 +96,30 @@ class CartController extends Controller
         $placedOrder = false;
         $updatedItem = false;
 
-        $cartId = Application::$app->cart->id;
+        $cartId = Session::get('cart_id');
         $items = $this->cartService->getCartItems($cartId);
 
-        $user_id = Application::$app->user->id;
-        $delivery_name = $request->getBody()['name'];
-        $delivery_phone = $request->getBody()['phone_number'];
-        $delivery_address = $request->getBody()['address'];
-        $payment_method = $request->getBody()['payment_method'];
+        $userId = AuthUser::authUser()->id;
+        $deliveryName = $request->getBody()['name'];
+        $deliveryPhone = $request->getBody()['phone_number'];
+        $deliveryAddress = $request->getBody()['address'];
+        $paymentMethod = $request->getBody()['payment_method'];
+
+        // Create order
         $order = new Order([
             'id' => uniqid(), 
-            'user_id' => $user_id, 
-            'payment_method' => $payment_method, 
+            'user_id' => $userId, 
+            'payment_method' => $paymentMethod, 
             'status' => 'processing', 
-            'delivery_name' => $delivery_name, 
-            'delivery_phone' => $delivery_phone, 
-            'delivery_address' => $delivery_address
+            'delivery_name' => $deliveryName, 
+            'delivery_phone' => $deliveryPhone, 
+            'delivery_address' => $deliveryAddress
         ]);
+
+        // Save order
         $order->save();
 
+        // Create order details
         foreach ($items as $item) {
             $orderDetail = new OrderDetail([
                 'id' => uniqid(),
@@ -124,10 +132,12 @@ class CartController extends Controller
             $orderDetail->save();
         }
 
+        // Delete cart items
         foreach ($items as $item) {
             $this->deleteItem($cartId, $item->cart_item_id);
         }
 
+        // Checkout cart
         $this->cartService->checkoutCart($cartId);
 
         return $this->redirect('/cart/notice');

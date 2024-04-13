@@ -1,9 +1,10 @@
 <?php
 
-use app\Core\Application;
+use app\Auth\AuthUser;
+use app\Core\Response;
 
-if (Application::isGuest()) {
-    Application::$app->response->redirect('/login');
+if (AuthUser::isGuest()) {
+    Response::redirect('/login');
 }
 ?>
 
