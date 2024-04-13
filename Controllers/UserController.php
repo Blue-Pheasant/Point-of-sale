@@ -11,6 +11,7 @@ use app\Middlewares\AdminMiddleware;
 use app\Middlewares\AuthMiddleware;
 use app\Models\User;
 use app\Services\UserService;
+use app\Auth\AuthUser;
 
 class UserController extends Controller
 {
@@ -117,7 +118,7 @@ class UserController extends Controller
     public function updateProfile(Request $request)
     {
         $updateSuccess = false;
-        $id = Application::$app->user->id;
+        $id = AuthUser::authUser()->id;
         $user = $this->userService->getUserById($id);
         if ($request->getMethod() === 'post') {
             $user->loadData($request->getBody());
@@ -127,9 +128,6 @@ class UserController extends Controller
                 }
             }
         }
-
-        $user = $this->userService->getUserById($id);
-        Application::$app->user = $user;
 
         return $this->render('profile', [
             'user' => $user,

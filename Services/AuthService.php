@@ -4,6 +4,7 @@ namespace app\Services;
 
 use app\Core\Database;
 use app\Core\Application;
+use app\Core\Session;
 use app\Models\User;
 use app\Common\Pagination;
 use app\Common\Query;
@@ -55,12 +56,20 @@ class AuthService
 
     public function logout()
     {
+        Session::remove('user');
+
+        if (isset($_COOKIE['member_login'])) {
+            setcookie('member_login', '', time() - 3600, '/');
+        }
+
         session_destroy();
+
+        return isset($_COOKIE['member_login']);
     }
 
     public function loginWithCookie(): void 
     {
-        if(!Application::$app->session::exists('user')) {
+        if(!Session::exists('user')) {
             if(isset($_COOKIE["member_login"])) {
                 $userId = $_COOKIE["member_login"];
 

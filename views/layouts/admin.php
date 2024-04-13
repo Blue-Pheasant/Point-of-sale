@@ -27,12 +27,9 @@
 </head>
 <?php
 
-use app\Core\Application;
-use app\Models\User;
+use app\Auth\AuthUser;
 
-
-$userID = Application::$app->session->get('user');
-$userModel = User::getUserInfo($userID);
+$userModel = AuthUser::authUser();
 
 ?>
 <body>

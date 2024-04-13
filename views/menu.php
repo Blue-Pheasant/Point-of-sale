@@ -167,8 +167,7 @@ use app\Models\CartItem;
             <div>Tổng cộng</div>
         </div>
         <?php
-            $cart_id = Application::$app->cart->id;
-            $cartItem = CartItem::getCartItems($cart_id);
+            $cartItem = CartItem::getCartItems($params['cartId']);
             $totalPrice = 0;
             foreach($cartItem as $item) {
                 $totalPrice += $item->getTotalPrice();

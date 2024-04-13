@@ -21,8 +21,6 @@ class Application
     public Database $db;
     public Session $session;
     public View $view;
-    public ?UserModel $user;
-    public ?Cart $cart;
 
     public function __construct($rootDir, $config)
     {
@@ -39,41 +37,6 @@ class Application
         $this->db = new Database($config['db']);
         $this->session = new Session();
         $this->view = new View();
-
-        $userId = Application::$app->session->get('user');
-        if ($userId) {
-            $key = $this->userClass::primaryKey();
-            $this->user = $this->userClass::findOne([$key => $userId]);
-
-            if (!Cart::findCart($userId)) {;
-                Cart::create($userId);
-            }
-            $cart = Cart::getCart($userId)[0];
-            $this->cart = $cart;
-        }
-    }
-
-    public static function isGuest()
-    {
-        return !self::$app->user;
-    }
-
-    public static function isAdmin()
-    {
-        return self::$app->user->role == 'admin';
-    }
-
-    public function logout()
-    {
-        $this->user = null;
-        self::$app->session->remove('user');
-        if (isset($_COOKIE['member_login'])) {
-            unset($_COOKIE['member_login']); 
-            setcookie('member_login', null, -1, '/'); 
-            return true;
-        } else {
-            return false;
-        }
     }
 
     public function bootstrap()
@@ -86,17 +49,6 @@ class Application
                 'exception' => $e,
             ]);
         }
-    }
-
-    public function login(UserModel $user)
-    {
-        $this->user = $user;
-        $primaryKey = $user->primaryKey();
-        $value = $user->{$primaryKey};
-        $role = $user->role;
-        Application::$app->session->set('user', $value);
-        Application::$app->session->set('role', $role);
-        return true;
     }
 
     public function triggerEvent($eventName)

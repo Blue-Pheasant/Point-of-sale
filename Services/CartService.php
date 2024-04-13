@@ -52,14 +52,18 @@ class CartService
 
     public function getCartItem($cartItemId)
     {
-        $db = Database::getInstance();
-        $req = $db->query("SELECT * FROM cart_item WHERE id = '$cartItemId'")->fetchAll()[0];
+        $req = $this->db->query("SELECT * FROM cart_item WHERE id = '$cartItemId'")->fetchAll()[0];
         return new CartItem($req);
     }
 
     public function checkOutCart($cartId)
     {
-        $db = Database::getInstance();
-        $db->query("UPDATE cart SET status = 'done' WHERE id = '$cartId'");
+        $this->db->query("UPDATE cart SET status = 'done' WHERE id = '$cartId'");
+    }
+
+    public function getCartIdFromUserId($userId)
+    {
+        $req = $this->db->query("SELECT id FROM cart WHERE user_id = '$userId'")->fetchAll();
+        return $req[0]['id'];
     }
 }

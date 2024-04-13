@@ -10,12 +10,13 @@ use app\Core\Controller;
 use app\Core\Request;
 use app\Models\Store;
 use app\Middlewares\AdminMiddleware;
+use app\Auth\AuthUser;
 
 class StoreController extends Controller
 {
     public function __construct() 
     {
-        $this->registerMiddleware(new AdminMiddleware(['index', 'add', 'delete', 'update']));
+        $this->registerMiddleware(AdminMiddleware::class, ['index', 'add', 'delete', 'update']);
     }
 
     public function index()

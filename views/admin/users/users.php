@@ -1,9 +1,9 @@
 <?php
 
-use app\Core\Application;
 use app\Models\User;
+use app\Auth\AuthUser;
 
-$user = User::getUserInfo(Application::$app->user->id);
+$user = AuthUser::authUser();
 ?>
 <script type="text/javascript">
   document.title = 'Quản lý người dùng';

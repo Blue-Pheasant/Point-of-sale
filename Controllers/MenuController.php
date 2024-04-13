@@ -12,6 +12,7 @@ use app\Models\CartItem;
 use app\Services\CartService;
 use app\Services\CategoryService;
 use app\Services\ProductService;
+use app\Auth\AuthUser;
 
 class MenuController extends SiteController
 {
@@ -27,17 +28,21 @@ class MenuController extends SiteController
         $this->productService = new ProductService();
     }
 
-    public function menu()
+    public function menu(Request $request)
     {
-        $categoryId = Application::$app->request->getParam('category_id');
-        $cartId = Application::$app->cart->id;
-        if ($categoryId == '') {
-            $products = Product::getAllProducts();
-        } else {
-            $products = Product::getProductsByCategory($categoryId);
-        }
+        $categoryId = $request->getParam('category_id');
+        $currentUser = AuthUser::authUser();
+        $cartId = $this->cartService->getCartIdFromUserId($currentUser->id);
+
+        // Get the products
+        $products = ($categoryId == '') 
+            ? Product::getAllProducts() 
+            : Product::getProductsByCategory($categoryId);
+
         $deletedItem = false;
         $updatedItem = false;
+
+        // Get the items in the cart
         $items = $this->cartService->getCartItems($cartId);
         $categories = $this->categoryService->getAllCategories();
 
@@ -46,21 +51,30 @@ class MenuController extends SiteController
             'categories' => $categories, 
             'items' => $items,
             'deletedItem' => $deletedItem,
-            'updatedItem' => $updatedItem
+            'updatedItem' => $updatedItem,
+            'cartId' => $cartId
         ]);
     }
 
     public function search(Request $request)
     {
-        $cartId = Application::$app->cart->id;
+        
+        // Get the current user
+        $currentUser = $this->getMiddleware()->authUser();
+        $cartId = $this->cartService->getCartIdFromUserId($currentUser->id);
+
+        // Initialize the deletedItem and updatedItem variables
         $deletedItem = false;
         $updatedItem = false;
+
+        // Get the items in the cart
         $items = $this->cartService->getCartItems($cartId);
         $categories = $this->categoryService->getAllCategories();
 
-        $body = Application::$app->request->getBody();
-        $keyword = $body['keyword'];
+        // Get the keyword from the request
+        $keyword = $request->getBody()['keyword'];
         $products = Product::getProductsByKeyword($keyword);
+
         return $this->render('menu', [
             'products' => $products, 
             'categories' => $categories, 

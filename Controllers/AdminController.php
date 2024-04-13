@@ -13,6 +13,7 @@ use app\Models\User;
 use app\Services\ProductService;
 use app\Services\UserService;
 use app\Services\OrderService;
+use app\Auth\AuthUser;
 
 
 class AdminController extends Controller
@@ -23,7 +24,7 @@ class AdminController extends Controller
 
     public function __construct() 
     {
-        Application::$app->controller->registerMiddleware(AdminMiddleware::class, ['index', 'profile']);
+        $this->registerMiddleware(AdminMiddleware::class, ['index', 'profile']);
         $this->productService = new ProductService();
         $this->userService = new UserService();
         $this->orderService = new OrderService();
@@ -47,8 +48,7 @@ class AdminController extends Controller
 
     public function profile(Request $request)
     {
-        $adminId = Application::$app->user->id;
-        $adminModel = $this->userService->getUserById($adminId);
+        $adminModel = AuthUser::authUser();
         if($request->getMethod() === 'post') {
             $adminModel->loadData($request->getBody());
             if ($adminModel->validateUpdateProfile() && true) {
