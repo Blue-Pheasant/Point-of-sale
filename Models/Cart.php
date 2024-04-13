@@ -77,15 +77,9 @@ class Cart extends DBModel
 
     public static function getCart($id)
     {
-        $list = [];
         $db = Database::getInstance();
         $req = $db->query("SELECT * FROM cart WHERE user_id = '$id' AND status = 'processing'");
 
-
-        foreach ($req->fetchAll() as $item) {
-            $list[] = new Cart($item);
-        };
-
-        return $list;
+        return new Cart($req->fetchAll()[0]);
     }
 }

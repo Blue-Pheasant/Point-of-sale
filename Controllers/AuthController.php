@@ -36,6 +36,8 @@ class AuthController extends Controller
             if ($loginForm->validate() && $loginForm->login('email')) {
                 $userId = Session::get('user');
                 $userModel = $this->userService->getUserById($userId);
+
+                // Set cookie
                 setcookie("member_login", $userId, time() + 3600 * 24 * 30);
 
                 if ($userModel->getRole() === 'admin') {
@@ -45,6 +47,7 @@ class AuthController extends Controller
                 }
             }
         }
+
         $this->setLayout('auth');
         return $this->render('login', [
             'model' => $loginForm
@@ -69,7 +72,7 @@ class AuthController extends Controller
 
     public function logout()
     {
-        Application::$app->logout();
+        $this->authService->logout();
         $this->redirect('/');
     }
 }

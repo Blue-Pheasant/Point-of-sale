@@ -2,8 +2,8 @@
 
 namespace app\Models;
 
-use app\Core\Application;
 use app\Core\Model;
+use app\Core\Session;
 
 class LoginForm extends Model
 {
@@ -47,7 +47,16 @@ class LoginForm extends Model
             }
         }
 
-        return Application::$app->login($user);
+        // Get cart Id
+        $userCart = Cart::getCart($user->id);
+        if (!$userCart) {
+            $userCart = Cart::create($user->id);
+        }
+
+        Session::set('cart_id', $userCart->id);
+        Session::set('user', $user->id);
+        
+        return true;
     }
 
     public function getLabel($attribute)
