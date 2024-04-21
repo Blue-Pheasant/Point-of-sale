@@ -68,7 +68,7 @@ class User extends UserModel
         ];
     }
 
-    public function getLabel(string $attribute)
+    public function getLabel(string $attribute): string
     {
         return $this->labels()[$attribute];
     }    
@@ -94,7 +94,7 @@ class User extends UserModel
         return parent::save();
     }
 
-    public function save()
+    public function save(): bool
     {
         $this->password = password_hash($this->password, PASSWORD_DEFAULT);
         $this->id = uniqid();

@@ -70,7 +70,7 @@ class Order extends DBModel
         $order->save();
     }
 
-    public function save()
+    public function save(): bool
     {
         return parent::save();
     }
