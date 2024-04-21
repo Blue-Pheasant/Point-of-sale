@@ -25,7 +25,7 @@ When a commit pushed into Github server, github action will be triggered to run 
             key: ${{ secrets.SSH_PRIVATE_KEY }}
             port: ${{ secrets.PORT }}
             script: |
-                cd /home/project/bkphones
+                cd /home/project/pos
                 git pull origin master
                 git reset --hard FETCH_HEAD
                 git clean -d -f --exclude secrets

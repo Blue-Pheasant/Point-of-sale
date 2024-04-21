@@ -64,8 +64,8 @@ version: "3.7"
 services:
   app:
     build: ./docker
-    image: callmedavid/bkphones
-    container_name: bkphones
+    image: callmedavid/pos
+    container_name: pos
     ports:
       - "8000:80"
     volumes:
