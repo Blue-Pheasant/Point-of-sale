@@ -30,7 +30,7 @@ class Category extends DBModel
         return $this->name;
     }
 
-    public function getLabel(string $attribute)
+    public function getLabel(string $attribute): string
     {
         return $this->labels()[$attribute];
     }
@@ -60,7 +60,7 @@ class Category extends DBModel
         ];
     }
 
-    public function save()
+    public function save(): bool
     {
         $this->id = uniqid();
         return parent::save();

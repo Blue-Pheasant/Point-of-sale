@@ -77,7 +77,7 @@ class Product extends DBModel
         ];
     }
     
-    public function getLabel(string $attribute)
+    public function getLabel(string $attribute): string
     {
         return $this->labels()[$attribute];
     }
@@ -91,7 +91,7 @@ class Product extends DBModel
         ];
     }
 
-    public function save()
+    public function save(): bool
     {
         $this->id = uniqid();
         return parent::save();

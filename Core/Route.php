@@ -49,9 +49,9 @@ abstract class Route
      * Adds a GET route to the application.
      *
      * @param string $path The path of the route.
-     * @param string $callback The callback function of the route.
+     * @param array $callback The callback function of the route.
      */
-    public function get(string $path, string $callback): void
+    public function get(string $path, array $callback): void
     {
         $this->routes['get'][$path] = $callback;
     }
@@ -62,9 +62,9 @@ abstract class Route
      * Adds a POST route to the application.
      *
      * @param string $path The path of the route.
-     * @param string $callback The callback function of the route.
+     * @param array $callback The callback function of the route.
      */
-    public function post(string $path, string $callback): void
+    public function post(string $path, array $callback): void
     {
         $this->routes['post'][$path] = $callback;
     }

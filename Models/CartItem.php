@@ -53,6 +53,17 @@ class CartItem extends DBModel
         return parent::save();
     }
 
+    public function getTotalPrice()
+    {
+        $unitPrice = $this->price;
+        if ($this->size === 'Medium') {
+            $unitPrice += 3000;
+        } else if ($this->size === 'Large') {
+            $unitPrice += 6000;
+        }
+        return $unitPrice * $this->quantity;
+    }
+    
     public static function getCartItems($cartId): array
     {
         $list = [];
