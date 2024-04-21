@@ -54,7 +54,7 @@ class OrderItem extends DBModel
         return [];
     }
 
-    public function save()
+    public function save(): bool
     {
         return parent::save();
     }

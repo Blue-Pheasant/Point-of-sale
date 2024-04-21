@@ -54,7 +54,7 @@ class Cart extends DBModel
         $db->query("UPDATE cart SET status = 'done' WHERE id = '$id'");
     }
 
-    public function save()
+    public function save(): bool
     {
         return parent::save();
     }

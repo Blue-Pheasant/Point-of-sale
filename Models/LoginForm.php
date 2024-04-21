@@ -19,7 +19,7 @@ class LoginForm extends Model
         ];
     }
 
-    public function labels()
+    public function labels(): array
     {
         return [
             'email' => 'Địa chỉ email',
@@ -59,7 +59,7 @@ class LoginForm extends Model
         return true;
     }
 
-    public function getLabel(string $attribute)
+    public function getLabel(string $attribute): string
     {
         return $this->labels()[$attribute];
     }

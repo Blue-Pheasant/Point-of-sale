@@ -167,9 +167,9 @@ abstract class DBModel extends Model
      * This method takes an SQL query as input, executes it, and returns the result.
      *
      * @param array $where The SQL query to execute.
-     * @return bool|PDOStatement The result of the query.
+     * @return bool|object The result of the query.
      */
-    public static function findOne(array $where): bool|PDOStatement
+    public static function findOne(array $where): bool|object
     {
         $tableName = static::tableName();
         $attributes = array_keys($where);
