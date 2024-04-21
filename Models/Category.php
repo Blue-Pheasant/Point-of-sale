@@ -30,7 +30,7 @@ class Category extends DBModel
         return $this->name;
     }
 
-    public function getLabel($attribute)
+    public function getLabel(string $attribute)
     {
         return $this->labels()[$attribute];
     }

@@ -57,7 +57,7 @@ class Store extends DBModel
         ];
     }
 
-    public function getLabel($attribute)
+    public function getLabel(string $attribute)
     {
         return $this->labels()[$attribute];
     }
