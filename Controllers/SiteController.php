@@ -2,36 +2,66 @@
 
 namespace app\Controllers;
 
-use app\Core\Application;
 use app\Core\Controller;
-use app\Core\Request;
-use app\Exception\ForbiddenException;
-use app\Middlewares\AuthMiddleware;
-
-use app\Models\LoginForm;
 use app\Models\Store;
-use app\Models\User;
 
+/**
+ * Class SiteController
+ *
+ * This class is responsible for handling the site operations of the application.
+ * It extends the base Controller class and uses the Store model.
+ *
+ * @package app\Controllers
+ */
 class SiteController extends Controller
 {
-    public function home()
+    /**
+     * Method home
+     *
+     * Renders the 'home' view with the application name.
+     *
+     * @return array|bool|string
+     */
+    public function home(): array|bool|string
     {
         return $this->render('home', [
             'name' => 'Buy me store'
         ]);
     }
 
-    public function error() {
+    /**
+     * Method error
+     *
+     * Renders the 'permission' view with the error message.
+     *
+     * @return array|bool|string
+     */
+    public function error(): array|bool|string
+    {
         $this->setLayout('auth');
         return $this->render('permission');
     }
 
-    public function about()
+    /**
+     * Method about
+     *
+     * Renders the 'about' view.
+     *
+     * @return array|bool|string
+     */
+    public function about(): array|bool|string
     {
         return $this->render('about');
     }
 
-    public function stores()
+    /**
+     * Method stores
+     *
+     * Fetches all stores and renders the 'stores' view with the fetched data.
+     *
+     * @return array|bool|string
+     */
+    public function stores(): array|bool|string
     {
         $stores = Store::getAll();
         $this->setLayout('main');
@@ -40,12 +70,26 @@ class SiteController extends Controller
         ]);
     }
 
-    public function contact()
+    /**
+     * Method contact
+     *
+     * Renders the 'contact' view.
+     *
+     * @return array|bool|string
+     */
+    public function contact(): array|bool|string
     {
         return $this->render('contact');
     }
 
-    public function notice()
+    /**
+     * Method payment
+     *
+     * Renders the 'payment' view.
+     *
+     * @return array|bool|string
+     */
+    public function notice(): array|bool|string
     {
         $this->setLayout('auth');
         return $this->render('payment_success');

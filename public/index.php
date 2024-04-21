@@ -1,7 +1,7 @@
 <?php
 
-use app\Controllers\SiteController;
 use app\Core\Application;
+use app\Models\User;
 use app\Routes\ProductRoute;
 use app\Routes\CategoryRoute;
 use app\Routes\OrderRoute;
@@ -16,7 +16,7 @@ $dotenv = Dotenv\Dotenv::createImmutable(dirname(__DIR__));
 $dotenv->load();
 
 $config = [
-    'userClass' => \app\Models\User::class,
+    'userClass' => User::class,
     'db' => [
         'dsn' => $_ENV['DB_DSN'],
         'user' => $_ENV['DB_USER'],

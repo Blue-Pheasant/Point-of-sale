@@ -5,21 +5,40 @@
 
 namespace app\Controllers;
 
-use app\Core\Application;
 use app\Core\Controller;
 use app\Core\Request;
 use app\Models\Store;
 use app\Middlewares\AdminMiddleware;
-use app\Auth\AuthUser;
 
+/**
+ * Class StoreController
+ *
+ * This class is responsible for handling the store operations of the application.
+ * It extends the base Controller class and uses the Store model.
+ * It also uses middleware for administrative tasks.
+ *
+ * @package app\Controllers
+ */
 class StoreController extends Controller
 {
+    /**
+     * StoreController constructor.
+     *
+     * Registers the middleware.
+     */
     public function __construct() 
     {
         $this->registerMiddleware(AdminMiddleware::class, ['index', 'add', 'delete', 'update']);
     }
 
-    public function index()
+    /**
+     * Method index
+     *
+     * Fetches all stores and renders the 'stores' view with the fetched data.
+     *
+     * @return array|bool|string
+     */
+    public function index(): array|bool|string
     {
         $stores = Store::getAll();
         $this->setLayout('admin');
@@ -28,59 +47,92 @@ class StoreController extends Controller
         ]);
     }
 
-    public function add(Request $request)
+    /**
+     * Method add
+     *
+     * Adds a new store to the database.
+     *
+     * @param Request $request
+     * @return array|bool|string
+     */
+    public function add(Request $request): array|bool|string
     {
         $storeModel = new Store;
         if($request->getMethod() === 'post') {
             $storeModel->loadData($request->getBody());
             $storeModel->save();
             return $this->refresh();
-        } else if($request->getMethod() === 'get') {
-            $this->setLayout('admin');
-            return $this->render('/admin/stores/create_store',  [
-                'storeModel' => $storeModel
-            ]);
         }
+
+        $this->setLayout('admin');
+        return $this->render('/admin/stores/create_store',  [
+            'storeModel' => $storeModel
+        ]);
     }
 
-    public function details(Request $request)
+    /**
+     * Method details
+     *
+     * Fetches the store by ID and renders the 'details_store' view with the fetched data.
+     *
+     * @param Request $request The request object containing the request data.
+     * @return array|bool|string
+     */
+    public function details(Request $request): array|bool|string
     {
         $storeId = $request->getParam('id');
         $storeModel = Store::get($storeId);
+        
         $this->setLayout('admin');
         return $this->render('/admin/stores/details_store', [
             'model' => $storeModel
         ]);
     }
 
-    public function delete(Request $request)
+    /**
+     * Method delete
+     *
+     * Deletes a store by ID.
+     *
+     * @param Request $request The request object containing the request data.
+     * @return array|bool|string
+     */
+    public function delete(Request $request): array|bool|string
     {
         $id = $request->getParam('id');
         $storeModel = Store::get($id);
         if ($request->getMethod() === 'post') {
             $storeModel->delete();
             return $this->back();
-        } else if ($request->getMethod() === 'get') {
-            $this->setLayout('admin');
-            return $this->render('/admin/stores/delete_store', [
-                'storeModel' => $storeModel
-            ]);
         }
+
+        $this->setLayout('admin');
+        return $this->render('/admin/stores/delete_store', [
+            'storeModel' => $storeModel
+        ]);
     }
 
-    public function update(Request $request)
+    /**
+     * Method update
+     *
+     * Updates a store by ID.
+     *
+     * @param Request $request The request object containing the request data.
+     * @return array|bool|string
+     */
+    public function update(Request $request): array|bool|string
     {
         $id = $request->getParam('id');
         $storeModel = Store::get($id);
         if ($request->getMethod() === 'post') {
             $storeModel->loadData($request->getBody());
-            $storeModel->update($storeModel);
+            $storeModel->update();
             return $this->refresh();
-        } else if ($request->getMethod() === 'get') {
-            $this->setLayout('admin');
-            return $this->render('/admin/stores/edit_store', [
-                'storeModel' => $storeModel
-            ]);
-        } 
+        }
+
+        $this->setLayout('admin');
+        return $this->render('/admin/stores/edit_store', [
+            'storeModel' => $storeModel
+        ]);
     }
 }

@@ -3,11 +3,30 @@
 namespace app\Common;
 
 use app\Core\Database;
+use PDO;
+use PDOStatement;
 
+/**
+ * Class Query
+ *
+ * This class provides a static method to prepare SQL queries.
+ *
+ * @package app\Common
+ */
 class Query
 {
-    private static $db;
+    /**
+     * @var PDO The PDO instance used to interact with the database.
+     */
+    private static PDO $db;
     
+    /**
+     * Prepares a SQL query and binds the provided parameters to it.
+     *
+     * @param string $query The SQL query to prepare.
+     * @param array $params The parameters to bind to the query.
+     * @return PDOStatement The prepared statement.
+     */
     public static function prepare(string $query, array $params = []): PDOStatement
     {
         if (empty(self::$db)) {
@@ -23,7 +42,18 @@ class Query
         return $stmt;
     }
 
-    public static function get($table, $columns = [], $where = [], $limit = 0, $offset = 0)
+    /**
+     * Executes a SQL query and returns the number of affected rows.
+     *
+     * @param string $table The table to execute the query on.
+     * @param array $columns The columns to select.
+     * @param string $query The SQL query to execute.
+     * @param array $params The parameters to bind to the query.
+     * @param int $limit The maximum number of rows to return.
+     * @param int $offset The number of rows to skip.
+     * @return int The number of affected rows.
+     */
+    public static function get(string $table, array $columns = [], array $where = [], int $limit = 0, int $offset = 0): string
     {
         $query = "SELECT ";
         if (count($columns) > 0) {
@@ -53,7 +83,12 @@ class Query
         return $query;
     }
 
-    public static function insert($table, $data)
+    /**
+     * Inserts data into a table.
+     * @param string $table The table to insert data into.
+     * @param array $data The data to insert.
+     */
+    public static function insert(string $table, array $data): string
     {
         $query = "INSERT INTO $table (";
         $columns = [];
@@ -69,7 +104,13 @@ class Query
         return $query;
     }
 
-    public static function update($table, $data, $where)
+    /**
+     * Updates data in a table.
+     * @param string $table The table to update data in.
+     * @param array $data The data to update.
+     * @param array $where The conditions to update data by.
+     */
+    public static function update(string $table, array $data, array $where): string
     {
         $query = "UPDATE $table SET ";
         $set = [];
@@ -86,7 +127,12 @@ class Query
         return $query;
     }
 
-    public static function delete($table, $where)
+    /**
+     * Deletes data from a table.
+     * @param string $table The table to delete data from.
+     * @param array $where The conditions to delete data by.
+     */
+    public static function delete(string $table, array $where): string
     {
         $query = "DELETE FROM $table WHERE ";
         $whereClause = [];
@@ -97,6 +143,11 @@ class Query
         return $query;
     }
 
+    /**
+     * Counts the number of rows in a table.
+     * @param string $table The table to count rows in.
+     * @param array $where The conditions to count rows by.
+     */
     public static function getCount(string $query, array $params = []): int
     {
         $db = Database::getInstance();
@@ -105,6 +156,11 @@ class Query
         return (int) $stmt->fetchColumn();
     }
 
+    /**
+     * Fetches all rows from a table.
+     * @param string $query The SQL query to execute.
+     * @param array $params The parameters to bind to the query.
+     */
     public static function getAll(string $query, array $params = []): array
     {
         $db = Database::getInstance();

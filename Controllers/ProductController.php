@@ -7,20 +7,33 @@ namespace app\Controllers;
 
 use app\Core\Controller;
 use app\Models\Product;
-use app\Core\Application;
 use app\Core\Request;
 use app\Core\Session;
-use app\Models\Cart;
 use app\Models\CartItem;
-use app\Models\Record;
 use app\Services\ProductService;
 use app\Middlewares\AdminMiddleware;
 use app\Middlewares\AuthMiddleware;
-use app\Auth\AuthUser;
-
+/**
+ * Class ProductController
+ *
+ * This class is responsible for handling the product operations of the application.
+ * It extends the base Controller class and uses services for products.
+ * It also uses middleware for administrative tasks.
+ *
+ * @package app\Controllers
+ */
 class ProductController extends Controller
 {
+    /**
+     * @var ProductService $productService An instance of ProductService to handle product-related operations.
+     */
     protected ProductService $productService;
+
+    /**
+     * ProductController constructor.
+     *
+     * Initializes the services and registers the middleware.
+     */
     public function __construct()
     {
         $this->productService = new ProductService();
@@ -28,7 +41,14 @@ class ProductController extends Controller
         $this->registerMiddleware(AuthMiddleware::class, ['product']);
     }
 
-    public function index()
+    /**
+     * Method index
+     *
+     * Fetches all products and renders the 'products' view with the fetched data.
+     *
+     * @return array|bool|string
+     */
+    public function index(): array|bool|string
     {
         $products = $this->productService->getAllProducts(['limit' => 10, 'page' => 1])['list'];
         $this->setLayout('admin');
@@ -37,68 +57,120 @@ class ProductController extends Controller
         ]);
     }
 
-    public function create(Request $request)
+    /**
+     * Method create
+     *
+     * Creates a new product and saves it to the database.
+     * If the request method is 'post', it loads the data, validates it, and saves it.
+     * If the request method is 'get', it renders the 'create_product' view.
+     *
+     * @param Request $request The request object containing the request parameters.
+     * @return array|bool|string
+     */
+    public function create(Request $request): array|bool|string
     {
         $productModel = new Product();
         if ($request->getMethod() === 'post') {
             $productModel->loadData($request->getBody());
             if ($productModel->validate() && $productModel->save()) {
-                $this->setFlash('success', 'Create product successuly');
+                $this->setFlash('success', 'Create product successfully');
                 $this->redirect('/admin/products/details_product?id=' . $productModel->getId());
             } else {
                 $this->setFlash('fail', 'Create product fail');
             }
-        } else if ($request->getMethod() === 'get') {
-            $products = Product::getAllProducts();
-            $this->setLayout('admin');
-            return $this->render('/admin/products/create_product', [
-                'productModel' => $products
-            ]);
         }
+        
+        // Fetch all products
+        $products = Product::getAllProducts();
+
+        $this->setLayout('admin');
+        return $this->render('/admin/products/create_product', [
+            'productModel' => $products
+        ]);
     }
 
-    public function delete(Request $request)
+    /**
+     * Method delete
+     *
+     * Deletes a product from the database.
+     * If the request method is 'post', it deletes the product.
+     * If the request method is 'get', it renders the 'delete_product' view.
+     *
+     * @param Request $request The request object containing the request parameters.
+     * @return array|bool|string
+     */
+    public function delete(Request $request): array|bool|string
     {
         $id = $request->getParam('id');
         $productModel = $this->productService->getProductById($id);
+
         if ($request->getMethod() === 'post') {
             $productModel->delete();
             return $this->back();
-        } else if ($request->getMethod() === 'get') {
-            $this->setLayout('admin');
-            return $this->render('/admin/products/delete_product', [
-                'productModel' => $productModel
-            ]);
         }
+
+        $this->setLayout('admin');
+        return $this->render('/admin/products/delete_product', [
+            'productModel' => $productModel
+        ]);
     }
 
-    public function update(Request $request)
+    /**
+     * Method update
+     *
+     * Updates a product in the database.
+     * If the request method is 'post', it loads the data, validates it, and updates it.
+     * If the request method is 'get', it renders the 'edit_product' view.
+     *
+     * @param Request $request The request object containing the request parameters.
+     * @return array|bool|string
+     */
+    public function update(Request $request): array|bool|string
     {
         $id = $request->getParam('id');
         $productModel = $this->productService->getProductById($id);
+
         if ($request->getMethod() === 'post') {
             $productModel->loadData($request->getBody());
-            $productModel->update($productModel);
+            $productModel->update();
             return $this->refresh();
-        } else if ($request->getMethod() === 'get') {
-            $this->setLayout('admin');
-            return $this->render('/admin/products/edit_product', [
-                'productModel' => $productModel
-            ]);
         }
+
+        $this->setLayout('admin');
+        return $this->render('/admin/products/edit_product', [
+            'productModel' => $productModel
+        ]);
     }
 
-    public function details(Request $request)
+    /**
+     * Method details
+     *
+     * Fetches the details of a product by its ID and renders the 'details_product' view with the fetched data.
+     *
+     * @param Request $request The request object containing the request parameters.
+     * @return array|bool|string
+     */
+    public function details(Request $request): array|bool|string
     {
         $id = $request->getParam('id');
         $productModel = $this->productService->getProductById($id);
+
         $this->setLayout('admin');
         return $this->render('/admin/products/details_product', [
             'productModel' => $productModel
         ]);
     }
 
-    public function product(Request $request)
+    /**
+     * Method product
+     *
+     * Fetches the product by its ID and renders the 'product_detail' view with the fetched data.
+     * If the request method is 'post', it adds the product to the cart.
+     *
+     * @param Request $request The request object containing the request parameters.
+     * @return array|bool|string
+     */
+    public function product(Request $request): array|bool|string
     {
         $id = $request->getParam('id');
         $product = $this->productService->getProductById($id);

@@ -2,31 +2,114 @@
 
 namespace app\Core;
 
+/**
+ * Class Model
+ *
+ * This class provides a set of constants that represent the names of the validation rules.
+ *
+ * @package app\Core
+ */
 abstract class Model
 {
+    /**
+     * @var string RULE_REQUIRED The 'required' validation rule.
+     */
     public const RULE_REQUIRED = 'required';
+
+    /**
+     * @var string RULE_EMAIL The 'email' validation rule.
+     */
     public const RULE_EMAIL = 'email';
+
+    /**
+     * @var string RULE_MIN The 'min' validation rule.
+     */
     public const RULE_MIN = 'min';
+
+    /**
+     * @var string RULE_MAX The 'max' validation rule.
+     */
     public const RULE_MAX = 'max';
+
+    /**
+     * @var string RULE_MATCH The 'match' validation rule.
+     */
     public const RULE_MATCH = 'match';
+
+    /**
+     * @var string RULE_UNIQUE The 'unique' validation rule.
+     */
     public const RULE_UNIQUE = 'unique';
+
+    /**
+     * @var string RULE_NUMBER The 'number' validation rule.
+     */
     public const RULE_NUMBER = 'number';
+
+    /**
+     * @var string RULE_INVALID_EMAIL The 'invalid email' validation rule.
+     */
     public const RULE_INVALID_EMAIL = 'invalid email';
+
+    /**
+     * @var string RULE_WRONG_PASSWORD The 'wrong password' validation rule.
+     */
     public const RULE_WRONG_PASSWORD = 'wrong password';
+
+    /**
+     * @var string RULE_INVALID_ID The 'invalid id' validation rule.
+     */
     public const RULE_INVALID_ID = 'invalid id';
+
+    /**
+     * @var string RULE_MIN_VALUE The 'minint' validation rule.
+     */
     public const RULE_MIN_VALUE = 'minint';
+
+    /**
+     * @var string RULE_MAX_VALUE The 'maxint' validation rule.
+     */
     public const RULE_MAX_VALUE = 'maxint';
 
+    /**
+     * Method rules
+     *
+     * Returns the validation rules.
+     *
+     * @return array
+     */
     abstract public function rules(): array;
 
-    public function getLabel($attribute)
+    /**
+     * Method getLabel
+     *
+     * Returns the label of the attribute.
+     *
+     * @param string $attribute The attribute to get the label of.
+     * @return string
+     */
+    public function getLabel(string $attribute): string
     {
-        return '';
+        return $this->labels()[$attribute] ?? $attribute;
     }
 
+    /**
+     * Method labels
+     *
+     * Returns the labels of the attributes.
+     *
+     * @return array
+     */
     public array $errors = [];
 
-    public function loadData($data)
+    /**
+     * Method loadData
+     *
+     * Loads the data into the model.
+     *
+     * @param array $data The data to load into the model.
+     */
+    public function loadData(array $data): void
     {
         foreach ($data as $key => $value) {
             if (property_exists($this, $key)) {
@@ -35,7 +118,14 @@ abstract class Model
         }
     }
 
-    public function validate()
+    /**
+     * Method validate
+     * 
+     * Validates the data of the form request.
+     * 
+     * @return bool
+     */
+    public function validate(): bool
     {
         foreach ($this->rules() as $attribute => $rules) {
             $value = $this->{$attribute};
@@ -88,7 +178,15 @@ abstract class Model
         return empty($this->errors);
     }
 
-    public function addError(string $attribute, string $rule, $params = [])
+
+    /**
+     * Adds an error to the form request.
+     *
+     * @param string $attribute The attribute of the error.
+     * @param string $rule The rule of the error.
+     * @param array $params The parameters of the error.
+     */
+    public function addError(string $attribute, string $rule, array $params = []): void
     {
         $message = $this->errorMessage()[$rule] ?? '';
         foreach ($params as $key => $value) {
@@ -97,7 +195,12 @@ abstract class Model
         $this->errors[$attribute][] = $message;
     }
 
-    public function errorMessage()
+    /**
+     * Returns the error messages of the form request.
+     *
+     * @return array The error messages of the form request.
+     */
+    public function errorMessage(): array
     {
         return [
             self::RULE_UNIQUE => '{field} đã tồn tại.',
@@ -115,12 +218,27 @@ abstract class Model
         ];
     }
 
-    public function hasError($attribute)
+    /**
+     * Adds an error to the form request.
+     *
+     * @param string $attribute The attribute of the error.
+     * @return bool Whether the form request has an error for the attribute.
+     */
+    public function hasError(string $attribute): bool
     {
         return $this->errors[$attribute] ?? false;
     }
 
-    public function getFirstError($attribute)
+    /**
+     * Returns the first error for the given attribute.
+     *
+     * This method returns the first error for the given attribute in the 'errors' property of the Model object.
+     * If there is no error for the attribute, it returns false.
+     *
+     * @param string $attribute The attribute to get the first error for.
+     * @return string|bool The first error for the attribute, or false if there is no error.
+     */
+    public function getFirstError(string $attribute): bool|string
     {
         return $this->errors[$attribute][0] ?? false;
     }
