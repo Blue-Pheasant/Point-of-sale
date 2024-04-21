@@ -6,39 +6,67 @@
 namespace app\Controllers;
 
 use app\Core\Controller;
-use app\Core\Application;
 use app\Core\Session;
-use app\Models\Cart;
 use app\Models\CartItem;
 use app\Models\Order;
 use app\Models\OrderDetail;
 use app\Core\Request;
-use app\Core\Response;
 use app\Services\CartService;
 use app\Middlewares\AuthMiddleware;
 use app\Auth\AuthUser;
 
+/**
+ * Class CartController
+ *
+ * This class is responsible for handling the cart operations of the application.
+ * It extends the base Controller class and uses services for cart and authentication.
+ *
+ * @package app\Controllers
+ */
 class CartController extends Controller
 {
+    /**
+     * @var CartService $cartService An instance of CartService to handle cart-related operations.
+     */
     protected CartService $cartService;
 
+    /**
+     * CartController constructor.
+     *
+     * Initializes the services and registers the middleware.
+     */
     public function __construct()
     {
         $this->cartService = new CartService();
         $this->registerMiddleware(AuthMiddleware::class, ['cart', 'update', 'placeOrder']);
     }
 
-    public function deleteItem($cartId, $id)
+    /**
+     * Method deleteItem
+     *
+     * Deletes an item from the cart.
+     *
+     * @param string $id The ID of the item to be deleted.
+     * @return void
+     */
+    public function deleteItem(string $id): void
     {
-        CartItem::deleteItem($id, $cartId);
+        CartItem::deleteItem($id);
     }
 
-    public function cart(Request $request)
+    /**
+     * Method cart
+     *
+     * Fetches the cart items and renders the 'cart' view with the fetched data.
+     * If an action is provided in the request, it performs the action on the cart.
+     *
+     * @param Request $request The request object containing the request data.
+     * @return array|bool|string
+     */
+    public function cart(Request $request): array|bool|string
     {
         $cartId = Session::get('cart_id');
         $deletedItem = false;
-        $updatedItem = false;
-
         $action = $request->getParam('action');
         if ($action) {
             $id = $request->getParam('id');
@@ -59,11 +87,20 @@ class CartController extends Controller
             'items' => $items,
             'user' => $user,
             'deletedItem' => $deletedItem,
-            'updatedItem' => $updatedItem
+            'updatedItem' => false
         ]);
     }
 
-    public function update(Request $request)
+    /**
+     * Method update
+     *
+     * Updates the quantity and note of a cart item.
+     * Renders the 'cart' view with the updated cart items.
+     *
+     * @param Request $request The request object containing the request data.
+     * @return array|bool|string
+     */
+    public function update(Request $request): array|bool|string
     {
         $cartId = Session::get('cart_id');
         $user = AuthUser::authUser();
@@ -91,11 +128,17 @@ class CartController extends Controller
         ]);
     }
 
+    /**
+     * Method placeOrder
+     *
+     * Places an order with the items in the cart.
+     * Creates an order and order details, and deletes the cart items.
+     * Redirects to the 'cart/notice' view after placing the order.
+     *
+     * @param Request $request The request object containing the request data.
+     */
     public function placeOrder(Request $request)
     {
-        $placedOrder = false;
-        $updatedItem = false;
-
         $cartId = Session::get('cart_id');
         $items = $this->cartService->getCartItems($cartId);
 

@@ -2,43 +2,145 @@
 
 namespace app\Core;
 
+/**
+ * Class FormRequest
+ *
+ * This class is responsible for handling the form request operations of the application.
+ *
+ * @package app\Core
+ */
 abstract class FormRequest extends Request
 {
-    protected $data;
-    protected $errors = [];
+    /**
+     * @var array $data The data of the form request.
+     */
+    protected array $data;
 
+    /**
+     * @var array $errors The errors of the form request.
+     */
+    protected array $errors = [];
+
+    /**
+     * @var string RULE_REQUIRED The 'required' validation rule.
+     */
     protected const RULE_REQUIRED = 'required';
+
+    /**
+     * @var string RULE_EMAIL The 'email' validation rule.
+     */
     protected const RULE_EMAIL = 'email';
+
+    /**
+     * @var string RULE_MIN The 'min' validation rule.
+     */
     protected const RULE_MIN = 'min';
+
+    /**
+     * @var string RULE_MAX The 'max' validation rule.
+     */
     protected const RULE_MAX = 'max';
+
+    /**
+     * @var string RULE_MATCH The 'match' validation rule.
+     */
     protected const RULE_MATCH = 'match';
+
+    /**
+     * @var string RULE_NUMERIC The 'numeric' validation rule.
+     */
     protected const RULE_NUMERIC = 'numeric';
+
+    /**
+     * @var string RULE_INTEGER The 'integer' validation rule.
+     */
     protected const RULE_INTEGER = 'integer';
+
+    /**
+     * @var string RULE_URL The 'url' validation rule.
+     */
     protected const RULE_URL = 'url';
+
+    /**
+     * @var string RULE_DATE The 'date' validation rule.
+     */
     protected const RULE_DATE = 'date';
+
+    /**
+     * @var string RULE_TIME The 'time' validation rule.
+     */
     protected const RULE_TIME = 'time';
+
+    /**
+     * @var string RULE_DATETIME The 'datetime' validation rule.
+     */
     protected const RULE_DATETIME = 'datetime';
+
+    /**
+     * @var string RULE_DATE_BEFORE The 'date:before' validation rule.
+     */
     protected const RULE_DATE_BEFORE = 'date:before';
+
+    /**
+     * @var string RULE_DATE_AFTER The 'date:after' validation rule.
+     */
     protected const RULE_DATE_AFTER = 'date:after';
+
+    /**
+     * @var string RULE_UNIQUE The 'unique' validation rule.
+     */
     protected const RULE_UNIQUE = 'unique';
 
+    /**
+     * Constructs a new FormRequest object.
+     * Merges the request parameters and body and validates the data.
+     */
     public function __construct()
     {
-        $this->validate(array_merge($this->getPrams(), $this->getBody()));
+        array_merge($this->getPrams(), $this->getBody());
+        $this->validate();
     }
 
+    /**
+     * Get rules
+     *
+     * @return array
+     */
     abstract protected function rules(): array;
+
+    /**
+     * Returns the messages of the form request.
+     *
+     * @return array The messages of the form request.
+     */
     abstract protected function messages(): array;
+
+    /**
+     * Returns the labels of the form request.
+     *
+     * @return array The labels of the form request.
+     */
     abstract protected function labels(): array;
-    protected function getLabel($attribute)
+
+    /**
+     * Validates the data of the form request.
+     *
+     * @param string $attribute
+     * @return mixed
+     */
+    protected function getLabel(string $attribute): mixed
     {
         return $this->labels()[$attribute] ?? $attribute;
     }
 
-    public function validate()
+    /**
+     * Validates the data of the form request.
+     *
+     * @return bool
+     */
+    public function validate(): bool
     {
         $rules = $this->rules();
-        $messages = $this->messages();
     
         foreach ($rules as $field => $rule) {
             foreach ($rule as $r) {
@@ -55,21 +157,21 @@ abstract class FormRequest extends Request
                         }
                         break;
 
-                    case strpos($r, self::RULE_MIN) !== false:
+                    case str_contains($r, self::RULE_MIN):
                         $min = explode(':', $r)[1];
                         if (strlen($this->data[$field]) < $min) {
                             $this->addError($field, self::RULE_MIN, $rules);
                         }
                         break;
 
-                    case strpos($r, self::RULE_MAX) !== false:
+                    case str_contains($r, self::RULE_MAX):
                         $max = explode(':', $r)[1];
                         if (strlen($this->data[$field]) > $max) {
                             $this->addError($field, self::RULE_MAX, $rules);
                         }
                         break;
 
-                    case strpos($r, self::RULE_MATCH) !== false:
+                    case str_contains($r, self::RULE_MATCH):
                         $match = explode(':', $r)[1];
                         if ($this->data[$field] !== $this->data[$match]) {
                             $this->addError($field, self::RULE_MATCH, $rules);
@@ -130,7 +232,7 @@ abstract class FormRequest extends Request
                         }
                         break;
 
-                    case strpos($r, self::RULE_UNIQUE) !== false:
+                    case str_contains($r, self::RULE_UNIQUE):
                         $unique = explode(':', $r)[1];
                         $model = new $unique();
                         $attr = explode(',', $field);
@@ -150,27 +252,39 @@ abstract class FormRequest extends Request
         return empty($this->errors);
     }
 
-    protected function errorsMessage()
+    /**
+     * Returns the error messages of the form request.
+     *
+     * @return array The error messages of the form request.
+     */
+    protected function errorsMessage(): array
     {
         return [
-            self::RULE_REQUIRED => 'This {lable} is required',
-            self::RULE_EMAIL => 'This {lable} must be a valid email address',
-            self::RULE_MIN => 'This {lable} must be at least {min} characters',
-            self::RULE_MAX => 'This {lable} must not exceed {max} characters',
-            self::RULE_MATCH => 'This {lable} must be the same as {match}',
-            self::RULE_NUMERIC => 'This {lable} must be a number',
-            self::RULE_INTEGER => 'This {lable} must be an integer',
-            self::RULE_URL => 'This {lable} must be a valid URL',
-            self::RULE_DATE => 'This {lable} must be a valid date',
-            self::RULE_TIME => 'This {lable} must be a valid time',
-            self::RULE_DATETIME => 'This {lable} must be a valid date and time',
-            self::RULE_DATE_BEFORE => 'This {lable} must be before {before}',
-            self::RULE_DATE_AFTER => 'This {lable} must be after {after}',
-            self::RULE_UNIQUE => 'This {lable} already exists'
+            self::RULE_REQUIRED => 'This {label} is required',
+            self::RULE_EMAIL => 'This {label} must be a valid email address',
+            self::RULE_MIN => 'This {label} must be at least {min} characters',
+            self::RULE_MAX => 'This {label} must not exceed {max} characters',
+            self::RULE_MATCH => 'This {label} must be the same as {match}',
+            self::RULE_NUMERIC => 'This {label} must be a number',
+            self::RULE_INTEGER => 'This {label} must be an integer',
+            self::RULE_URL => 'This {label} must be a valid URL',
+            self::RULE_DATE => 'This {label} must be a valid date',
+            self::RULE_TIME => 'This {label} must be a valid time',
+            self::RULE_DATETIME => 'This {label} must be a valid date and time',
+            self::RULE_DATE_BEFORE => 'This {label} must be before {before}',
+            self::RULE_DATE_AFTER => 'This {label} must be after {after}',
+            self::RULE_UNIQUE => 'This {label} already exists'
         ];
     }
 
-    public function addError(string $attribute, string $rule, $params = [])
+    /**
+     * Adds an error to the form request.
+     *
+     * @param string $attribute The attribute of the error.
+     * @param string $rule The rule of the error.
+     * @param array $params The parameters of the error.
+     */
+    public function addError(string $attribute, string $rule, array $params = []): void
     {
         $message = $this->errorsMessage()[$rule] ?? '';
         foreach ($params as $key => $value) {
@@ -179,7 +293,14 @@ abstract class FormRequest extends Request
         $this->errors[$attribute][] = $message;
     }
 
-    public function errors()
+    /**
+     * Returns the validation errors.
+     *
+     * This method returns the 'errors' property of the FormRequest object, which is an array of validation errors.
+     *
+     * @return array The validation errors.
+     */
+    public function errors(): array
     {
         return $this->errors;
     }

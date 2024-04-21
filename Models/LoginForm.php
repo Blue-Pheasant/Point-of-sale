@@ -59,7 +59,7 @@ class LoginForm extends Model
         return true;
     }
 
-    public function getLabel($attribute)
+    public function getLabel(string $attribute)
     {
         return $this->labels()[$attribute];
     }

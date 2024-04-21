@@ -4,16 +4,51 @@ namespace app\Core;
 
 use PDO;
 use PDOException;
+use PDOStatement;
 
+/**
+ * Class Database
+ *
+ * This class is responsible for handling the database operations.
+ * It uses the PDO class to connect to the database and execute the queries.
+ *
+ * @package app\Core
+ */
 class Database
 {
+    /**
+     * @var PDO $pdo The PDO instance.
+     */
     public PDO $pdo;
-    private $dsn;
-    private $user;
-    private $password;
-    private static $instance = NULl;
 
-    public static function getInstance()
+    /**
+     * @var string $dsn The DSN of the database.
+     */
+    private string $dsn;
+
+    /**
+     * @var string $user The user of the database.
+     */
+    private string $user;
+
+    /**
+     * @var string $password The password of the database.
+     */
+    private string $password;
+
+    /**
+     * @var PDO|null $instance The database instance.
+     */
+    private static PDO|null $instance = NULl;
+
+    /**
+     * Method getInstance
+     *
+     * Gets the database instance.
+     *
+     * @return Database|PDO|null
+     */
+    public static function getInstance(): Database|PDO|null
     {
         $dsn = $_ENV['DB_DSN'];
         $user =  $_ENV['DB_USER'];
@@ -30,11 +65,18 @@ class Database
         return self::$instance;
     }
 
-    public function __construct($config)
+    /**
+     * Database constructor.
+     *
+     * Initializes the database with the provided configuration.
+     *
+     * @param array $config The configuration of the database.
+     */
+    public function __construct(array $config)
     {
-        $this->dsn = $config['dsn'] ? $config['dsn'] : $_ENV['DB_DSN'];
-        $this->user = $config['user'] ? $config['user'] : $_ENV['DB_USER'];
-        $this->password = $config['password'] ? $config['password'] : $_ENV['DB_PASSWORD'];
+        $this->dsn = $config['dsn'] ?: $_ENV['DB_DSN'];
+        $this->user = $config['user'] ?: $_ENV['DB_USER'];
+        $this->password = $config['password'] ?: $_ENV['DB_PASSWORD'];
 
         try {
             $this->pdo = new PDO($this->dsn, $this->user, $this->password);
@@ -45,12 +87,12 @@ class Database
         }
     }
 
-    public function CreateConnection()
-    {
-        return $this->dbo;
-    }
-
-    public function applyMigrations()
+    /**
+     * Method applyMigrations
+     *
+     * Applies the migrations to the database.
+     */
+    public function applyMigrations(): void
     {
         $this->createMigrationsTable();
         $appliedMigrations =  $this->getAppliedMigrations();
@@ -70,7 +112,7 @@ class Database
             $instance = new $className;
             $this->log("Applying migration $migration");
             $instance->up();
-            $this->log("Applyied migration $migration" . PHP_EOL);
+            $this->log("Applied migration $migration" . PHP_EOL);
             $newMigrations[] = $migration;
         }
 
@@ -81,7 +123,18 @@ class Database
         }
     }
 
-    public function createMigrationsTable()
+    /**
+     * Creates the migrations table.
+     *
+     * This method creates a new table named 'migrations' in the database if it doesn't already exist.
+     * The 'migrations' table has the following columns:
+     * - 'id': an auto-incrementing integer that serves as the primary key.
+     * - 'migration': a string that stores the name of the migration.
+     * - 'created_at': a timestamp that stores the date and time when the migration was created. It defaults to the current timestamp.
+     *
+     * @return void
+     */
+    public function createMigrationsTable(): void
     {
         $this->pdo->exec("
             CREATE TABLE IF NOT EXISTS migrations (
@@ -92,34 +145,73 @@ class Database
         ");
     }
 
-    public function getAppliedMigrations()
+    /**
+     * Gets the applied migrations.
+     *
+     * This method retrieves the applied migrations from the 'migrations' table.
+     *
+     * @return bool|array The applied migrations.
+     */
+    public function getAppliedMigrations(): bool|array
     {
         $statement = $this->pdo->prepare("SELECT migration FROM migrations");
         $statement->execute();
 
-        return $statement->fetchAll(\PDO::FETCH_COLUMN);
+        return $statement->fetchAll(PDO::FETCH_COLUMN);
     }
 
-    public function saveMigrations(array $migrations)
+    /**
+     * Saves the migrations to the database.
+     *
+     * This method takes an array of migration names, prepares an INSERT statement, and executes it to save the migrations to the 'migrations' table in the database.
+     *
+     * @param array $migrations An array of migration names to save to the database.
+     * @return void
+     */
+    public function saveMigrations(array $migrations): void
     {
         $str = implode(",", array_map(fn ($m) => "('$m')", $migrations));
         $statement = $this->pdo->prepare("INSERT INTO migrations (migration) VALUES $str");
         $statement->execute();
     }
 
-    protected function log($message)
+    /**
+     * Logs a message with a timestamp.
+     *
+     * This method takes a message as input, prepends a timestamp to it, and echoes it followed by a newline.
+     * The timestamp is in the 'Y-m-d H:i:s' format.
+     *
+     * @param string $message The message to log.
+     * @return void
+     */
+    protected function log(string $message): void
     {
         echo '[' . date('Y-m-d H:i:s') . '] - ' . $message . PHP_EOL;
     }
 
-    public function prepare($sql)
+    /**
+     * Prepares a SQL query and returns the PDO statement.
+     *
+     * This method takes an SQL query as input, prepares it, and returns the PDO statement.
+     *
+     * @param string $sql The SQL query to prepare.
+     * @return bool|PDOStatement The PDO statement.
+     */
+    public function prepare(string $sql): bool|PDOStatement
     {
         return $this->pdo->prepare($sql);
     }
 
-   
-    public function query($message)
+    /**
+     * Executes a SQL query and returns the result.
+     *
+     * This method takes an SQL query as input, executes it, and returns the result.
+     *
+     * @param string $sql The SQL query to execute.
+     * @return bool|PDOStatement The result of the query.
+     */
+    public function query(string $sql): bool|PDOStatement
     {
-        return $this->pdo->query($message);
+        return $this->pdo->query($sql);
     }
 }

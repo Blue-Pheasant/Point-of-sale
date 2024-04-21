@@ -2,13 +2,26 @@
 
 namespace app\Core;
 
-use app\Core\DBModel;
-
+/**
+ * Class UserModel
+ *
+ * This class is responsible for handling the user model of the application.
+ * It uses the DBModel class.
+ *
+ * @package app\Core
+ */
 abstract class UserModel extends DBModel
 {
+    /**
+     * @var string $firstname The first name of the user.
+     */
     abstract public function getDisplayName(): string;
 
-    public function validateUpdateProfile()
+    /**
+     * @var string $firstname The first name of the user.
+     * @return bool
+     */
+    public function validateUpdateProfile(): bool
     {
         $updateRules = [
             'firstname' => [self::RULE_REQUIRED],

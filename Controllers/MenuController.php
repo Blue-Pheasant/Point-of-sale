@@ -2,24 +2,44 @@
 
 namespace app\Controllers;
 
-use app\Controllers\SiteController;
-use app\Models\Category;
 use app\Models\Product;
 use app\Core\Request;
-use app\Core\Application;
 use app\Middlewares\AuthMiddleware;
-use app\Models\CartItem;
 use app\Services\CartService;
 use app\Services\CategoryService;
 use app\Services\ProductService;
 use app\Auth\AuthUser;
 
+/**
+ * Class MenuController
+ *
+ * This class is responsible for handling the menu operations of the application.
+ * It extends the base SiteController class and uses services for cart, categories, and products.
+ *
+ * @package app\Controllers
+ */
 class MenuController extends SiteController
 {
+    /**
+     * @var CartService $cartService An instance of CartService to handle cart-related operations.
+     */
     private CartService $cartService;
+
+    /**
+     * @var CategoryService $categoryService An instance of CategoryService to handle category-related operations.
+     */
     private CategoryService $categoryService;
+
+    /**
+     * @var ProductService $productService An instance of ProductService to handle product-related operations.
+     */
     private ProductService $productService;
 
+    /**
+     * MenuController constructor.
+     *
+     * Initializes the services and registers the middleware.
+     */
     public function __construct()
     {
         $this->registerMiddleware(AuthMiddleware::class, ['menu', 'search']);
@@ -28,7 +48,17 @@ class MenuController extends SiteController
         $this->productService = new ProductService();
     }
 
-    public function menu(Request $request)
+    /**
+     * Method menu
+     *
+     * Fetches the products and categories, and the items in the cart.
+     * Sets the deletedItem and updatedItem variables to false.
+     * Renders the 'menu' view with the fetched data.
+     *
+     * @param Request $request The request object containing the request data.
+     * @return array|bool|string
+     */
+    public function menu(Request $request): array|bool|string
     {
         $categoryId = $request->getParam('category_id');
         $currentUser = AuthUser::authUser();
@@ -39,9 +69,6 @@ class MenuController extends SiteController
             ? Product::getAllProducts() 
             : Product::getProductsByCategory($categoryId);
 
-        $deletedItem = false;
-        $updatedItem = false;
-
         // Get the items in the cart
         $items = $this->cartService->getCartItems($cartId);
         $categories = $this->categoryService->getAllCategories();
@@ -50,22 +77,26 @@ class MenuController extends SiteController
             'products' => $products, 
             'categories' => $categories, 
             'items' => $items,
-            'deletedItem' => $deletedItem,
-            'updatedItem' => $updatedItem,
+            'deletedItem' => false,
+            'updatedItem' => false,
             'cartId' => $cartId
         ]);
     }
 
-    public function search(Request $request)
+    /**
+     * Method search
+     *
+     * Fetches the products by keyword and renders the 'menu' view with the fetched data.
+     *
+     * @param Request $request The request object containing the request data.
+     * @return array|bool|string
+     */
+    public function search(Request $request): array|bool|string
     {
         
         // Get the current user
-        $currentUser = $this->getMiddleware()->authUser();
+        $currentUser = AuthUser::authUser();
         $cartId = $this->cartService->getCartIdFromUserId($currentUser->id);
-
-        // Initialize the deletedItem and updatedItem variables
-        $deletedItem = false;
-        $updatedItem = false;
 
         // Get the items in the cart
         $items = $this->cartService->getCartItems($cartId);
@@ -79,8 +110,8 @@ class MenuController extends SiteController
             'products' => $products, 
             'categories' => $categories, 
             'items' => $items,
-            'deletedItem' => $deletedItem,
-            'updatedItem' => $updatedItem
+            'deletedItem' => false,
+            'updatedItem' => false
         ]);
     }
 }

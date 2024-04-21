@@ -68,7 +68,7 @@ class User extends UserModel
         ];
     }
 
-    public function getLabel($attribute)
+    public function getLabel(string $attribute)
     {
         return $this->labels()[$attribute];
     }    
