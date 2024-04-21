@@ -142,7 +142,7 @@ class Controller
      */
     public function refresh(): bool|array|string
     {
-        $currentUrl = Application::$app->request->getReqest();
+        $currentUrl = Application::$app->request->getRequest();
         return Application::$app->response->redirect($currentUrl);
     }
 
