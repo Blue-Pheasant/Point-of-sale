@@ -9,7 +9,7 @@
           <a href="/admin/products/create" class="btn btn-success">Tạo ra</a>
       </header>
       <div class="panel-body">
-        <table class="table table-striped table-hover dt-datatable">
+        <table id="table-pagination" class="table table-striped table-hover dt-datatable">
           <thead>
             <tr>
               <th>Mã sản phẩm</th>
@@ -49,3 +49,39 @@
     </section>
   </div>
 </div>
+
+<script>
+function updatePagination(totalRecords, activePage) {
+    var paginationWrapper = document.getElementsByClassName('.pagination')[0];
+    paginationWrapper.innerHTML = ''; // Clear existing pagination
+
+    var totalPages = Math.ceil(totalRecords / 10); // Assuming 10 records per page
+
+    for (var i = 1; i <= totalPages; i++) {
+      var listItem = document.createElement('li');
+      listItem.classList.add('paginate_button');
+      if (i === activePage) {
+        listItem.classList.add('active');
+      }
+
+      var link = document.createElement('a');
+      link.href = '#';
+      link.setAttribute('aria-controls', 'table-pagination');
+      link.setAttribute('data-dt-idx', i);
+      link.setAttribute('tabindex', '0');
+      link.innerText = i;
+
+      link.addEventListener('click', function(event) {
+        event.preventDefault();
+        var pageNumber = parseInt(this.innerText);
+        goToPage(pageNumber);
+        updatePagination(totalRecords, pageNumber);
+      });
+
+      listItem.appendChild(link);
+      paginationWrapper.appendChild(listItem);
+    }
+  }
+
+  updatePagination(100, 1);
+</script>
