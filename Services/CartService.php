@@ -64,6 +64,6 @@ class CartService
     public function getCartIdFromUserId($userId)
     {
         $req = $this->db->query("SELECT id FROM cart WHERE user_id = '$userId'")->fetchAll();
-        return $req[0]['id'];
+        return $req[0]['id'] ?? null;
     }
 }

@@ -80,6 +80,6 @@ class Cart extends DBModel
         $db = Database::getInstance();
         $req = $db->query("SELECT * FROM cart WHERE user_id = '$id' AND status = 'processing'");
 
-        return new Cart($req->fetchAll()[0]);
+        return new Cart($req->fetchAll()[0] ?? []);
     }
 }

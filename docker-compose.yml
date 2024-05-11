@@ -1,0 +1,42 @@
+version: "3.7"
+
+services:
+  app:
+    build: ./docker
+    image: callmedavid/pos
+    container_name: pos
+    ports:
+      - "8000:80"
+    volumes:
+      - ./:/var/www
+    depends_on:
+      - db
+    environment:
+      - DB_DSN=mysql:host=db;dbname=pos
+      - DB_USER=pos
+      - DB_PASS=123456
+    networks:
+      - pos-network
+      
+  db:
+    image: mysql:8
+    container_name: mysql
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./docker/mysql-config.cnf:/etc/mysql/conf.d/config.cnf
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: pos
+      MYSQL_USER: pos
+      MYSQL_PASSWORD: 123456
+    networks:
+      - pos-network
+
+volumes:
+  mysql-data:
+
+networks:
+  pos-network:
+    driver: bridge

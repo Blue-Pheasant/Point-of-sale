@@ -10,12 +10,9 @@
     <link rel="stylesheet" href="/css/admin/dataTables.bootstrap.css">
     <link rel="stylesheet" href="/css/admin/dt-sidebar.css">
     <link rel="stylesheet" href="/css/admin/dt-gradients.css">
-    <link rel="stylesheet" href="/css/admin/dt-theme.css">
     <link rel="stylesheet" href="/css/admin/dt-styles.css">
-    <link rel="stylesheet" href="/css/error.css">
     <link rel="stylesheet" href="/css/admin/profile.css">
     <link rel="stylesheet" href="/css/admin/dashboard.css">
-    <link rel="stylesheet" href="/css/admin/create_user.css">
     <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     
@@ -117,6 +114,7 @@ $userModel = AuthUser::authUser();
 
   <script src="/js/admin/simple-sidebar.js"></script>
   <script src="/js/admin/plugins.js"></script>
+  <script src="/js/admin/pagination.js"></script>
 </body>
 
 </html>
