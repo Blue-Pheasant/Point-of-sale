@@ -23,8 +23,12 @@ class Pagination
      * @param int $total The total count of items.
      * @return array Returns an array containing the pagination details.
      */
-    public static function paginate(int $limit, int $pageNum = 1, int $total): array
+    public static function paginate(int $limit, int $pageNum, int $total): array
     {
+        if ($pageNum == null) {
+            $pageNum = 1;
+        }
+
         $totalPage = ceil($total / $limit);
         $currentPage = min($pageNum, $totalPage);
         $offset = $currentPage > 0 ? ($currentPage - 1) * $limit : 0;
