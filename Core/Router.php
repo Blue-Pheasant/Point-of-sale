@@ -3,11 +3,12 @@
 namespace app\Core;
 
 /**
- * Class Router
- *
  * Resolves the incoming request to a route. Supports dynamic path parameters
  * (`/{id}`), the GET/POST/PUT/PATCH/DELETE verbs (with `_method` spoofing for
  * HTML forms), and a per-route middleware pipeline that runs BEFORE the action.
+ *
+ * Render logic is fully delegated to {@see View} — no duplicate layout/content
+ * rendering lives here.
  *
  * @package app\Core
  */
@@ -15,45 +16,24 @@ class Router
 {
     /**
      * @var array<string, array<int, array{path: string, callback: mixed, middleware: array<int, array{0: string, 1: array<int, string>}>}>>
-     *     The registered routes keyed by HTTP method (lowercase).
      */
     protected array $routes = [];
 
-    /**
-     * @var array<int, string> The HTTP methods supported by the router.
-     */
     private const METHODS = ['get', 'post', 'put', 'patch', 'delete'];
 
-    /**
-     * @var Request $request The request instance.
-     */
-    public Request $request;
-
-    /**
-     * @var Response $response The response instance.
-     */
+    public Request  $request;
     public Response $response;
 
-    /**
-     * Router constructor.
-     *
-     * @param Request $request The request instance.
-     * @param Response $response The response instance.
-     */
     public function __construct(Request $request, Response $response)
     {
-        $this->request = $request;
+        $this->request  = $request;
         $this->response = $response;
         foreach (self::METHODS as $method) {
             $this->routes[$method] = [];
         }
     }
 
-    /**
-     * Merges the given route table into the router.
-     *
-     * @param array<string, array<int, mixed>> $routes The routes to register.
-     */
+    /** @param array<string, array<int, mixed>> $routes */
     public function register(array $routes): void
     {
         foreach (self::METHODS as $method) {
@@ -63,21 +43,11 @@ class Router
         }
     }
 
-    /**
-     * Stores the URL the user intended to visit before being redirected.
-     *
-     * @param string $url The URL to remember.
-     */
     public function setIntendedUrl(string $url): void
     {
         Application::$app->session->set('url.intended', $url);
     }
 
-    /**
-     * Redirects to the previously intended URL, or to a default.
-     *
-     * @param string $default The default path to fall back to.
-     */
     public function intended(string $default = '/'): void
     {
         $path = Application::$app->session->get('url.intended');
@@ -87,36 +57,24 @@ class Router
         Application::$app->response->redirect($default);
     }
 
-    /**
-     * Resolves the current request to a route and executes it.
-     *
-     * @return mixed The rendered response.
-     */
     public function resolve(): mixed
     {
-        $path = $this->request->getPath();
+        $path   = $this->request->getPath();
         $method = $this->request->getMethod();
 
-        // Try to match within the requested method first.
         $match = $this->matchRoute($method, $path);
         if ($match !== null) {
             return $this->runRoute($match['route'], $match['params']);
         }
 
-        // The path exists under a different verb → 405 Method Not Allowed.
         if ($this->pathExistsForOtherMethod($method, $path)) {
             return $this->abort(405, '_404');
         }
 
-        // No route matches the path at all → 404 Not Found.
         return $this->abort(404, '_404');
     }
 
     /**
-     * Finds a route matching the method and path, extracting any parameters.
-     *
-     * @param string $method The lowercase HTTP method.
-     * @param string $path The request path.
      * @return array{route: array{path: string, callback: mixed, middleware: array<int, array{0: string, 1: array<int, string>}>}, params: array<string, string>}|null
      */
     private function matchRoute(string $method, string $path): ?array
@@ -127,17 +85,9 @@ class Router
                 return ['route' => $route, 'params' => $params];
             }
         }
-
         return null;
     }
 
-    /**
-     * Tests whether the same path is registered under any other method.
-     *
-     * @param string $currentMethod The method already tried.
-     * @param string $path The request path.
-     * @return bool True when the path matches under a different verb.
-     */
     private function pathExistsForOtherMethod(string $currentMethod, string $path): bool
     {
         foreach (self::METHODS as $method) {
@@ -148,29 +98,12 @@ class Router
                 return true;
             }
         }
-
         return false;
     }
 
-    /**
-     * Matches a route pattern against a concrete path.
-     *
-     * A pattern such as `/products/{id}` is compiled to a regex; on a match the
-     * captured parameter values are returned in declaration order. A static
-     * pattern returns an empty array on a match. Returns null when there is no
-     * match.
-     *
-     * Parameters are returned as an associative `name => value` map (in
-     * declaration order), so callers can both pass them positionally to the
-     * action and expose them by name on the request.
-     *
-     * @param string $pattern The route pattern (may contain `{param}`).
-     * @param string $path The concrete request path.
-     * @return array<string, string>|null The captured parameters, or null.
-     */
+    /** @return array<string, string>|null */
     private function matchPath(string $pattern, string $path): ?array
     {
-        // Fast path: a static pattern with no parameters.
         if (!str_contains($pattern, '{')) {
             return rtrim($pattern, '/') === rtrim($path, '/') ? [] : null;
         }
@@ -189,132 +122,61 @@ class Router
         return null;
     }
 
-    /**
-     * Runs a matched route: its middleware pipeline, then its action.
-     *
-     * @param array{path: string, callback: mixed, middleware: array<int, array{0: string, 1: array<int, string>}>} $route
-     * @param array<string, string> $params The extracted route parameters (name => value).
-     * @return mixed The rendered response.
-     */
+    /** @param array<string, string> $params */
     private function runRoute(array $route, array $params): mixed
     {
-        // Expose the captured route parameters by name on the request.
         $this->request->setRouteParams($params);
 
         $callback = $route['callback'];
 
-        // A plain view name → render it directly.
         if (is_string($callback)) {
             return $this->renderView($callback);
         }
 
         [$controllerClass, $action] = $callback;
 
-        // Make the resolved action visible to the application context BEFORE the
-        // controller is constructed, so constructor-registered (action-scoped)
-        // middleware reads the correct action. This fixes the previous ordering
-        // bug where the action was assigned to the outgoing controller instance.
         Application::$app->controller->action = $action;
-
-        // Run route-level middleware before instantiating the controller/action.
         $this->runMiddleware($route['middleware'], $action);
 
-        $controller = new $controllerClass();
+        $controller         = new $controllerClass();
         Application::$app->controller = $controller;
-        // Preserve the action on the freshly built controller too.
         $controller->action = $action;
 
-        // Route parameter values are passed positionally to the action, after
-        // the request (e.g. show(Request $r, string $id)).
         return call_user_func([$controller, $action], $this->request, ...array_values($params));
     }
 
-    /**
-     * Executes the route-level middleware pipeline.
-     *
-     * @param array<int, array{0: string, 1: array<int, string>}> $middleware
-     * @param string $action The resolved action (for action-scoped middleware).
-     * @return void
-     */
+    /** @param array<int, array{0: string, 1: array<int, string>}> $middleware */
     private function runMiddleware(array $middleware, string $action): void
     {
         foreach ($middleware as [$middlewareClass, $actions]) {
-            // When no actions are listed, the middleware applies to every action
-            // on the route; otherwise reuse the action-scoped contract.
-            $scoped = empty($actions) ? [$action] : $actions;
+            $scoped   = empty($actions) ? [$action] : $actions;
             $instance = new $middlewareClass($scoped);
             $instance->execute();
         }
     }
 
-    /**
-     * Sends an error status and renders the matching error view.
-     *
-     * @param int $status The HTTP status code.
-     * @param string $view The error view to render.
-     * @return string The rendered error page.
-     */
     private function abort(int $status, string $view): string
     {
-        // NOTE: setStateCode is renamed to setStatusCode in T08 (alias kept).
-        $this->response->setStateCode($status);
+        $this->response->setStatusCode($status);
         Application::$app->controller->layout = 'auth';
         return $this->renderView($view);
     }
 
     /**
-     * Renders a view inside the active layout.
+     * Render a view inside the active layout — delegates to View.
      *
-     * @param string $view The view name.
-     * @param array<string, mixed> $params The view parameters.
-     * @return array|bool|string The rendered page.
+     * @param array<string, mixed> $params
      */
-    public function renderView($view, array $params = []): array|bool|string
+    public function renderView(string $view, array $params = []): string
     {
-        $layoutContent = $this->layoutContent();
-        $viewContent = $this->renderViewContent($view, $params);
-        return str_replace('{{content}}', $viewContent, $layoutContent);
+        return Application::$app->view->renderView($view, $params);
     }
 
     /**
-     * Renders the active layout.
-     *
-     * @return bool|string The layout content.
+     * Render pre-built content inside the active layout — delegates to View.
      */
-    protected function layoutContent(): bool|string
+    public function renderContent(string $viewContent): string
     {
-        $layout = Application::$app->controller->layout;
-        ob_start();
-        include_once __DIR__ . "/../views/layouts/$layout.php";
-        return ob_get_clean();
-    }
-
-    /**
-     * Renders a view's body content.
-     *
-     * @param string $view The view name.
-     * @param array<string, mixed> $params The view parameters.
-     * @return array|bool|string The rendered content.
-     */
-    protected function renderViewContent($view, array $params = []): array|bool|string
-    {
-        foreach ($params as $key => $param) {
-            $$key = $param;
-        }
-        ob_start();
-        include_once Application::$ROOT_DIR . "/views/$view.php";
-        return ob_get_clean();
-    }
-
-    /**
-     * Renders pre-built content inside the active layout.
-     *
-     * @param string $viewContent The body content.
-     * @return array|bool|string The rendered page.
-     */
-    public function renderContent($viewContent): array|bool|string
-    {
-        $layoutContent = $this->layoutContent();
-        return str_replace('{{content}}', $viewContent, $layoutContent);
+        return Application::$app->view->renderContent($viewContent);
     }
 }

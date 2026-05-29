@@ -62,8 +62,7 @@ class AuthController extends Controller
                 $userId = Session::get('user');
                 $userModel = $this->userService->getUserById($userId);
 
-                // Set cookie
-                setcookie("member_login", $userId, time() + 3600 * 24 * 30);
+                $this->authService->setRememberToken((string) $userId);
 
                 if ($userModel->getRole() === 'admin') {
                     return $this->intended('/admin');

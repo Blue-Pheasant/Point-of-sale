@@ -2,141 +2,113 @@
 
 namespace app\Core;
 
-use Exception;
+use app\Exception\ForbiddenException;
+use app\Exception\ForLoginException;
+use app\Exception\NotFoundException;
+use app\Middlewares\CsrfMiddleware;
+use Throwable;
 
 /**
- * Class Application
+ * Application bootstrap and central exception handler.
  *
- * This class is responsible for handling the application operations.
- * It uses the Router, Request, Response, Controller, Database, Session, and View classes.
- *
- * @package app\Core
+ * Exception mapping:
+ *   ForLoginException  → redirect to /login (stores intended URL)
+ *   ForbiddenException → 403 + error view
+ *   NotFoundException  → 404 + error view
+ *   Any other          → 500 + error view (stack trace shown only when APP_DEBUG=true)
  */
 class Application
 {
-    /**
-     * @var string $EVENT_BEFORE_REQUEST The event before the request.
-     */
-    const EVENT_BEFORE_REQUEST = 'beforeRequest';
+    public const EVENT_BEFORE_REQUEST = 'beforeRequest';
+    public const EVENT_AFTER_REQUEST  = 'afterRequest';
 
-    /**
-     * @var string $EVENT_AFTER_REQUEST The event after the request.
-     */
-    const EVENT_AFTER_REQUEST = 'afterRequest';
-
-    /**
-     * @var array $eventListeners The event listeners.
-     */
     protected array $eventListeners = [];
 
-    /**
-     * @var Application $app The application instance.
-     */
     public static Application $app;
+    public static string      $ROOT_DIR;
 
-    /**
-     * @var string $ROOT_DIR The root directory of the application.
-     */
-    public static string $ROOT_DIR;
-
-    /**
-     * @var string $userClass The user class.
-     */
-    public string $userClass;
-
-    /**
-     * @var string $layout The layout of the application.
-     * Default is 'main'.
-     */
-    public string $layout = 'main';
-
-    /**
-     * @var Router $router The router instance.
-     */
-    public Router $router;
-
-    /**
-     * @var Request $request The request instance.
-     */
-    public Request $request;
-
-    /**
-     * @var Response $response The response instance.
-     */
-    public Response $response;
-
-    /**
-     * @var ?Controller $controller The controller instance.
-     */
+    public string      $userClass;
+    public string      $layout = 'main';
+    public Router      $router;
+    public Request     $request;
+    public Response    $response;
     public ?Controller $controller = null;
+    public Database    $db;
+    public Session     $session;
+    public View        $view;
 
-    /**
-     * @var Database $db The database instance.
-     */
-    public Database $db;
-
-    /**
-     * @var Session $session The session instance.
-     */
-    public Session $session;
-
-    /**
-     * @var View $view The view instance.
-     */
-    public View $view;
-
-    /**
-     * Application constructor.
-     *
-     * Initializes the application with the root directory and configuration.
-     *
-     * @param string $rootDir The root directory of the application.
-     * @param array $config The configuration of the application.
-     */
     public function __construct(string $rootDir, array $config)
     {
         $this->userClass = $config['userClass'];
-        self::$ROOT_DIR = $rootDir;
-        self::$app = $this;
+        self::$ROOT_DIR  = $rootDir;
+        self::$app       = $this;
         $this->controller = new Controller();
-        $this->request = new Request();
-        $this->response = new Response();
-        $this->router = new Router($this->request, $this->response);
-        $this->db = new Database($config['db']);
-        $this->session = new Session();
-        $this->view = new View();
+        $this->request    = new Request();
+        $this->response   = new Response();
+        $this->router     = new Router($this->request, $this->response);
+        $this->db         = new Database($config['db']);
+        $this->session    = new Session();
+        $this->view       = new View();
     }
 
-    /**
-     * Bootstraps the application.
-     *
-     * This method triggers the EVENT_BEFORE_REQUEST event, then tries to resolve the current route.
-     * If the route is resolved successfully, it echoes the result. If an exception is thrown during
-     * route resolution, it catches the exception and echoes an error view, passing the exception to the view.
-     *
-     * @return void
-     */
     public function bootstrap(): void
     {
         $this->triggerEvent(self::EVENT_BEFORE_REQUEST);
+        // CSRF check runs before routing so every mutation request is protected.
+        (new CsrfMiddleware())->execute();
         try {
             echo $this->router->resolve();
-        } catch (Exception $e) {
-            echo $this->router->renderView('_error', [
-                'exception' => $e,
-            ]);
+        } catch (Throwable $e) {
+            echo $this->handleException($e);
         }
     }
 
     /**
-     * Triggers an event.
+     * Map an exception to an HTTP status + view and render the error page.
      *
-     * This method triggers the specified event by calling all the callbacks registered for this event.
-     * If no callbacks are registered for the event, it does nothing.
-     *
-     * @param string $eventName The name of the event to trigger.
-     * @return void
+     * @return string The rendered error HTML.
      */
+    protected function handleException(Throwable $e): string
+    {
+        $debug = filter_var($_ENV['APP_DEBUG'] ?? false, FILTER_VALIDATE_BOOLEAN);
+
+        if ($e instanceof ForLoginException) {
+            // Intended URL already stored in the constructor.
+            $this->response->redirect('/login');
+            return '';
+        }
+
+        if ($e instanceof ForbiddenException) {
+            $this->response->setStatusCode(403);
+            $this->controller->layout = 'auth';
+            return $this->router->renderView('_error', [
+                'exception' => $debug ? $e : null,
+                'statusCode' => 403,
+                'message'    => 'Bạn không có quyền truy cập trang này.',
+            ]);
+        }
+
+        if ($e instanceof NotFoundException) {
+            $this->response->setStatusCode(404);
+            $this->controller->layout = 'auth';
+            return $this->router->renderView('_404', []);
+        }
+
+        // Unexpected error → 500.
+        $this->response->setStatusCode(500);
+        $this->controller->layout = 'auth';
+
+        if (!$debug) {
+            error_log((string) $e);
+        }
+
+        return $this->router->renderView('_error', [
+            'exception'  => $debug ? $e : null,
+            'statusCode' => 500,
+            'message'    => 'Đã xảy ra lỗi không mong muốn. Vui lòng thử lại sau.',
+        ]);
+    }
+
     public function triggerEvent(string $eventName): void
     {
         $callbacks = $this->eventListeners[$eventName] ?? [];
@@ -145,29 +117,11 @@ class Application
         }
     }
 
-    /**
-     * Registers an event listener.
-     *
-     * This method registers a callback for the specified event.
-     *
-     * @param string $eventName The name of the event to listen for.
-     * @param callable $callback The callback to call when the event is triggered.
-     * @return void
-     */
     public function on(string $eventName, callable $callback): void
     {
         $this->eventListeners[$eventName][] = $callback;
     }
 
-    /**
-     * Triggers an event.
-     *
-     * This method triggers the specified event by calling all the callbacks registered for this event.
-     * If no callbacks are registered for the event, it does nothing.
-     *
-     * @param string $routeClass
-     * @return void
-     */
     public function useRoute(string $routeClass): void
     {
         $route = new $routeClass();

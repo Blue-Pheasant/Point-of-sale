@@ -35,7 +35,7 @@ $userModel = AuthUser::authUser();
       <ul class="sidebar-nav">
         <li class="sidebar-brand">
           <a>
-            Hello, <?= $userModel->getDisplayName() ?>
+            Hello, <?= e($userModel->getDisplayName()) ?>
           </a>
         </li>
           <li>

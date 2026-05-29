@@ -2,13 +2,8 @@
 
 namespace app\Exception;
 
-class NotFoundException extends \Exception
+class NotFoundException extends \RuntimeException
 {
     protected $message = 'Not found';
-    protected $code = 403;
-
-    public function __construct()
-    {
-        return $this->message;
-    }
+    protected $code    = 404;
 }

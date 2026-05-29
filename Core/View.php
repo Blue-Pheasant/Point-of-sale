@@ -2,62 +2,80 @@
 
 namespace app\Core;
 
-
 /**
- * Class View
+ * Single rendering engine for the entire application.
  *
- * This class is responsible for handling the views of the application.
- *
- * @package app\Core
+ * Router delegates to this class; duplicate render logic in Router is kept
+ * only as thin wrappers that call through here.
  */
 class View
 {
-    /**
-     * @var string $title The title of the view.
-     */
     public string $title = '';
 
     /**
-     * Method renderView
+     * Render a view wrapped in its layout.
      *
-     * Renders the view with the layout.
+     * Resolves the active layout from the current controller (falls back to
+     * Application::$layout when no controller is set).
      *
-     * @param string $view The view to be rendered.
-     * @param array $params The parameters to be passed to the view.
-     * @return string
+     * @param string               $view   View name relative to views/ (no .php).
+     * @param array<string, mixed> $params Variables extracted into the view.
+     * @return string The fully rendered HTML page.
      */
-    public function renderView(string $view, array $params): string
+    public function renderView(string $view, array $params = []): string
     {
         $layoutName = Application::$app->layout;
         if (Application::$app->controller) {
             $layoutName = Application::$app->controller->layout;
         }
-        $viewContent = $this->renderViewOnly($view, $params);
-        ob_start();
-        include_once Application::$ROOT_DIR . "/views/layouts/$layoutName.php";
-        $layoutContent = ob_get_clean();
+        $viewContent   = $this->renderViewOnly($view, $params);
+        $layoutContent = $this->renderLayout($layoutName);
         return str_replace('{{content}}', $viewContent, $layoutContent);
     }
 
     /**
-     * Renders a view without a layout.
+     * Render only the view body without a layout.
      *
-     * This method takes a view name and an associative array of parameters.
-     * It extracts the parameters into variables that can be used in the view.
-     * It then starts output buffering and includes the view file.
-     * Finally, it returns the contents of the output buffer and cleans the buffer.
-     *
-     * @param string $view The name of the view to render.
-     * @param array $params An associative array of parameters to extract into variables for the view.
-     * @return string The rendered view.
-    */
-    public function renderViewOnly(string $view, array $params): string
+     * @param string               $view
+     * @param array<string, mixed> $params
+     * @return string
+     */
+    public function renderViewOnly(string $view, array $params = []): string
     {
         foreach ($params as $key => $value) {
             $$key = $value;
         }
         ob_start();
-        include_once Application::$ROOT_DIR . "/views/$view.php";
-        return ob_get_clean();
+        include Application::$ROOT_DIR . "/views/$view.php";
+        return (string) ob_get_clean();
+    }
+
+    /**
+     * Render pre-built content inside the active layout.
+     *
+     * @param string $viewContent Already-rendered body HTML.
+     * @return string
+     */
+    public function renderContent(string $viewContent): string
+    {
+        $layoutName = Application::$app->layout;
+        if (Application::$app->controller) {
+            $layoutName = Application::$app->controller->layout;
+        }
+        $layoutContent = $this->renderLayout($layoutName);
+        return str_replace('{{content}}', $viewContent, $layoutContent);
+    }
+
+    /**
+     * Render a layout file by name.
+     *
+     * @param string $layout Layout name (e.g. 'main', 'admin', 'auth').
+     * @return string
+     */
+    public function renderLayout(string $layout): string
+    {
+        ob_start();
+        include Application::$ROOT_DIR . "/views/layouts/$layout.php";
+        return (string) ob_get_clean();
     }
 }
