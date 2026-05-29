@@ -7,6 +7,7 @@ use app\Models\Order;
 use app\Models\OrderItem;
 use app\Common\Pagination;
 use app\Common\Query;
+use app\Common\QueryBuilder;
 use PDO;
 
 class OrderService
@@ -23,13 +24,18 @@ class OrderService
         $limit = $pagerCondition['limit'];
         $page = $pagerCondition['page'] ;
         
-        $totalCount = Query::getCount("SELECT * FROM orders WHERE status = '$status' AND deleted_at IS NULL");
+        $totalCount = Query::getCount(
+            'SELECT * FROM orders WHERE status = :status AND deleted_at IS NULL',
+            ['status' => $status]
+        );
         $pagination = Pagination::paginate($limit, $page, $totalCount);
-        
+
         $offset = $pagination['offset'];
-        $query = Query::get('orders', [], [], $limit, $offset);
-        
-        $req = $this->db->query($query)->fetchAll();
+        $req = QueryBuilder::table('orders')
+            ->limit((int) $limit)
+            ->offset((int) $offset)
+            ->get();
+
         $list = [];
 
         foreach ($req as $item) {
@@ -122,12 +128,16 @@ class OrderService
 
     public function getTotalOrderNumber($status = ''): int
     {
-        $query = "SELECT COUNT(*) FROM users";
+        // NOTE: the `FROM users` table here is a known bug, fixed in T13.
+        $query = 'SELECT COUNT(*) FROM users';
+        $params = [];
         if ($status) {
-            $query .= " WHERE status = '$status'";
+            $query .= ' WHERE status = :status';
+            $params['status'] = $status;
         }
-        $stmt = $this->db->query($query);
-        return $stmt->fetchColumn();
+        $stmt = Query::prepare($query, $params);
+        $stmt->execute();
+        return (int) $stmt->fetchColumn();
     }
 
     public function getTotalInCome(): int
@@ -164,11 +174,12 @@ class OrderService
     public function getOrderItemsByOrderId($orderId)
     {
         $list = [];
-        $req = $this->db->query(
-            "SELECT *
-            FROM order_detail JOIN products ON order_detail.product_id = products.id 
-            WHERE order_detail.order_id = '$orderId';"
-        )->fetchAll();
+        $req = Query::getAll(
+            'SELECT *
+            FROM order_detail JOIN products ON order_detail.product_id = products.id
+            WHERE order_detail.order_id = :orderId',
+            ['orderId' => $orderId]
+        );
 
         foreach ($req as $item) {
             $list[] = new OrderItem($item);

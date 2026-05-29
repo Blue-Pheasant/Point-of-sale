@@ -6,6 +6,7 @@ use app\Core\Database;
 use app\Models\User;
 use app\Common\Pagination;
 use app\Common\Query;
+use app\Common\QueryBuilder;
 use Exception;
 use PDO;
 
@@ -47,11 +48,13 @@ class UserService
         
         $totalCount = Query::getCount("SELECT * FROM users WHERE deleted_at IS NULL");
         $pagination = Pagination::paginate($limit, $page, $totalCount);
-        
+
         $offset = $pagination['offset'];
-        $query = Query::get('users', [], [], $limit, $offset);
-        
-        $req = $this->db->query($query)->fetchAll();
+        $req = QueryBuilder::table('users')
+            ->limit((int) $limit)
+            ->offset((int) $offset)
+            ->get();
+
         $list = [];
 
         foreach ($req as $item) {
@@ -97,13 +100,19 @@ class UserService
         $limit = $pagerCondition['limit'] ?? 10;
         $page = $pagerCondition['page'] ?? 1;
         
-        $totalCount = Query::getCount("SELECT * FROM users WHERE role_id = $roleId AND deleted_at IS NULL");
+        $totalCount = Query::getCount(
+            'SELECT * FROM users WHERE role_id = :roleId AND deleted_at IS NULL',
+            ['roleId' => $roleId]
+        );
         $pagination = Pagination::paginate($limit, $page, $totalCount);
-        
+
         $offset = $pagination['offset'];
-        $query = Query::get('users', [], ['role_id' => $roleId], $limit, $offset);
-        
-        $req = $this->db->query($query)->fetchAll();
+        $req = QueryBuilder::table('users')
+            ->where('role_id', $roleId)
+            ->limit((int) $limit)
+            ->offset((int) $offset)
+            ->get();
+
         $list = [];
 
         foreach ($req as $item) {
@@ -126,20 +135,7 @@ class UserService
      */
     public function createUser(array $data): bool
     {
-        $query = "INSERT INTO users (";
-        $columns = [];
-        $values = [];
-
-        foreach ($data as $key => $value) {
-            $columns[] = $key;
-            $values[] = "'$value'";
-        }
-        $query .= implode(", ", $columns);
-        $query .= ") VALUES (";
-        $query .= implode(", ", $values);
-        $query .= ")";
-
-        return $this->db->exec($query);
+        return QueryBuilder::table('users')->insert($data);
     }
 
     /**
@@ -153,15 +149,9 @@ class UserService
      */
     public function updateUser(string $id, array $data): bool
     {
-        $query = "UPDATE users SET ";
-        $set = [];
-        foreach ($data as $key => $value) {
-            $set[] = "$key = '$value'";
-        }
-        $query .= implode(", ", $set);
-        $query .= " WHERE id = $id";
-
-        return $this->db->exec($query);
+        return QueryBuilder::table('users')
+            ->where('id', $id)
+            ->update($data);
     }
 
     /**
@@ -174,8 +164,9 @@ class UserService
      */
     public function deleteUser(string $id): bool
     {
-        $query = "DELETE FROM users WHERE id = $id";
-        return $this->db->exec($query);
+        return QueryBuilder::table('users')
+            ->where('id', $id)
+            ->delete();
     }
 
     /**
@@ -192,12 +183,18 @@ class UserService
         $limit = $pagerCondition['limit'];
         $page = $pagerCondition['page'] ;
 
-        $totalCount = Query::getCount("SELECT * FROM users WHERE name LIKE '%$keyword%' AND deleted_at IS NULL"); 
+        $totalCount = Query::getCount(
+            'SELECT * FROM users WHERE name LIKE :keyword AND deleted_at IS NULL',
+            ['keyword' => "%$keyword%"]
+        );
         $pagination = Pagination::paginate($limit, $page, $totalCount);
 
         $offset = $pagination['offset'];
-        $query = Query::get('users', [], ['name' => $keyword], $limit, $offset);
-        $req = $this->db->query($query)->fetchAll();
+        $req = QueryBuilder::table('users')
+            ->whereLike('name', $keyword)
+            ->limit((int) $limit)
+            ->offset((int) $offset)
+            ->get();
 
         $list = array_map(function ($item) {
             return new User($item);

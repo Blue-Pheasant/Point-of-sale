@@ -6,6 +6,7 @@ use app\Core\Database;
 use app\Models\Product;
 use app\Common\Pagination;
 use app\Common\Query;
+use app\Common\QueryBuilder;
 use PDO;
 
 class ProductService
@@ -21,14 +22,16 @@ class ProductService
     {
         $limit = $pagerCondition['limit'];
         $page = $pagerCondition['page'] ;
-        
+
         $totalCount = Query::getCount("SELECT * FROM products WHERE deleted_at IS NULL");
         $pagination = Pagination::paginate($limit, $page, $totalCount);
-        
+
         $offset = $pagination['offset'];
-        $query = Query::get('products', [], [], $limit, $offset);
-        
-        $req = $this->db->query($query)->fetchAll();
+        $req = QueryBuilder::table('products')
+            ->limit((int) $limit)
+            ->offset((int) $offset)
+            ->get();
+
         $list = [];
 
         foreach ($req as $item) {
@@ -48,9 +51,9 @@ class ProductService
         $stmt = $this->db->prepare("SELECT * FROM products WHERE id = :id LIMIT 1");
         $stmt->bindValue(':id', $id, PDO::PARAM_STR);
         $stmt->execute();
-    
+
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
-    
+
         return $result ? new Product($result) : null;
     }
 
@@ -69,7 +72,9 @@ class ProductService
         // Fetch products with pagination
         $offset = $pagination['offset'];
         $query .= " LIMIT :limit OFFSET :offset";
-        $params = array_merge($params, ['limit' => $limit, 'offset' => $offset]);
+
+        // Cast to int so they bind as PDO::PARAM_INT under non-emulated prepares.
+        $params = array_merge($params, ['limit' => (int) $limit, 'offset' => (int) $offset]);
         $products = Query::getAll($query, $params);
 
         $list = array_map(function ($item) {
@@ -106,18 +111,18 @@ class ProductService
     public function updateProduct(int $id, array $data): bool
     {
         $this->db->beginTransaction();
-    
+
         try {
             $product = new Product($data);
             $product->id = $id;
             $result = $product->update();
-    
+
             if ($result) {
                 $this->db->commit();
             } else {
                 $this->db->rollBack();
             }
-    
+
             return $result;
         } catch (\Exception $e) {
             $this->db->rollBack();
@@ -128,17 +133,17 @@ class ProductService
     public function deleteProduct(int $id): bool
     {
         $this->db->beginTransaction();
-    
+
         try {
             $product = new Product(['id' => $id]);
             $result = $product->delete();
-    
+
             if ($result) {
                 $this->db->commit();
             } else {
                 $this->db->rollBack();
             }
-    
+
             return $result;
         } catch (\Exception $e) {
             $this->db->rollBack();
@@ -151,18 +156,22 @@ class ProductService
         $limit = $pagerCondition['limit'];
         $page = $pagerCondition['page'] ;
 
-        $query = "SELECT * FROM products WHERE name LIKE '%$keyword%'";
-        $totalCount = Query::getCount("SELECT * FROM products WHERE name LIKE '%$keyword%'"); 
+        $totalCount = QueryBuilder::table('products')
+            ->whereLike('name', $keyword)
+            ->count();
         $pagination = Pagination::paginate($limit, $page, $totalCount);
 
         // Fetch products with pagination
         $offset = $pagination['offset'];
-        $query = Query::get('products', [], ['name' => $keyword], $limit, $offset);
-        $req = $this->db->query($query)->fetchAll();
-        
+        $req = QueryBuilder::table('products')
+            ->whereLike('name', $keyword)
+            ->limit((int) $limit)
+            ->offset((int) $offset)
+            ->get();
+
         $list = array_map(function ($item) {
             return new Product($item);
-        }, $products);
+        }, $req);
 
         $result = [
             'list' => $list,
