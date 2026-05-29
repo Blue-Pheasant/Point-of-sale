@@ -2,11 +2,10 @@
 
 namespace app\Services;
 
+use app\Common\Pagination;
+use app\Common\QueryBuilder;
 use app\Core\Database;
 use app\Models\User;
-use app\Common\Pagination;
-use app\Common\Query;
-use app\Common\QueryBuilder;
 use Exception;
 use PDO;
 
@@ -41,30 +40,14 @@ class UserService
      * @param array $pagerCondition The pagination conditions.
      * @return array Returns an array containing the list of users and the pagination details.
      */
-    public function getAllUsers(array $pagerCondition) : array
+    public function getAllUsers(array $pagerCondition): array
     {
-        $limit = $pagerCondition['limit'];
-        $page = $pagerCondition['page'] ;
-        
-        $totalCount = Query::getCount("SELECT * FROM users WHERE deleted_at IS NULL");
-        $pagination = Pagination::paginate($limit, $page, $totalCount);
-
-        $offset = $pagination['offset'];
-        $req = QueryBuilder::table('users')
-            ->limit((int) $limit)
-            ->offset((int) $offset)
-            ->get();
-
-        $list = [];
-
-        foreach ($req as $item) {
-            $list[] = new User($item);
-        }
-
-        return [
-            'list' => $list,
-            'pagination' => $pagination
-        ];
+        return Pagination::paginateResults(
+            QueryBuilder::table('users')->whereRaw('deleted_at IS NULL'),
+            (int) $pagerCondition['limit'],
+            (int) $pagerCondition['page'],
+            fn ($item) => new User($item)
+        );
     }
 
     /**
@@ -77,12 +60,12 @@ class UserService
      */
     public function getUserById(string $id): ?User
     {
-        $stmt = $this->db->prepare("SELECT * FROM users WHERE id = :id AND deleted_at IS NULL LIMIT 1");
+        $stmt = $this->db->prepare('SELECT * FROM users WHERE id = :id AND deleted_at IS NULL LIMIT 1');
         $stmt->bindValue(':id', $id, PDO::PARAM_STR);
         $stmt->execute();
-    
+
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
-    
+
         return $result ? new User($result) : null;
     }
 
@@ -97,32 +80,14 @@ class UserService
      */
     public function getUserRole(string $roleId, array $pagerCondition = []): array
     {
-        $limit = $pagerCondition['limit'] ?? 10;
-        $page = $pagerCondition['page'] ?? 1;
-        
-        $totalCount = Query::getCount(
-            'SELECT * FROM users WHERE role_id = :roleId AND deleted_at IS NULL',
-            ['roleId' => $roleId]
+        return Pagination::paginateResults(
+            QueryBuilder::table('users')
+                ->where('role_id', $roleId)
+                ->whereRaw('deleted_at IS NULL'),
+            (int) ($pagerCondition['limit'] ?? 10),
+            (int) ($pagerCondition['page'] ?? 1),
+            fn ($item) => new User($item)
         );
-        $pagination = Pagination::paginate($limit, $page, $totalCount);
-
-        $offset = $pagination['offset'];
-        $req = QueryBuilder::table('users')
-            ->where('role_id', $roleId)
-            ->limit((int) $limit)
-            ->offset((int) $offset)
-            ->get();
-
-        $list = [];
-
-        foreach ($req as $item) {
-            $list[] = new User($item);
-        }
-
-        return [
-            'list' => $list,
-            'pagination' => $pagination
-        ];
     }
 
     /**
@@ -178,32 +143,16 @@ class UserService
      * @param array $pagerCondition The pagination conditions.
      * @return array Returns an array containing the list of users and the pagination details.
      */
-    public function findUserByKeyWord(string $keyword, array $pagerCondition) : array
+    public function findUserByKeyWord(string $keyword, array $pagerCondition): array
     {
-        $limit = $pagerCondition['limit'];
-        $page = $pagerCondition['page'] ;
-
-        $totalCount = Query::getCount(
-            'SELECT * FROM users WHERE name LIKE :keyword AND deleted_at IS NULL',
-            ['keyword' => "%$keyword%"]
+        return Pagination::paginateResults(
+            QueryBuilder::table('users')
+                ->whereLike('name', $keyword)
+                ->whereRaw('deleted_at IS NULL'),
+            (int) $pagerCondition['limit'],
+            (int) $pagerCondition['page'],
+            fn ($item) => new User($item)
         );
-        $pagination = Pagination::paginate($limit, $page, $totalCount);
-
-        $offset = $pagination['offset'];
-        $req = QueryBuilder::table('users')
-            ->whereLike('name', $keyword)
-            ->limit((int) $limit)
-            ->offset((int) $offset)
-            ->get();
-
-        $list = array_map(function ($item) {
-            return new User($item);
-        }, $req);
-
-        return [
-            'list' => $list,
-            'pagination' => $pagination
-        ];
     }
 
     /**
@@ -216,12 +165,12 @@ class UserService
      */
     public function getUserByEmail(string $email): ?User
     {
-        $stmt = $this->db->prepare("SELECT * FROM users WHERE email = :email AND deleted_at IS NULL LIMIT 1");
+        $stmt = $this->db->prepare('SELECT * FROM users WHERE email = :email AND deleted_at IS NULL LIMIT 1');
         $stmt->bindValue(':email', $email, PDO::PARAM_STR);
         $stmt->execute();
-    
+
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
-    
+
         return $result ? new User($result) : null;
     }
 
@@ -235,12 +184,12 @@ class UserService
      */
     public function getUserByPhone($phone): ?User
     {
-        $stmt = $this->db->prepare("SELECT * FROM users WHERE phone = :phone AND deleted_at IS NULL LIMIT 1");
+        $stmt = $this->db->prepare('SELECT * FROM users WHERE phone = :phone AND deleted_at IS NULL LIMIT 1');
         $stmt->bindValue(':phone', $phone, PDO::PARAM_STR);
         $stmt->execute();
-    
+
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
-    
+
         return $result ? new User($result) : null;
     }
 
@@ -258,18 +207,18 @@ class UserService
     {
         try {
             $this->db->beginTransaction();
-        
-            $query = "UPDATE users SET deleted_at = NOW() WHERE id = :id AND deleted_at IS NULL";
+
+            $query = 'UPDATE users SET deleted_at = NOW() WHERE id = :id AND deleted_at IS NULL';
             $statement = $this->db->prepare($query);
             $statement->bindValue(':id', $id);
             $result = $statement->execute();
-        
+
             if ($result) {
                 $this->db->commit();
             } else {
                 $this->db->rollBack();
             }
-        
+
             return $result;
         } catch (Exception $e) {
             $this->db->rollBack();
@@ -279,7 +228,7 @@ class UserService
 
     public function getTotalUserNumber(): int
     {
-        $query = "SELECT COUNT(*) FROM users WHERE deleted_at IS NULL";
+        $query = 'SELECT COUNT(*) FROM users WHERE deleted_at IS NULL';
         $stmt = $this->db->query($query);
         return $stmt->fetchColumn();
     }

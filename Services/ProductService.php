@@ -20,30 +20,12 @@ class ProductService
 
     public function getAllProducts($pagerCondition): array
     {
-        $limit = $pagerCondition['limit'];
-        $page = $pagerCondition['page'] ;
-
-        $totalCount = Query::getCount('SELECT * FROM products WHERE deleted_at IS NULL');
-        $pagination = Pagination::paginate($limit, $page, $totalCount);
-
-        $offset = $pagination['offset'];
-        $req = QueryBuilder::table('products')
-            ->limit((int) $limit)
-            ->offset((int) $offset)
-            ->get();
-
-        $list = [];
-
-        foreach ($req as $item) {
-            $list[] = new Product($item);
-        }
-
-        $result = [
-            'list' => $list,
-            'pagination' => $pagination,
-        ];
-
-        return $result;
+        return Pagination::paginateResults(
+            QueryBuilder::table('products')->whereRaw('deleted_at IS NULL'),
+            (int) $pagerCondition['limit'],
+            (int) $pagerCondition['page'],
+            fn ($item) => new Product($item)
+        );
     }
 
     public function getProductById($id): ?Product
@@ -59,32 +41,12 @@ class ProductService
 
     public function getProductCategory($categoryId, $pagerCondition = []): array
     {
-        $limit = $pagerCondition['limit'] ?? 10;
-        $page = $pagerCondition['page'] ?? 1;
-
-        $query = 'SELECT * FROM products WHERE category_id = :categoryId';
-        $params = ['categoryId' => $categoryId];
-
-        // Get total count for pagination
-        $totalCount = Query::getCount('SELECT * FROM products WHERE category_id = :categoryId', $params);
-        $pagination = Pagination::paginate($limit, $page, $totalCount);
-
-        // Fetch products with pagination
-        $offset = $pagination['offset'];
-        $query .= ' LIMIT :limit OFFSET :offset';
-
-        // Cast to int so they bind as PDO::PARAM_INT under non-emulated prepares.
-        $params = array_merge($params, ['limit' => (int) $limit, 'offset' => (int) $offset]);
-        $products = Query::getAll($query, $params);
-
-        $list = array_map(function ($item) {
-            return new Product($item);
-        }, $products);
-
-        return [
-            'list' => $list,
-            'pagination' => $pagination,
-        ];
+        return Pagination::paginateResults(
+            QueryBuilder::table('products')->where('category_id', $categoryId),
+            (int) ($pagerCondition['limit'] ?? 10),
+            (int) ($pagerCondition['page'] ?? 1),
+            fn ($item) => new Product($item)
+        );
     }
 
     public function createProduct(array $data): bool
@@ -163,27 +125,12 @@ class ProductService
      */
     public function searchProducts(string $keyword, array $pagerCondition): array
     {
-        $limit = $pagerCondition['limit'];
-        $page = $pagerCondition['page'];
-
-        $totalCount = QueryBuilder::table('products')
-            ->whereLike('name', $keyword)
-            ->count();
-        $pagination = Pagination::paginate((int) $limit, (int) $page, $totalCount);
-
-        $offset = $pagination['offset'];
-        $req = QueryBuilder::table('products')
-            ->whereLike('name', $keyword)
-            ->limit((int) $limit)
-            ->offset((int) $offset)
-            ->get();
-
-        $list = array_map(fn ($item) => new Product($item), $req);
-
-        return [
-            'list' => $list,
-            'pagination' => $pagination,
-        ];
+        return Pagination::paginateResults(
+            QueryBuilder::table('products')->whereLike('name', $keyword),
+            (int) $pagerCondition['limit'],
+            (int) $pagerCondition['page'],
+            fn ($item) => new Product($item)
+        );
     }
 
     /**

@@ -4,6 +4,7 @@ namespace app\Models;
 
 use app\Core\Database;
 use app\Core\DBModel;
+use app\Services\PricingService;
 
 class CartItem extends DBModel
 {
@@ -55,20 +56,15 @@ class CartItem extends DBModel
 
     public function getTotalPrice()
     {
-        $unitPrice = $this->price;
-        if ($this->size === 'Medium') {
-            $unitPrice += 3000;
-        } else if ($this->size === 'Large') {
-            $unitPrice += 6000;
-        }
-        return $unitPrice * $this->quantity;
+        return PricingService::lineTotal((float) $this->price, (string) $this->size, (int) $this->quantity);
     }
-    
+
     public static function getCartItems($cartId): array
     {
         $list = [];
         $db = Database::getInstance();
-        $req = $db->query("SELECT 
+        $req = $db->query(
+            "SELECT 
             cart_item.id, cart_item.product_id, cart_item.cart_id, cart_item.quantity,
             cart_item.note, products.image_url, cart_item.size, products.name,
             products.price, products.description

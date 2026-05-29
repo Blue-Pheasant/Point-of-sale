@@ -2,13 +2,18 @@
 
 namespace app\Models;
 
-use app\Core\Application;
-use app\Core\CartModel;
 use app\Core\Database;
 use app\Core\DBModel;
 
 class Order extends DBModel
 {
+    /** Order lifecycle status values (column `orders.status`). */
+    public const STATUS_PROCESSING = 'processing';
+    public const STATUS_ACCEPTED   = 'accepted';
+    public const STATUS_REJECTED   = 'rejected';
+    public const STATUS_DONE       = 'done';
+    public const STATUS_CANCEL     = 'cancel';
+
     public string $id = '';
     public string $user_id = '';
     public string $payment_method = '';
@@ -24,15 +29,42 @@ class Order extends DBModel
         parent::__construct($attributes);
     }
 
-    public function getId () { return $this->id; }
-    public function getUserId () { return $this->user_id; }
-    public function getPaymentMethod() { return $this->payment_method; }
-    public function getStatus() { return $this->status; }
-    public function setStatus($status) { $this->status = $status; }
-    public function getDeliveryName() { return $this->delivery_name; }
-    public function getDeliveryAddress() { return $this->delivery_address; }
-    public function getDeliveryPhone() { return $this->delivery_phone; }
-    public function getDateTime() { return $this->created_at; }
+    public function getId()
+    {
+        return $this->id;
+    }
+    public function getUserId()
+    {
+        return $this->user_id;
+    }
+    public function getPaymentMethod()
+    {
+        return $this->payment_method;
+    }
+    public function getStatus()
+    {
+        return $this->status;
+    }
+    public function setStatus($status)
+    {
+        $this->status = $status;
+    }
+    public function getDeliveryName()
+    {
+        return $this->delivery_name;
+    }
+    public function getDeliveryAddress()
+    {
+        return $this->delivery_address;
+    }
+    public function getDeliveryPhone()
+    {
+        return $this->delivery_phone;
+    }
+    public function getDateTime()
+    {
+        return $this->created_at;
+    }
 
     public static function tableName(): string
     {
@@ -66,7 +98,7 @@ class Order extends DBModel
 
     public static function create($user_id, $payment_method, $delivery_name, $delivery_phone, $delivery_address)
     {
-        $order = new Order(uniqid(), $user_id, $payment_method, 'processing', $delivery_name, $delivery_phone, $delivery_address);
+        $order = new Order(uniqid(), $user_id, $payment_method, self::STATUS_PROCESSING, $delivery_name, $delivery_phone, $delivery_address);
         $order->save();
     }
 
@@ -117,7 +149,7 @@ class Order extends DBModel
         return $list;
     }
 
-    public function getDisplay() : string
+    public function getDisplay(): string
     {
         return $this->display;
     }

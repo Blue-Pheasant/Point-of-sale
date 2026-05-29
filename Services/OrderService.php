@@ -21,33 +21,14 @@ class OrderService
 
     public function getAllOrders($pagerCondition, $status): array
     {
-        $limit = $pagerCondition['limit'];
-        $page = $pagerCondition['page'] ;
-
-        $totalCount = Query::getCount(
-            'SELECT * FROM orders WHERE status = :status AND deleted_at IS NULL',
-            ['status' => $status]
+        return Pagination::paginateResults(
+            QueryBuilder::table('orders')
+                ->where('status', $status)
+                ->whereRaw('deleted_at IS NULL'),
+            (int) $pagerCondition['limit'],
+            (int) $pagerCondition['page'],
+            fn ($item) => new Order($item)
         );
-        $pagination = Pagination::paginate($limit, $page, $totalCount);
-
-        $offset = $pagination['offset'];
-        $req = QueryBuilder::table('orders')
-            ->limit((int) $limit)
-            ->offset((int) $offset)
-            ->get();
-
-        $list = [];
-
-        foreach ($req as $item) {
-            $list[] = new Order($item);
-        }
-
-        $result = [
-            'list' => $list,
-            'pagination' => $pagination,
-        ];
-
-        return $result;
     }
 
     public function getOrderByUserId($userId): array
@@ -90,37 +71,24 @@ class OrderService
 
     public function acceptOrder($orderId): bool
     {
-        try {
-            $this->db->beginTransaction();
-
-            $stmt = $this->db->prepare("UPDATE orders SET status = 'accepted' WHERE id = :id");
-            $stmt->bindValue(':id', $orderId, PDO::PARAM_STR);
-            $stmt->execute();
-
-            $this->db->commit();
-
-            return true;
-        } catch (\Exception $e) {
-            $this->db->rollBack();
-            error_log($e->getMessage());
-            return false;
-        }
+        return $this->setOrderStatus($orderId, Order::STATUS_ACCEPTED);
     }
 
     public function rejectOrder($orderId): bool
     {
+        return $this->setOrderStatus($orderId, Order::STATUS_REJECTED);
+    }
+
+    /**
+     * Sets an order's status (param-bound). Returns false (and logs) on error.
+     */
+    private function setOrderStatus($orderId, string $status): bool
+    {
         try {
-            $this->db->beginTransaction();
-
-            $stmt = $this->db->prepare("UPDATE orders SET status = 'rejected' WHERE id = :id");
-            $stmt->bindValue(':id', $orderId, PDO::PARAM_STR);
-            $stmt->execute();
-
-            $this->db->commit();
-
-            return true;
+            return QueryBuilder::table('orders')
+                ->where('id', $orderId)
+                ->update(['status' => $status]);
         } catch (\Exception $e) {
-            $this->db->rollBack();
             error_log($e->getMessage());
             return false;
         }
@@ -143,8 +111,8 @@ class OrderService
 
     public function getTotalInCome(): int
     {
-        $query = "
-            SELECT
+        $req = Query::getAll(
+            'SELECT
                 products.price,
                 order_detail.quantity,
                 order_detail.size
@@ -153,24 +121,20 @@ class OrderService
                 INNER JOIN products ON order_detail.product_id = products.id
                 INNER JOIN orders ON order_detail.order_id = orders.id
             WHERE
-                orders.status = 'done'";
+                orders.status = :status',
+            ['status' => Order::STATUS_DONE]
+        );
 
-        $stmt = $this->db->query($query);
-        $req = $stmt->fetchAll();
         $totalIncome = 0;
-
         foreach ($req as $item) {
-            $unitPrice = $item['price'];
-            if ($item['size'] == 'Medium') {
-                $unitPrice += 3000;
-            } elseif ($item['size'] == 'Large') {
-                $unitPrice += 6000;
-            }
-
-            $totalIncome += $unitPrice * $item['quantity'];
+            $totalIncome += PricingService::lineTotal(
+                (float) $item['price'],
+                (string) $item['size'],
+                (int) $item['quantity']
+            );
         }
 
-        return $totalIncome;
+        return (int) $totalIncome;
     }
 
     public function getOrderItemsByOrderId($orderId)

@@ -1,19 +1,20 @@
 <?php
+
 /*
     controllers/category/index.php
 */
 
 namespace app\Controllers;
 
+use app\Auth\AuthUser;
 use app\Core\Controller;
+use app\Core\Request;
 use app\Core\Session;
+use app\Middlewares\AuthMiddleware;
 use app\Models\CartItem;
 use app\Models\Order;
 use app\Models\OrderDetail;
-use app\Core\Request;
 use app\Services\CartService;
-use app\Middlewares\AuthMiddleware;
-use app\Auth\AuthUser;
 
 /**
  * Class CartController
@@ -73,7 +74,7 @@ class CartController extends Controller
             if ($action == 'delete') {
                 $this->deleteItem($cartId, $id);
                 $deletedItem = true;
-            } else if($action == 'deletemenu') {
+            } elseif ($action == 'deletemenu') {
                 $this->deleteItem($cartId, $id);
                 $deletedItem = true;
                 $this->redirect('menu');
@@ -87,7 +88,7 @@ class CartController extends Controller
             'items' => $items,
             'user' => $user,
             'deletedItem' => $deletedItem,
-            'updatedItem' => false
+            'updatedItem' => false,
         ]);
     }
 
@@ -150,13 +151,13 @@ class CartController extends Controller
 
         // Create order
         $order = new Order([
-            'id' => uniqid(), 
-            'user_id' => $userId, 
-            'payment_method' => $paymentMethod, 
-            'status' => 'processing', 
-            'delivery_name' => $deliveryName, 
-            'delivery_phone' => $deliveryPhone, 
-            'delivery_address' => $deliveryAddress
+            'id' => uniqid(),
+            'user_id' => $userId,
+            'payment_method' => $paymentMethod,
+            'status' => Order::STATUS_PROCESSING,
+            'delivery_name' => $deliveryName,
+            'delivery_phone' => $deliveryPhone,
+            'delivery_address' => $deliveryAddress,
         ]);
 
         // Save order
@@ -170,7 +171,7 @@ class CartController extends Controller
                 'order_id' => $order->id,
                 'quantity' => $item->quantity,
                 'note' => $item->note,
-                'size' => $item->size
+                'size' => $item->size,
             ]);
             $orderDetail->save();
         }
