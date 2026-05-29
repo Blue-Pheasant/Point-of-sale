@@ -2,6 +2,7 @@
 
 namespace app\Core;
 
+use app\Common\QueryBuilder;
 use PDOStatement;
 
 /**
@@ -71,81 +72,60 @@ abstract class DBModel extends Model
     /**
      * Saves the current model to the database.
      *
-     * This method inserts a new record into the table associated with this model.
-     * It prepares an INSERT SQL statement, binds the model's attributes to the statement, and executes it.
-     * It always returns true after executing the statement.
+     * Inserts a new record into the table associated with this model using the
+     * param-bound {@see QueryBuilder}, and returns the real result of the
+     * underlying statement execution.
      *
-     * @return bool Always returns true.
+     * @return bool True when the insert succeeds, false otherwise.
      */
     public function save(): bool
     {
-        $tableName = $this->tableName();
-        $attributes = $this->attributes();
-        $params = array_map(fn ($attr) => ":$attr", $attributes);
-
-        $statement = self::prepare("INSERT INTO $tableName (" . implode(", ", $attributes) . ")
-            VALUES (" . implode(', ', $params) . ");
-        ");
-
-        foreach ($attributes as $attribute) {
-            $statement->bindValue(":$attribute", $this->{$attribute});
+        $data = [];
+        foreach ($this->attributes() as $attribute) {
+            $data[$attribute] = $this->{$attribute};
         }
 
-        $statement->execute();
-        return true;
+        return QueryBuilder::table($this->tableName())->insert($data);
     }
 
     /**
-     * Marks a record as deleted in the database.
+     * Soft-deletes the current record.
      *
-     * This method sets the 'deleted_at' field of the record with the current model's id to the current timestamp.
-     * It prepares and executes an UPDATE SQL statement to do this.
-     * It always returns true after executing the statement.
+     * Sets the `deleted_at` column of the record matching this model's id to
+     * the current timestamp, and returns the real execution result.
      *
-     * @return bool Always returns true.
+     * @return bool True when the update succeeds, false otherwise.
      */
     public function delete() : bool
     {
         $tableName = $this->tableName();
-        $id = $this->id;
 
+        // `deleted_at = NOW()` is a constant SQL expression (no user value), so
+        // it is set via a raw statement while the id stays param-bound.
         $statement = self::prepare("UPDATE $tableName SET deleted_at = NOW() WHERE id = :id");
-        $statement->bindValue(':id', $id);
+        $statement->bindValue(':id', $this->id);
 
-        $statement->execute();
-        return true;
+        return $statement->execute();
     }
 
     /**
-     * Updates the record in the database.
+     * Updates the current record in the database.
      *
-     * This method prepares and executes an UPDATE SQL statement to update the record with the current model's id.
-     * It sets the attributes of the model to the corresponding fields in the database.
-     * It always returns true after executing the statement.
+     * Sets every model attribute on the row matching this model's id using the
+     * param-bound {@see QueryBuilder}, and returns the real execution result.
      *
-     * @return bool Always returns true.
+     * @return bool True when the update succeeds, false otherwise.
      */
     public function update() : bool
     {
-        $tableName = $this->tableName();
-        $attributes = $this->attributes();
-        $id = $this->id;
-
-        $sql = "UPDATE $tableName SET ";
-        foreach ($attributes as $attribute) {
-            $sql .= "$attribute = :$attribute, ";
+        $data = [];
+        foreach ($this->attributes() as $attribute) {
+            $data[$attribute] = $this->{$attribute};
         }
-        $sql = rtrim($sql, ', ') . " WHERE id = :id";
 
-        $statement = self::prepare($sql);
-
-        foreach ($attributes as $attribute) {
-            $statement->bindValue(":$attribute", $this->{$attribute});
-        }
-        $statement->bindValue(':id', $id);
-
-        $statement->execute();
-        return true;
+        return QueryBuilder::table($this->tableName())
+            ->where('id', $this->id)
+            ->update($data);
     }
 
     /**
@@ -162,23 +142,72 @@ abstract class DBModel extends Model
     }
 
     /**
-     * Executes a SQL query and returns the result.
+     * Finds the first record matching the given equality conditions.
      *
-     * This method takes an SQL query as input, executes it, and returns the result.
+     * Conditions are joined with ` AND ` and every value is bound as a
+     * parameter, so multi-condition lookups such as
+     * `findOne(['a' => 1, 'b' => 2])` produce valid, injection-safe SQL.
      *
-     * @param array $where The SQL query to execute.
-     * @return bool|object The result of the query.
+     * @param array<string, mixed> $where Equality conditions (column => value).
+     * @return bool|object The hydrated model on a hit, false when none match.
      */
     public static function findOne(array $where): bool|object
     {
         $tableName = static::tableName();
         $attributes = array_keys($where);
-        $sql = implode("AND", array_map(fn ($attr) => "$attr = :$attr", $attributes));
+        $sql = implode(' AND ', array_map(fn ($attr) => "$attr = :$attr", $attributes));
         $statement = self::prepare("SELECT * FROM $tableName WHERE $sql");
         foreach ($where as $key => $item) {
             $statement->bindValue(":$key", $item);
         }
         $statement->execute();
         return $statement->fetchObject(static::class);
+    }
+
+    /**
+     * Finds a single record by its primary key.
+     *
+     * @param mixed $id The primary key value.
+     * @return object|null The hydrated model, or null when not found.
+     */
+    public static function find(mixed $id): ?object
+    {
+        $record = static::findOne([static::primaryKey() => $id]);
+        return $record === false ? null : $record;
+    }
+
+    /**
+     * Returns all records matching the given equality conditions.
+     *
+     * Every value is bound as a parameter via {@see QueryBuilder}; results are
+     * hydrated into instances of the calling model class.
+     *
+     * @param array<string, mixed> $where Equality conditions (column => value).
+     * @return array<int, object> The hydrated models (empty when none match).
+     */
+    public static function where(array $where = []): array
+    {
+        $builder = QueryBuilder::table(static::tableName());
+        foreach ($where as $column => $value) {
+            $builder->where($column, $value);
+        }
+
+        $statement = self::prepare($builder->toSql());
+        foreach ($builder->getParams() as $name => $value) {
+            $statement->bindValue(":$name", $value);
+        }
+        $statement->execute();
+
+        return $statement->fetchAll(\PDO::FETCH_CLASS, static::class);
+    }
+
+    /**
+     * Returns every record in the model's table.
+     *
+     * @return array<int, object> The hydrated models.
+     */
+    public static function findAll(): array
+    {
+        return static::where();
     }
 }
