@@ -107,9 +107,10 @@ class CartController extends Controller
         $user = AuthUser::authUser();
 
         // Get the order information
+        $body = $request->getBody();
         $id = $request->getParam('cart_item_id');
-        $newNote = $request->getBody()['note'];
-        $newQuantity = $request->getBody()['quantity'];
+        $newNote = $body['note'] ?? '';
+        $newQuantity = (int) ($body['quantity'] ?? 0);
 
         $cartDetailModel = $this->cartService->getCartItem($id);
         $cartDetailModel->note = $newNote;
@@ -143,11 +144,12 @@ class CartController extends Controller
         $cartId = Session::get('cart_id');
         $items = $this->cartService->getCartItems($cartId);
 
+        $body = $request->getBody();
         $userId = AuthUser::authUser()->id;
-        $deliveryName = $request->getBody()['name'];
-        $deliveryPhone = $request->getBody()['phone_number'];
-        $deliveryAddress = $request->getBody()['address'];
-        $paymentMethod = $request->getBody()['payment_method'];
+        $deliveryName = $body['name'] ?? '';
+        $deliveryPhone = $body['phone_number'] ?? '';
+        $deliveryAddress = $body['address'] ?? '';
+        $paymentMethod = $body['payment_method'] ?? '';
 
         // Create order
         $order = new Order([
@@ -159,6 +161,12 @@ class CartController extends Controller
             'delivery_phone' => $deliveryPhone,
             'delivery_address' => $deliveryAddress,
         ]);
+
+        // Reject incomplete delivery info instead of saving a broken order.
+        if (!$order->validate()) {
+            $this->setFlash('fail', 'Vui lòng nhập đầy đủ thông tin giao hàng hợp lệ.');
+            return $this->redirect('/cart');
+        }
 
         // Save order
         $order->save();

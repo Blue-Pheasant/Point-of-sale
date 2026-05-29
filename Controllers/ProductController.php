@@ -1,4 +1,5 @@
 <?php
+
 /*
     controllers/product.php
 */
@@ -6,13 +7,14 @@
 namespace app\Controllers;
 
 use app\Core\Controller;
-use app\Models\Product;
 use app\Core\Request;
 use app\Core\Session;
-use app\Models\CartItem;
-use app\Services\ProductService;
 use app\Middlewares\AdminMiddleware;
 use app\Middlewares\AuthMiddleware;
+use app\Models\CartItem;
+use app\Models\Product;
+use app\Services\ProductService;
+
 /**
  * Class ProductController
  *
@@ -53,7 +55,7 @@ class ProductController extends Controller
         $products = $this->productService->getAllProducts(['limit' => 10, 'page' => 1])['list'];
         $this->setLayout('admin');
         return $this->render('/admin/products/products', [
-            'products' => $products
+            'products' => $products,
         ]);
     }
 
@@ -79,13 +81,13 @@ class ProductController extends Controller
                 $this->setFlash('fail', 'Create product fail');
             }
         }
-        
+
         // Fetch all products
         $products = Product::getAllProducts();
 
         $this->setLayout('admin');
         return $this->render('/admin/products/create_product', [
-            'productModel' => $products
+            'productModel' => $products,
         ]);
     }
 
@@ -111,7 +113,7 @@ class ProductController extends Controller
 
         $this->setLayout('admin');
         return $this->render('/admin/products/delete_product', [
-            'productModel' => $productModel
+            'productModel' => $productModel,
         ]);
     }
 
@@ -138,7 +140,7 @@ class ProductController extends Controller
 
         $this->setLayout('admin');
         return $this->render('/admin/products/edit_product', [
-            'productModel' => $productModel
+            'productModel' => $productModel,
         ]);
     }
 
@@ -157,7 +159,7 @@ class ProductController extends Controller
 
         $this->setLayout('admin');
         return $this->render('/admin/products/details_product', [
-            'productModel' => $productModel
+            'productModel' => $productModel,
         ]);
     }
 
@@ -177,9 +179,10 @@ class ProductController extends Controller
         $addToCart = false;
 
         if ($request->getMethod() === 'post') {
-            $size = $request->getBody()['size'];
-            $note = $request->getBody()['note'];
-            $quantity = $request->getBody()['quantity'];
+            $body = $request->getBody();
+            $size = $body['size'] ?? '';
+            $note = $body['note'] ?? '';
+            $quantity = (int) ($body['quantity'] ?? 0);
             $cartId = Session::get('cart_id');
             $cartDetail = new CartItem([
                 'id' => uniqid(),
@@ -187,14 +190,18 @@ class ProductController extends Controller
                 'cart_id' => $cartId,
                 'quantity' => $quantity,
                 'note' => $note,
-                'size' => $size
+                'size' => $size,
             ]);
 
-            $cartDetail->save();
-            $addToCart = true;
+            if ($cartDetail->validate()) {
+                $cartDetail->save();
+                $addToCart = true;
+            } else {
+                $this->setFlash('fail', 'Vui lòng chọn kích cỡ và số lượng hợp lệ.');
+            }
         }
 
-        $data = array('product' => $product, 'addToCart' => $addToCart);
+        $data = ['product' => $product, 'addToCart' => $addToCart];
         return $this->render('product_detail', $data);
     }
 }

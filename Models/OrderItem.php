@@ -51,7 +51,11 @@ class OrderItem extends DBModel
 
     public function rules(): array
     {
-        return [];
+        return [
+            'product_id' => [self::RULE_REQUIRED],
+            'order_id'   => [self::RULE_REQUIRED],
+            'quantity'   => [self::RULE_REQUIRED, [self::RULE_MIN_VALUE, 'minint' => 1]],
+        ];
     }
 
     public function save(): bool

@@ -93,7 +93,14 @@ class Order extends DBModel
 
     public function rules(): array
     {
-        return [];
+        return [
+            'user_id'          => [self::RULE_REQUIRED],
+            'payment_method'   => [self::RULE_REQUIRED],
+            'status'           => [self::RULE_REQUIRED],
+            'delivery_name'    => [self::RULE_REQUIRED],
+            'delivery_phone'   => [self::RULE_REQUIRED, self::RULE_NUMBER],
+            'delivery_address' => [self::RULE_REQUIRED],
+        ];
     }
 
     public static function create($user_id, $payment_method, $delivery_name, $delivery_phone, $delivery_address)

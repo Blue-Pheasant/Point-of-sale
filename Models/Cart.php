@@ -2,8 +2,6 @@
 
 namespace app\Models;
 
-use app\Core\Application;
-use app\Core\CartModel;
 use app\Core\Database;
 use app\Core\DBModel;
 
@@ -39,7 +37,10 @@ class Cart extends DBModel
 
     public function rules(): array
     {
-        return [];
+        return [
+            'user_id' => [self::RULE_REQUIRED],
+            'status'  => [self::RULE_REQUIRED],
+        ];
     }
 
     public static function create($id)

@@ -73,10 +73,10 @@ class Product extends DBModel
         return $this->image_url;
     }
 
-    public static function getNameById($id)
+    public static function getNameById($id): string
     {
         $productModel = Product::getProductDetail($id);
-        return $productModel->getName();
+        return $productModel?->getName() ?? '';
     }
 
     public function getCategory()
@@ -145,13 +145,13 @@ class Product extends DBModel
         return $list;
     }
 
-    public static function getProductDetail($id)
+    public static function getProductDetail($id): ?Product
     {
-        $db = Database::getInstance();
-        $req = $db->query("SELECT * FROM products WHERE id = '$id'");
-        $item = $req->fetchAll()[0];
-        $product = new Product($item);
-        return $product;
+        $row = \app\Common\QueryBuilder::table('products')
+            ->where('id', $id)
+            ->first();
+
+        return $row ? new Product($row) : null;
     }
 
     public static function getProductsByCategory($category_id)

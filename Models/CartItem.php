@@ -46,7 +46,12 @@ class CartItem extends DBModel
 
     public function rules(): array
     {
-        return [];
+        return [
+            'product_id' => [self::RULE_REQUIRED],
+            'cart_id'    => [self::RULE_REQUIRED],
+            'size'       => [self::RULE_REQUIRED],
+            'quantity'   => [self::RULE_REQUIRED, [self::RULE_MIN_VALUE, 'minint' => 1]],
+        ];
     }
 
     public function save(): bool
