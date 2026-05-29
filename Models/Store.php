@@ -100,12 +100,6 @@ class Store extends DBModel
         ];
     }
 
-    public function save(): bool
-    {
-        $this->id = uniqid();
-        return parent::save();
-    }
-
     public function getDisplayInfo(): string
     {
         return $this->name . ' ' . $this->address . ' ' . $this->phone;

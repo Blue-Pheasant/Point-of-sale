@@ -137,7 +137,6 @@ class User extends UserModel
     public function saveAdmin($role)
     {
         $this->password = password_hash($this->password, PASSWORD_DEFAULT);
-        $this->id = uniqid();
         $this->role = $role;
 
         return parent::save();
@@ -146,7 +145,6 @@ class User extends UserModel
     public function save(): bool
     {
         $this->password = password_hash($this->password, PASSWORD_DEFAULT);
-        $this->id = uniqid();
         $this->role = 'client';
 
         return parent::save();

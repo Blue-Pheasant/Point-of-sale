@@ -126,12 +126,6 @@ class Product extends DBModel
         ];
     }
 
-    public function save(): bool
-    {
-        $this->id = uniqid();
-        return parent::save();
-    }
-
     public static function getAllProducts()
     {
         $list = [];

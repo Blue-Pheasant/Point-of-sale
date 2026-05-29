@@ -45,7 +45,7 @@ class Cart extends DBModel
 
     public static function create($id)
     {
-        $cart = new Cart(['id' => uniqid(), 'user_id' => $id, 'status' => 'processing']);
+        $cart = new Cart(['user_id' => $id, 'status' => 'processing']);
         $cart->save();
     }
 
@@ -53,11 +53,6 @@ class Cart extends DBModel
     {
         $db = Database::getInstance();
         $db->query("UPDATE cart SET status = 'done' WHERE id = '$id'");
-    }
-
-    public function save(): bool
-    {
-        return parent::save();
     }
 
     public static function findCart($id)

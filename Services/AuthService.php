@@ -4,6 +4,7 @@ namespace app\Services;
 
 use app\Core\Database;
 use app\Core\Session;
+use app\Core\Uuid;
 use app\Models\User;
 use PDO;
 
@@ -87,7 +88,7 @@ class AuthService
     {
         $token    = bin2hex(random_bytes(32));
         $hash     = hash('sha256', $token);
-        $id       = uniqid('rt_', true);
+        $id       = Uuid::v4();
         $expires  = date('Y-m-d H:i:s', time() + 3600 * 24 * self::COOKIE_DAYS);
 
         $stmt = $this->db->prepare(

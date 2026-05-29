@@ -50,9 +50,4 @@ class OrderDetail extends DBModel
             'quantity'   => [self::RULE_REQUIRED, [self::RULE_MIN_VALUE, 'minint' => 1]],
         ];
     }
-
-    public function save(): bool
-    {
-        return parent::save();
-    }
 }

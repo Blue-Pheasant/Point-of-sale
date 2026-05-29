@@ -80,6 +80,12 @@ abstract class DBModel extends Model
      */
     public function save(): bool
     {
+        // Generate the primary key centrally (UUID v4) when the caller has not
+        // set one, so models no longer scatter their own uniqid() calls.
+        if (!isset($this->id) || $this->id === '') {
+            $this->id = Uuid::v4();
+        }
+
         $data = [];
         foreach ($this->attributes() as $attribute) {
             $data[$attribute] = $this->{$attribute};
@@ -96,7 +102,7 @@ abstract class DBModel extends Model
      *
      * @return bool True when the update succeeds, false otherwise.
      */
-    public function delete() : bool
+    public function delete(): bool
     {
         $tableName = $this->tableName();
 
@@ -116,7 +122,7 @@ abstract class DBModel extends Model
      *
      * @return bool True when the update succeeds, false otherwise.
      */
-    public function update() : bool
+    public function update(): bool
     {
         $data = [];
         foreach ($this->attributes() as $attribute) {

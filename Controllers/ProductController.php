@@ -185,7 +185,6 @@ class ProductController extends Controller
             $quantity = (int) ($body['quantity'] ?? 0);
             $cartId = Session::get('cart_id');
             $cartDetail = new CartItem([
-                'id' => uniqid(),
                 'product_id' => $id,
                 'cart_id' => $cartId,
                 'quantity' => $quantity,

@@ -54,11 +54,6 @@ class CartItem extends DBModel
         ];
     }
 
-    public function save(): bool
-    {
-        return parent::save();
-    }
-
     public function getTotalPrice()
     {
         return PricingService::lineTotal((float) $this->price, (string) $this->size, (int) $this->quantity);

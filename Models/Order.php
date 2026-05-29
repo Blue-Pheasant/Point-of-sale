@@ -21,7 +21,7 @@ class Order extends DBModel
     public string $delivery_name = '';
     public string $delivery_phone = '';
     public string $delivery_address = '';
-    public $display = '';
+    public string $display = '';
     public string $created_at = '';
 
     public function __construct($attributes = [])
@@ -29,39 +29,39 @@ class Order extends DBModel
         parent::__construct($attributes);
     }
 
-    public function getId()
+    public function getId(): string
     {
         return $this->id;
     }
-    public function getUserId()
+    public function getUserId(): string
     {
         return $this->user_id;
     }
-    public function getPaymentMethod()
+    public function getPaymentMethod(): string
     {
         return $this->payment_method;
     }
-    public function getStatus()
+    public function getStatus(): string
     {
         return $this->status;
     }
-    public function setStatus($status)
+    public function setStatus(string $status): void
     {
         $this->status = $status;
     }
-    public function getDeliveryName()
+    public function getDeliveryName(): string
     {
         return $this->delivery_name;
     }
-    public function getDeliveryAddress()
+    public function getDeliveryAddress(): string
     {
         return $this->delivery_address;
     }
-    public function getDeliveryPhone()
+    public function getDeliveryPhone(): string
     {
         return $this->delivery_phone;
     }
-    public function getDateTime()
+    public function getDateTime(): string
     {
         return $this->created_at;
     }
@@ -103,15 +103,17 @@ class Order extends DBModel
         ];
     }
 
-    public static function create($user_id, $payment_method, $delivery_name, $delivery_phone, $delivery_address)
+    public static function create($user_id, $payment_method, $delivery_name, $delivery_phone, $delivery_address): void
     {
-        $order = new Order(uniqid(), $user_id, $payment_method, self::STATUS_PROCESSING, $delivery_name, $delivery_phone, $delivery_address);
+        $order = new Order([
+            'user_id'          => $user_id,
+            'payment_method'   => $payment_method,
+            'status'           => self::STATUS_PROCESSING,
+            'delivery_name'    => $delivery_name,
+            'delivery_phone'   => $delivery_phone,
+            'delivery_address' => $delivery_address,
+        ]);
         $order->save();
-    }
-
-    public function save(): bool
-    {
-        return parent::save();
     }
 
     public static function getAllOrders($status)
@@ -140,20 +142,32 @@ class Order extends DBModel
         return $list;
     }
 
-    public static function getOrderItem($order_id)
+    /**
+     * Returns the items belonging to the given order id.
+     *
+     * @return array<int, OrderItem>
+     */
+    public static function getOrderItems($order_id): array
     {
-        $list = [];
-        $db = Database::getInstance();
-        $req = $db->query(
-            "SELECT *
-            FROM cart_item JOIN products ON cart_item.product_id = products.id 
-            WHERE cart_item.cart_id = '$order_id';"
+        $rows = \app\Common\Query::getAll(
+            'SELECT *
+            FROM cart_item JOIN products ON cart_item.product_id = products.id
+            WHERE cart_item.cart_id = :order_id',
+            ['order_id' => $order_id]
         );
 
-        foreach ($req->fetchAll() as $item) {
-            $list[] = new OrderItem($item);
-        }
-        return $list;
+        return array_map(fn ($item) => new OrderItem($item), $rows);
+    }
+
+    /**
+     * @deprecated Use {@see self::getOrderItems()}; this method returns a list,
+     *     so the plural name is correct. Kept as a backward-compatible alias.
+     *
+     * @return array<int, OrderItem>
+     */
+    public static function getOrderItem($order_id): array
+    {
+        return self::getOrderItems($order_id);
     }
 
     public function getDisplay(): string

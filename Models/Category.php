@@ -59,12 +59,6 @@ class Category extends DBModel
         ];
     }
 
-    public function save(): bool
-    {
-        $this->id = uniqid();
-        return parent::save();
-    }
-
     public static function get($id)
     {
         $row = \app\Common\QueryBuilder::table('categories')

@@ -153,7 +153,6 @@ class CartController extends Controller
 
         // Create order
         $order = new Order([
-            'id' => uniqid(),
             'user_id' => $userId,
             'payment_method' => $paymentMethod,
             'status' => Order::STATUS_PROCESSING,
@@ -174,7 +173,6 @@ class CartController extends Controller
         // Create order details
         foreach ($items as $item) {
             $orderDetail = new OrderDetail([
-                'id' => uniqid(),
                 'product_id' => $item->product_id,
                 'order_id' => $order->id,
                 'quantity' => $item->quantity,

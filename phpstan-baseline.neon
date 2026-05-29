@@ -101,16 +101,6 @@ parameters:
 			path: Models/LoginForm.php
 
 		-
-			message: "#^Class app\\\\Models\\\\Order constructor invoked with 7 parameters, 0\\-1 required\\.$#"
-			count: 1
-			path: Models/Order.php
-
-		-
-			message: "#^Parameter \\#1 \\$attributes of class app\\\\Models\\\\Order constructor expects array, string given\\.$#"
-			count: 1
-			path: Models/Order.php
-
-		-
 			message: "#^Access to an undefined property app\\\\Models\\\\OrderItem\\:\\:\\$list\\.$#"
 			count: 1
 			path: Models/OrderItem.php
