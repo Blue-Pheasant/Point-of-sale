@@ -2,12 +2,12 @@
 
 namespace app\Services;
 
-use app\Core\Database;
-use app\Models\Order;
-use app\Models\OrderItem;
 use app\Common\Pagination;
 use app\Common\Query;
 use app\Common\QueryBuilder;
+use app\Core\Database;
+use app\Models\Order;
+use app\Models\OrderItem;
 use PDO;
 
 class OrderService
@@ -19,11 +19,11 @@ class OrderService
         $this->db = Database::getInstance();
     }
 
-    public function getAllOrders($pagerCondition, $status) : array
+    public function getAllOrders($pagerCondition, $status): array
     {
         $limit = $pagerCondition['limit'];
         $page = $pagerCondition['page'] ;
-        
+
         $totalCount = Query::getCount(
             'SELECT * FROM orders WHERE status = :status AND deleted_at IS NULL',
             ['status' => $status]
@@ -44,7 +44,7 @@ class OrderService
 
         $result = [
             'list' => $list,
-            'pagination' => $pagination
+            'pagination' => $pagination,
         ];
 
         return $result;
@@ -52,39 +52,39 @@ class OrderService
 
     public function getOrderByUserId($userId): array
     {
-        $stmt = $this->db->prepare("SELECT * FROM orders WHERE user_id = :user_id AND deleted_at IS NULL");
+        $stmt = $this->db->prepare('SELECT * FROM orders WHERE user_id = :user_id AND deleted_at IS NULL');
         $stmt->bindValue(':user_id', $userId, PDO::PARAM_STR);
         $stmt->execute();
-    
+
         $req = $stmt->fetchAll(PDO::FETCH_ASSOC);
         $list = [];
 
         foreach ($req as $item) {
             $list[] = new Order($item);
         }
-    
+
         return $list;
     }
 
     public function getOrderById($id): ?Order
     {
-        $stmt = $this->db->prepare("SELECT * FROM orders WHERE id = :id LIMIT 1");
+        $stmt = $this->db->prepare('SELECT * FROM orders WHERE id = :id LIMIT 1');
         $stmt->bindValue(':id', $id, PDO::PARAM_STR);
         $stmt->execute();
-    
+
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
-    
+
         return $result ? new Order($result) : null;
     }
 
     public function getOrderItems($orderId): array
     {
-        $stmt = $this->db->prepare("SELECT * FROM order_items WHERE order_id = :order_id");
+        $stmt = $this->db->prepare('SELECT * FROM order_items WHERE order_id = :order_id');
         $stmt->bindValue(':order_id', $orderId, PDO::PARAM_STR);
         $stmt->execute();
-    
+
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    
+
         return $result ? $result : [];
     }
 
@@ -92,13 +92,13 @@ class OrderService
     {
         try {
             $this->db->beginTransaction();
-        
+
             $stmt = $this->db->prepare("UPDATE orders SET status = 'accepted' WHERE id = :id");
             $stmt->bindValue(':id', $orderId, PDO::PARAM_STR);
             $stmt->execute();
-        
+
             $this->db->commit();
-        
+
             return true;
         } catch (\Exception $e) {
             $this->db->rollBack();
@@ -111,13 +111,13 @@ class OrderService
     {
         try {
             $this->db->beginTransaction();
-        
+
             $stmt = $this->db->prepare("UPDATE orders SET status = 'rejected' WHERE id = :id");
             $stmt->bindValue(':id', $orderId, PDO::PARAM_STR);
             $stmt->execute();
-        
+
             $this->db->commit();
-        
+
             return true;
         } catch (\Exception $e) {
             $this->db->rollBack();
@@ -128,15 +128,16 @@ class OrderService
 
     public function getTotalOrderNumber($status = ''): int
     {
-        // NOTE: the `FROM users` table here is a known bug, fixed in T13.
-        $query = 'SELECT COUNT(*) FROM users';
+        $query = 'SELECT COUNT(*) FROM orders WHERE deleted_at IS NULL';
         $params = [];
         if ($status) {
-            $query .= ' WHERE status = :status';
+            $query .= ' AND status = :status';
             $params['status'] = $status;
         }
+
         $stmt = Query::prepare($query, $params);
         $stmt->execute();
+
         return (int) $stmt->fetchColumn();
     }
 
@@ -153,21 +154,22 @@ class OrderService
                 INNER JOIN orders ON order_detail.order_id = orders.id
             WHERE
                 orders.status = 'done'";
-    
+
         $stmt = $this->db->query($query);
         $req = $stmt->fetchAll();
         $totalIncome = 0;
-    
+
         foreach ($req as $item) {
             $unitPrice = $item['price'];
-            if($item['size'] == 'Medium') {
+            if ($item['size'] == 'Medium') {
                 $unitPrice += 3000;
-            } else if($item['size'] == 'Large') {
+            } elseif ($item['size'] == 'Large') {
                 $unitPrice += 6000;
             }
+
             $totalIncome += $unitPrice * $item['quantity'];
         }
-    
+
         return $totalIncome;
     }
 

@@ -2,11 +2,11 @@
 
 namespace app\Services;
 
-use app\Core\Database;
-use app\Models\Product;
 use app\Common\Pagination;
 use app\Common\Query;
 use app\Common\QueryBuilder;
+use app\Core\Database;
+use app\Models\Product;
 use PDO;
 
 class ProductService
@@ -18,12 +18,12 @@ class ProductService
         $this->db = Database::getInstance();
     }
 
-    public function getAllProducts($pagerCondition) : array
+    public function getAllProducts($pagerCondition): array
     {
         $limit = $pagerCondition['limit'];
         $page = $pagerCondition['page'] ;
 
-        $totalCount = Query::getCount("SELECT * FROM products WHERE deleted_at IS NULL");
+        $totalCount = Query::getCount('SELECT * FROM products WHERE deleted_at IS NULL');
         $pagination = Pagination::paginate($limit, $page, $totalCount);
 
         $offset = $pagination['offset'];
@@ -40,7 +40,7 @@ class ProductService
 
         $result = [
             'list' => $list,
-            'pagination' => $pagination
+            'pagination' => $pagination,
         ];
 
         return $result;
@@ -48,7 +48,7 @@ class ProductService
 
     public function getProductById($id): ?Product
     {
-        $stmt = $this->db->prepare("SELECT * FROM products WHERE id = :id LIMIT 1");
+        $stmt = $this->db->prepare('SELECT * FROM products WHERE id = :id LIMIT 1');
         $stmt->bindValue(':id', $id, PDO::PARAM_STR);
         $stmt->execute();
 
@@ -62,16 +62,16 @@ class ProductService
         $limit = $pagerCondition['limit'] ?? 10;
         $page = $pagerCondition['page'] ?? 1;
 
-        $query = "SELECT * FROM products WHERE category_id = :categoryId";
+        $query = 'SELECT * FROM products WHERE category_id = :categoryId';
         $params = ['categoryId' => $categoryId];
 
         // Get total count for pagination
-        $totalCount = Query::getCount("SELECT * FROM products WHERE category_id = :categoryId", $params);
+        $totalCount = Query::getCount('SELECT * FROM products WHERE category_id = :categoryId', $params);
         $pagination = Pagination::paginate($limit, $page, $totalCount);
 
         // Fetch products with pagination
         $offset = $pagination['offset'];
-        $query .= " LIMIT :limit OFFSET :offset";
+        $query .= ' LIMIT :limit OFFSET :offset';
 
         // Cast to int so they bind as PDO::PARAM_INT under non-emulated prepares.
         $params = array_merge($params, ['limit' => (int) $limit, 'offset' => (int) $offset]);
@@ -83,7 +83,7 @@ class ProductService
 
         return [
             'list' => $list,
-            'pagination' => $pagination
+            'pagination' => $pagination,
         ];
     }
 
@@ -151,17 +151,26 @@ class ProductService
         }
     }
 
-    public function findProductByKeyWord($keyword, $pagerCondition) : array
+    /**
+     * Searches products whose name matches the given keyword, with pagination.
+     *
+     * Uses the param-bound {@see QueryBuilder} (LIKE wildcards are bound, never
+     * concatenated), so the search is safe against SQL injection.
+     *
+     * @param string $keyword The keyword to match against the product name.
+     * @param array<string, mixed> $pagerCondition The pagination conditions (limit, page).
+     * @return array{list: array<int, Product>, pagination: array<string, mixed>}
+     */
+    public function searchProducts(string $keyword, array $pagerCondition): array
     {
         $limit = $pagerCondition['limit'];
-        $page = $pagerCondition['page'] ;
+        $page = $pagerCondition['page'];
 
         $totalCount = QueryBuilder::table('products')
             ->whereLike('name', $keyword)
             ->count();
-        $pagination = Pagination::paginate($limit, $page, $totalCount);
+        $pagination = Pagination::paginate((int) $limit, (int) $page, $totalCount);
 
-        // Fetch products with pagination
         $offset = $pagination['offset'];
         $req = QueryBuilder::table('products')
             ->whereLike('name', $keyword)
@@ -169,20 +178,29 @@ class ProductService
             ->offset((int) $offset)
             ->get();
 
-        $list = array_map(function ($item) {
-            return new Product($item);
-        }, $req);
+        $list = array_map(fn ($item) => new Product($item), $req);
 
-        $result = [
+        return [
             'list' => $list,
-            'pagination' => $pagination
+            'pagination' => $pagination,
         ];
-
-        return $result;
     }
 
-    public function getProductNumber() : int
+    /**
+     * @deprecated Use {@see self::searchProducts()} instead. Kept as a
+     *     backward-compatible alias for callers of the old name.
+     *
+     * @param string $keyword
+     * @param array<string, mixed> $pagerCondition
+     * @return array{list: array<int, Product>, pagination: array<string, mixed>}
+     */
+    public function findProductByKeyWord($keyword, $pagerCondition): array
     {
-        return Query::getCount("SELECT * FROM products");
+        return $this->searchProducts((string) $keyword, $pagerCondition);
+    }
+
+    public function getProductNumber(): int
+    {
+        return Query::getCount('SELECT * FROM products');
     }
 }

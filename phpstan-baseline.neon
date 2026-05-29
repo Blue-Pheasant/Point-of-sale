@@ -76,81 +76,6 @@ parameters:
 			path: Core/Form/Form.php
 
 		-
-			message: "#^Call to function array_merge\\(\\) on a separate line has no effect\\.$#"
-			count: 1
-			path: Core/FormRequest.php
-
-		-
-			message: "#^Call to an undefined method app\\\\Core\\\\Model\\:\\:labels\\(\\)\\.$#"
-			count: 1
-			path: Core/Model.php
-
-		-
-			message: "#^Access to an undefined property app\\\\Core\\\\UserModel\\:\\:\\$address\\.$#"
-			count: 1
-			path: Core/UserModel.php
-
-		-
-			message: "#^Access to an undefined property app\\\\Core\\\\UserModel\\:\\:\\$email\\.$#"
-			count: 1
-			path: Core/UserModel.php
-
-		-
-			message: "#^Access to an undefined property app\\\\Core\\\\UserModel\\:\\:\\$firstname\\.$#"
-			count: 1
-			path: Core/UserModel.php
-
-		-
-			message: "#^Access to an undefined property app\\\\Core\\\\UserModel\\:\\:\\$lastname\\.$#"
-			count: 1
-			path: Core/UserModel.php
-
-		-
-			message: "#^Access to an undefined property app\\\\Core\\\\UserModel\\:\\:\\$phone_number\\.$#"
-			count: 1
-			path: Core/UserModel.php
-
-		-
-			message: "#^Offset 'attribute' on 'email'\\|'number'\\|'required'\\|array\\{0\\: 'max', max\\: 10\\}\\|array\\{0\\: 'min', min\\: 10\\} on left side of \\?\\? does not exist\\.$#"
-			count: 1
-			path: Core/UserModel.php
-
-		-
-			message: "#^Offset 'class' does not exist on 'email'\\|'number'\\|'required'\\|array\\{0\\: 'max', max\\: 10\\}\\|array\\{0\\: 'min', min\\: 10\\}\\.$#"
-			count: 1
-			path: Core/UserModel.php
-
-		-
-			message: "#^Offset 'match' does not exist on 'email'\\|'number'\\|'required'\\|array\\{0\\: 'max', max\\: 10\\}\\|array\\{0\\: 'min', min\\: 10\\}\\.$#"
-			count: 1
-			path: Core/UserModel.php
-
-		-
-			message: "#^PHPDoc tag @var above a method has no effect\\.$#"
-			count: 2
-			path: Core/UserModel.php
-
-		-
-			message: "#^Result of && is always false\\.$#"
-			count: 1
-			path: Core/UserModel.php
-
-		-
-			message: "#^Strict comparison using \\=\\=\\= between 'e'\\|'email'\\|'max'\\|'min'\\|'n'\\|'number'\\|'r'\\|'required' and 'match' will always evaluate to false\\.$#"
-			count: 1
-			path: Core/UserModel.php
-
-		-
-			message: "#^Strict comparison using \\=\\=\\= between 'e'\\|'email'\\|'max'\\|'min'\\|'n'\\|'number'\\|'r'\\|'required' and 'unique' will always evaluate to false\\.$#"
-			count: 1
-			path: Core/UserModel.php
-
-		-
-			message: "#^Method app\\\\Exception\\\\NotFoundException\\:\\:__construct\\(\\) with return type void returns mixed but should not return anything\\.$#"
-			count: 1
-			path: Exception/NotFoundException.php
-
-		-
 			message: "#^Access to an undefined property app\\\\Models\\\\Cart\\:\\:\\$records\\.$#"
 			count: 1
 			path: Models/Cart.php
@@ -164,11 +89,6 @@ parameters:
 			message: "#^Access to an undefined property app\\\\Models\\\\CartItem\\:\\:\\$size\\.$#"
 			count: 1
 			path: Models/CartItem.php
-
-		-
-			message: "#^Comparison operation \"\\<\\=\" between 'max' and 30 is always false\\.$#"
-			count: 1
-			path: Models/Category.php
 
 		-
 			message: "#^Cannot access property \\$id on object\\|true\\.$#"
@@ -201,32 +121,7 @@ parameters:
 			path: Models/OrderItem.php
 
 		-
-			message: "#^Comparison operation \"\\<\\=\" between 'max' and 100 is always false\\.$#"
-			count: 1
-			path: Models/Product.php
-
-		-
-			message: "#^Comparison operation \"\\<\\=\" between 'max' and 50 is always false\\.$#"
-			count: 1
-			path: Models/Product.php
-
-		-
-			message: "#^Comparison operation \"\\>\\=\" between 'min' and 20 is always true\\.$#"
-			count: 1
-			path: Models/Product.php
-
-		-
 			message: "#^Access to an undefined property app\\\\Models\\\\Store\\:\\:\\$name\\.$#"
-			count: 1
-			path: Models/Store.php
-
-		-
-			message: "#^Comparison operation \"\\<\\=\" between 'max' and 1000 is always false\\.$#"
-			count: 1
-			path: Models/Store.php
-
-		-
-			message: "#^Comparison operation \"\\<\\=\" between 'max' and 13 is always false\\.$#"
 			count: 1
 			path: Models/Store.php
 

@@ -5,7 +5,6 @@ namespace app\Models;
 use app\Core\Database;
 use app\Core\DBModel;
 
-
 class Store extends DBModel
 {
     public string $id;
@@ -20,20 +19,50 @@ class Store extends DBModel
         parent::__construct($attributes);
     }
 
-    public function getId () { return $this->id; }
-    private function setId ($id) { $this->id = $id; }
+    public function getId()
+    {
+        return $this->id;
+    }
+    private function setId($id)
+    {
+        $this->id = $id;
+    }
 
-    public function getAddress() { return $this->address; }
-    private function setAddress($address) { $this->address = $address; }
+    public function getAddress()
+    {
+        return $this->address;
+    }
+    private function setAddress($address)
+    {
+        $this->address = $address;
+    }
 
-    public function getHotline() { return $this->phone; }
-    private function setHotline($phone) { $this->phone = $phone; }
-    
-    public function getStatus() { return $this->status; }
-    private function setStatus($status) { $this->status = $status; }
+    public function getHotline()
+    {
+        return $this->phone;
+    }
+    private function setHotline($phone)
+    {
+        $this->phone = $phone;
+    }
 
-    public function getOpentime() { return $this->open_time; }
-    private function setOpentime($open_time) { $this->open_time = $open_time; }
+    public function getStatus()
+    {
+        return $this->status;
+    }
+    private function setStatus($status)
+    {
+        $this->status = $status;
+    }
+
+    public function getOpentime()
+    {
+        return $this->open_time;
+    }
+    private function setOpentime($open_time)
+    {
+        $this->open_time = $open_time;
+    }
 
     public static function tableName(): string
     {
@@ -53,7 +82,7 @@ class Store extends DBModel
             'phone' => 'Số điện thoại',
             'description' => 'Giới thiệu về cửa hàng',
             'status' => 'Tình trạng cửa hàng',
-            'image_url' => 'Hình ảnh cửa hàng'
+            'image_url' => 'Hình ảnh cửa hàng',
         ];
     }
 
@@ -61,13 +90,13 @@ class Store extends DBModel
     {
         return $this->labels()[$attribute];
     }
-        
+
     public function rules(): array
     {
         return [
             'status' => [self::RULE_REQUIRED],
-            'phone' => [self::RULE_REQUIRED, [self::RULE_MAX, 'max' <= 13]],
-            'address' => [self::RULE_REQUIRED, [self::RULE_MAX, 'max' <= 1000]]
+            'phone' => [self::RULE_REQUIRED, [self::RULE_MAX, 'max' => 13]],
+            'address' => [self::RULE_REQUIRED, [self::RULE_MAX, 'max' => 1000]],
         ];
     }
 
@@ -97,10 +126,10 @@ class Store extends DBModel
 
     public static function get($id)
     {
-        $db = Database::getInstance();
-        $req = $db->query("SELECT * FROM stores WHERE id = '$id'");
-        $item = $req->fetchAll()[0];
-        $store = new Store($item);
-        return $store;
+        $row = \app\Common\QueryBuilder::table('stores')
+            ->where('id', $id)
+            ->first();
+
+        return new Store($row ?? []);
     }
 }
