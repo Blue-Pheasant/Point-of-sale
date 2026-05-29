@@ -1,0 +1,19 @@
+includes:
+    - phpstan-baseline.neon
+
+parameters:
+    level: 5
+    paths:
+        - Core
+        - Common
+        - Controllers
+        - Services
+        - Models
+        - Routes
+        - Middlewares
+        - Auth
+        - Exception
+    excludePaths:
+        - vendor
+        - migrations
+    treatPhpDocTypesAsCertain: false

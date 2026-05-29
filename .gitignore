@@ -1,2 +1,9 @@
 .env
 /vendor
+
+# Tooling / build artifacts
+/.php-cs-fixer.cache
+/.phpunit.result.cache
+/.phpunit.cache
+/build
+/coverage

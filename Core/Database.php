@@ -17,74 +17,83 @@ use PDOStatement;
 class Database
 {
     /**
-     * @var PDO $pdo The PDO instance.
+     * @var PDO $pdo The PDO instance (kept public as a backward-compatible alias).
      */
     public PDO $pdo;
 
     /**
-     * @var string $dsn The DSN of the database.
+     * @var PDO|null $instance The shared PDO instance behind getInstance().
      */
-    private string $dsn;
-
-    /**
-     * @var string $user The user of the database.
-     */
-    private string $user;
-
-    /**
-     * @var string $password The password of the database.
-     */
-    private string $password;
-
-    /**
-     * @var PDO|null $instance The database instance.
-     */
-    private static PDO|null $instance = NULl;
-
-    /**
-     * Method getInstance
-     *
-     * Gets the database instance.
-     *
-     * @return Database|PDO|null
-     */
-    public static function getInstance(): Database|PDO|null
-    {
-        $dsn = $_ENV['DB_DSN'];
-        $user =  $_ENV['DB_USER'];
-        $password = $_ENV['DB_PASSWORD'];
-        if (!isset(self::$instance)) {
-            try {
-                self::$instance = new PDO($dsn, $user, $password);
-                self::$instance->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-                self::$instance->exec("SET NAMES 'utf8'");
-            } catch (PDOException $ex) {
-                die($ex->getMessage());
-            }
-        }
-        return self::$instance;
-    }
+    private static ?PDO $instance = null;
 
     /**
      * Database constructor.
      *
-     * Initializes the database with the provided configuration.
+     * Initializes the database with the provided configuration. Both this
+     * instance's {@see self::$pdo} and the static {@see self::$instance} share
+     * the SAME PDO connection, so {@see self::getInstance()} and `->pdo` always
+     * return the one canonical connection.
      *
      * @param array $config The configuration of the database.
      */
     public function __construct(array $config)
     {
-        $this->dsn = $config['dsn'] ?: $_ENV['DB_DSN'];
-        $this->user = $config['user'] ?: $_ENV['DB_USER'];
-        $this->password = $config['password'] ?: $_ENV['DB_PASSWORD'];
+        $this->pdo = self::connect(
+            $config['dsn'] ?: $_ENV['DB_DSN'],
+            $config['user'] ?: $_ENV['DB_USER'],
+            $config['password'] ?: $_ENV['DB_PASSWORD']
+        );
 
-        try {
-            $this->pdo = new PDO($this->dsn, $this->user, $this->password);
-            $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            $this->pdo->exec("SET NAMES 'utf8'");
-        } catch (PDOException $exp) {
-            echo "Connection to database failed: " . $exp->getMessage();
+        self::$instance = $this->pdo;
+    }
+
+    /**
+     * Creates a configured PDO connection.
+     *
+     * Single source of truth for connection options:
+     * exceptions on error, real (non-emulated) prepared statements,
+     * associative fetch by default, and the `utf8mb4` charset that matches
+     * the database collation (`utf8mb4_vietnamese_ci`).
+     *
+     * @param string $dsn The PDO DSN.
+     * @param string $user The database user.
+     * @param string $password The database password.
+     * @return PDO The configured PDO connection.
+     * @throws PDOException When the connection cannot be established. The
+     *         exception is left for the central error handler (roadmap T12).
+     */
+    private static function connect(string $dsn, string $user, string $password): PDO
+    {
+        return new PDO($dsn, $user, $password, [
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_EMULATE_PREPARES => false,
+            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+            PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'utf8mb4'",
+        ]);
+    }
+
+    /**
+     * Method getInstance
+     *
+     * Returns the shared PDO connection. Kept as a backward-compatible alias
+     * for callers (e.g. {@see \app\Common\Query}, {@see \app\Services\AuthService})
+     * that obtain the connection statically. Lazily connects from environment
+     * configuration if the application has not constructed a Database yet.
+     *
+     * @return PDO The shared PDO connection.
+     * @throws PDOException When the connection cannot be established.
+     */
+    public static function getInstance(): PDO
+    {
+        if (!isset(self::$instance)) {
+            self::$instance = self::connect(
+                $_ENV['DB_DSN'],
+                $_ENV['DB_USER'],
+                $_ENV['DB_PASSWORD']
+            );
         }
+
+        return self::$instance;
     }
 
     /**
