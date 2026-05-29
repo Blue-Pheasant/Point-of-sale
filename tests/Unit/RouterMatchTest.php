@@ -29,7 +29,7 @@ final class RouterMatchTest extends TestCase
     }
 
     /**
-     * @return array<int, string>|null
+     * @return array<string, string>|null
      */
     private function match(string $pattern, string $path): ?array
     {
@@ -52,15 +52,15 @@ final class RouterMatchTest extends TestCase
         $this->assertSame([], $this->match('/products', '/products/'));
     }
 
-    public function testSingleParameterIsExtracted(): void
+    public function testSingleParameterIsExtractedByName(): void
     {
-        $this->assertSame(['42'], $this->match('/products/{id}', '/products/42'));
+        $this->assertSame(['id' => '42'], $this->match('/products/{id}', '/products/42'));
     }
 
-    public function testMultipleParametersAreExtractedInOrder(): void
+    public function testMultipleParametersAreExtractedByNameInOrder(): void
     {
         $this->assertSame(
-            ['7', '99'],
+            ['categoryId' => '7', 'productId' => '99'],
             $this->match('/categories/{categoryId}/products/{productId}', '/categories/7/products/99')
         );
     }

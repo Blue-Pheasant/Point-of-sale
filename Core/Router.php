@@ -117,7 +117,7 @@ class Router
      *
      * @param string $method The lowercase HTTP method.
      * @param string $path The request path.
-     * @return array{route: array{path: string, callback: mixed, middleware: array<int, array{0: string, 1: array<int, string>}>}, params: array<int, string>}|null
+     * @return array{route: array{path: string, callback: mixed, middleware: array<int, array{0: string, 1: array<int, string>}>}, params: array<string, string>}|null
      */
     private function matchRoute(string $method, string $path): ?array
     {
@@ -160,9 +160,13 @@ class Router
      * pattern returns an empty array on a match. Returns null when there is no
      * match.
      *
+     * Parameters are returned as an associative `name => value` map (in
+     * declaration order), so callers can both pass them positionally to the
+     * action and expose them by name on the request.
+     *
      * @param string $pattern The route pattern (may contain `{param}`).
      * @param string $path The concrete request path.
-     * @return array<int, string>|null The captured parameters, or null.
+     * @return array<string, string>|null The captured parameters, or null.
      */
     private function matchPath(string $pattern, string $path): ?array
     {
@@ -171,12 +175,15 @@ class Router
             return rtrim($pattern, '/') === rtrim($path, '/') ? [] : null;
         }
 
+        preg_match_all('#\{([a-zA-Z_][a-zA-Z0-9_]*)\}#', $pattern, $nameMatches);
+        $names = $nameMatches[1];
+
         $regex = preg_replace('#\{[a-zA-Z_][a-zA-Z0-9_]*\}#', '([^/]+)', $pattern);
         $regex = '#^' . rtrim((string) $regex, '/') . '/?$#';
 
         if (preg_match($regex, rtrim($path, '/'), $matches)) {
             array_shift($matches);
-            return array_values($matches);
+            return array_combine($names, array_values($matches));
         }
 
         return null;
@@ -186,11 +193,14 @@ class Router
      * Runs a matched route: its middleware pipeline, then its action.
      *
      * @param array{path: string, callback: mixed, middleware: array<int, array{0: string, 1: array<int, string>}>} $route
-     * @param array<int, string> $params The extracted route parameters.
+     * @param array<string, string> $params The extracted route parameters (name => value).
      * @return mixed The rendered response.
      */
     private function runRoute(array $route, array $params): mixed
     {
+        // Expose the captured route parameters by name on the request.
+        $this->request->setRouteParams($params);
+
         $callback = $route['callback'];
 
         // A plain view name → render it directly.
@@ -214,7 +224,9 @@ class Router
         // Preserve the action on the freshly built controller too.
         $controller->action = $action;
 
-        return call_user_func([$controller, $action], $this->request, ...$params);
+        // Route parameter values are passed positionally to the action, after
+        // the request (e.g. show(Request $r, string $id)).
+        return call_user_func([$controller, $action], $this->request, ...array_values($params));
     }
 
     /**

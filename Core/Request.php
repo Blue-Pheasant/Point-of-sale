@@ -5,16 +5,23 @@ namespace app\Core;
 /**
  * Class Request
  *
- * This class is responsible for handling the request operations of the application.
+ * Represents the incoming HTTP request: path, method (with `_method` spoofing
+ * for HTML forms), query/body parameters, JSON bodies, and route parameters.
+ *
+ * Input is NOT sanitized here — values are returned as received. Escaping is
+ * applied at output time (see the `e()` view helper, roadmap T11).
  *
  * @package app\Core
  */
 class Request
 {
     /**
-     * Method getPath
-     *
-     * Gets the path of the request.
+     * @var array<string, string> The route parameters captured by the router.
+     */
+    private array $routeParams = [];
+
+    /**
+     * Gets the path of the request (without the query string).
      *
      * @return string
      */
@@ -27,55 +34,85 @@ class Request
         }
         return substr($path, 0, $position);
     }
-    
+
     /**
-     * Retrieves a specific parameter from the GET request.
+     * Retrieves a single query-string parameter.
      *
-     * This method checks if the specified parameter exists in the $_GET super-global array.
-     * If the parameter exists, it returns its value. If it does not exist, the method returns null.
-     *
-     * @param string $param The name of the parameter to retrieve.
-     * @return mixed The value of the parameter if it exists, null otherwise.
+     * @param string $param The parameter name.
+     * @return mixed The value if present, null otherwise.
      */
     public function getParam(string $param): mixed
     {
-        if (isset($_GET[$param])) {
-            return $_GET[$param];
-        }
-
-        return null;
+        return $_GET[$param] ?? null;
     }
 
     /**
-     * Retrieves the request method.
+     * Sets the route parameters captured by the router.
      *
-     * This method returns the request method from the $_SERVER super-global array.
+     * @param array<string, string> $params The captured route parameters.
+     * @return void
+     */
+    public function setRouteParams(array $params): void
+    {
+        $this->routeParams = $params;
+    }
+
+    /**
+     * Retrieves a single route parameter (e.g. `{id}` from `/products/{id}`).
      *
-     * @return string The request method.
+     * @param string $name The route parameter name.
+     * @param mixed $default The default to return when absent.
+     * @return mixed
+     */
+    public function routeParam(string $name, mixed $default = null): mixed
+    {
+        return $this->routeParams[$name] ?? $default;
+    }
+
+    /**
+     * Retrieves all route parameters.
+     *
+     * @return array<string, string>
+     */
+    public function routeParams(): array
+    {
+        return $this->routeParams;
+    }
+
+    /**
+     * Retrieves the request method, honoring a `_method` override submitted by
+     * HTML forms (method spoofing) so they can reach PUT/PATCH/DELETE routes.
+     *
+     * @return string The lowercase HTTP method.
      */
     public function getMethod(): string
     {
-        return strtolower($_SERVER['REQUEST_METHOD']);
+        $method = strtolower($_SERVER['REQUEST_METHOD'] ?? 'get');
+
+        if ($method === 'post' && isset($_POST['_method'])) {
+            $spoofed = strtolower((string) $_POST['_method']);
+            if (in_array($spoofed, ['put', 'patch', 'delete'], true)) {
+                return $spoofed;
+            }
+        }
+
+        return $method;
     }
 
     /**
-     * Retrieves the request URI.
+     * Retrieves the raw request URI.
      *
-     * This method returns the request URI from the $_SERVER super-global array.
-     *
-     * @return string The request URI.
+     * @return string
      */
     public function getRequest(): string
     {
-        return "$_SERVER[REQUEST_URI]";
+        return $_SERVER['REQUEST_URI'] ?? '/';
     }
 
     /**
      * Checks if the request method is GET.
      *
-     * This method checks if the request method is GET and returns true if it is, false otherwise.
-     *
-     * @return bool True if the request method is GET, false otherwise.
+     * @return bool
      */
     public function isGet(): bool
     {
@@ -85,9 +122,7 @@ class Request
     /**
      * Checks if the request method is POST.
      *
-     * This method checks if the request method is POST and returns true if it is, false otherwise.
-     *
-     * @return bool True if the request method is POST, false otherwise.
+     * @return bool
      */
     public function isPost(): bool
     {
@@ -95,52 +130,85 @@ class Request
     }
 
     /**
-     * Retrieves the request body.
+     * Determines whether the client expects a JSON response, based on the
+     * `Content-Type` or `Accept` headers.
      *
-     * This method returns the request body from the $_POST super-global array.
-     *
-     * @return array The request body.
+     * @return bool
      */
-    public function getBody(): array
+    public function wantsJson(): bool
     {
-        $body = [];
-        if ($this->getMethod() === 'get') {
-            foreach ($_GET as $key => $value) {
-                $body[$key] = filter_input(INPUT_GET, $key, FILTER_SANITIZE_SPECIAL_CHARS);
-            }
-        }
-        if ($this->getMethod() === 'post') {
-            foreach ($_POST as $key => $value) {
-                $body[$key] = filter_input(INPUT_POST, $key, FILTER_SANITIZE_SPECIAL_CHARS);
-            }
-        }
+        $contentType = $_SERVER['CONTENT_TYPE'] ?? '';
+        $accept = $_SERVER['HTTP_ACCEPT'] ?? '';
 
-        return $body;
+        return str_contains($contentType, 'application/json')
+            || str_contains($accept, 'application/json');
     }
 
     /**
-     * Retrieves all parameters from the current HTTP request.
+     * Returns the request body parameters.
      *
-     * This method retrieves all parameters from the $_GET or $_POST super-global arrays, depending on the HTTP method of the request.
-     * It sanitizes the parameters using the FILTER_SANITIZE_SPECIAL_CHARS filter.
-     * It returns an associative array of the parameters, where the keys are the parameter names and the values are the sanitized parameter values.
+     * For `application/json` requests the decoded JSON body is returned;
+     * otherwise the `$_GET` or `$_POST` array is returned as-is (no lossy
+     * sanitization — escaping happens at output time).
      *
-     * @return array An associative array of the sanitized parameters.
+     * @return array<string, mixed> The request body.
+     */
+    public function getBody(): array
+    {
+        if ($this->isJson()) {
+            return $this->jsonBody();
+        }
+
+        if ($this->getMethod() === 'get') {
+            return $_GET;
+        }
+
+        return $_POST;
+    }
+
+    /**
+     * Retrieves all request parameters (query + body) without sanitization.
+     *
+     * @return array<string, mixed>
+     */
+    public function getParams(): array
+    {
+        return $this->getBody();
+    }
+
+    /**
+     * @deprecated Misspelled original name. Use {@see self::getParams()}.
+     *
+     * @return array<string, mixed>
      */
     public function getPrams(): array
     {
-        $params = [];
-        if ($this->getMethod() === 'get') {
-            foreach ($_GET as $key => $value) {
-                $params[$key] = filter_input(INPUT_GET, $key, FILTER_SANITIZE_SPECIAL_CHARS);
-            }
-        }
-        if ($this->getMethod() === 'post') {
-            foreach ($_POST as $key => $value) {
-                $params[$key] = filter_input(INPUT_POST, $key, FILTER_SANITIZE_SPECIAL_CHARS);
-            }
+        return $this->getParams();
+    }
+
+    /**
+     * Checks whether the request carries a JSON body.
+     *
+     * @return bool
+     */
+    private function isJson(): bool
+    {
+        return str_contains($_SERVER['CONTENT_TYPE'] ?? '', 'application/json');
+    }
+
+    /**
+     * Decodes the raw JSON request body into an associative array.
+     *
+     * @return array<string, mixed> The decoded body, or an empty array.
+     */
+    private function jsonBody(): array
+    {
+        $raw = file_get_contents('php://input');
+        if ($raw === false || $raw === '') {
+            return [];
         }
 
-        return $params;
+        $decoded = json_decode($raw, true);
+        return is_array($decoded) ? $decoded : [];
     }
 }
