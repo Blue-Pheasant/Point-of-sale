@@ -7,6 +7,7 @@ use app\Routes\AuthRoute;
 use app\Routes\CategoryRoute;
 use app\Routes\CustomerRoute;
 use app\Routes\OrderRoute;
+use app\Routes\PaymentRoute;
 use app\Routes\ProductRoute;
 use app\Routes\StoreRoute;
 use app\Routes\UserRoute;
@@ -49,6 +50,9 @@ $app->useRoute(UserRoute::class);
 
 // order
 $app->useRoute(OrderRoute::class);
+
+// payment
+$app->useRoute(PaymentRoute::class);
 
 // Bootstrap the application
 $app->bootstrap();

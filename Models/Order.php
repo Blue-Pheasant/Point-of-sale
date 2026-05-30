@@ -14,10 +14,17 @@ class Order extends DBModel
     public const STATUS_DONE       = 'done';
     public const STATUS_CANCEL     = 'cancel';
 
+    /** Payment lifecycle status values (column `orders.payment_status`). */
+    public const PAYMENT_PENDING = 'pending';
+    public const PAYMENT_PAID    = 'paid';
+    public const PAYMENT_FAILED  = 'failed';
+
     public string $id = '';
     public string $user_id = '';
     public string $payment_method = '';
     public string $status = '';
+    public string $payment_status = self::PAYMENT_PENDING;
+    public ?string $transaction_id = null;
     public string $delivery_name = '';
     public string $delivery_phone = '';
     public string $delivery_address = '';
@@ -71,9 +78,19 @@ class Order extends DBModel
         return 'orders';
     }
 
+    public function getPaymentStatus(): string
+    {
+        return $this->payment_status;
+    }
+
+    public function getTransactionId(): ?string
+    {
+        return $this->transaction_id;
+    }
+
     public function attributes(): array
     {
-        $attributes = ['user_id', 'payment_method', 'status', 'delivery_name', 'delivery_phone', 'delivery_address', 'display'];
+        $attributes = ['user_id', 'payment_method', 'status', 'payment_status', 'transaction_id', 'delivery_name', 'delivery_phone', 'delivery_address', 'display'];
         return array_merge($this->defaultAttributes(), $attributes);
     }
 

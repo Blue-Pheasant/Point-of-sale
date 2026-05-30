@@ -20,7 +20,7 @@ final class CartServiceTest extends IntegrationTestCase
         parent::setUp();
         $this->seedCategory();
         $this->seedUser('user-1');
-        $this->service = new CartService();
+        $this->service = new CartService(self::$pdo);
     }
 
     private function seedCart(string $id = 'cart-1', string $userId = 'user-1', string $status = 'active'): void

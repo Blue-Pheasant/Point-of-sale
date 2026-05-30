@@ -35,11 +35,11 @@ class UserController extends Controller
      *
      * Registers the middleware and initializes the UserService.
      */
-    public function __construct()
+    public function __construct(UserService $userService)
     {
+        $this->userService = $userService;
         $this->registerMiddleware(AdminMiddleware::class, ['index', 'create', 'delete', 'update', 'details']);
         $this->registerMiddleware(AuthMiddleware::class, ['profile', 'updateProfile', 'password']);
-        $this->userService = new UserService();
     }
 
     /**

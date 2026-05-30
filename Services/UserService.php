@@ -4,7 +4,6 @@ namespace app\Services;
 
 use app\Common\Pagination;
 use app\Common\QueryBuilder;
-use app\Core\Database;
 use app\Models\User;
 use Exception;
 use PDO;
@@ -20,16 +19,11 @@ use PDO;
  */
 class UserService
 {
-    private PDO $db;
-
     /**
      * UserService constructor.
-     *
-     * Initializes the database connection.
      */
-    public function __construct()
+    public function __construct(private PDO $db)
     {
-        $this->db = Database::getInstance();
     }
 
     /**

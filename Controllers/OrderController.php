@@ -35,9 +35,9 @@ class OrderController extends Controller
      *
      * Initializes the services and registers the middleware.
      */
-    public function __construct()
+    public function __construct(OrderService $orderService)
     {
-        $this->orderService = new OrderService();
+        $this->orderService = $orderService;
         $this->registerMiddleware(AuthMiddleware::class, ['orderDetail', 'clear']);
         $this->registerMiddleware(
             AdminMiddleware::class,

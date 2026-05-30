@@ -5,17 +5,13 @@ namespace app\Services;
 use app\Common\Pagination;
 use app\Common\Query;
 use app\Common\QueryBuilder;
-use app\Core\Database;
 use app\Models\Product;
 use PDO;
 
 class ProductService
 {
-    private PDO $db;
-
-    public function __construct()
+    public function __construct(private PDO $db)
     {
-        $this->db = Database::getInstance();
     }
 
     public function getAllProducts($pagerCondition): array

@@ -42,10 +42,10 @@ class CartController extends Controller
      *
      * Initializes the services and registers the middleware.
      */
-    public function __construct()
+    public function __construct(CartService $cartService, OrderService $orderService)
     {
-        $this->cartService = new CartService();
-        $this->orderService = new OrderService();
+        $this->cartService = $cartService;
+        $this->orderService = $orderService;
         $this->registerMiddleware(AuthMiddleware::class, ['cart', 'update', 'placeOrder']);
     }
 

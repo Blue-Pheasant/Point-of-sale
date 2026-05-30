@@ -2,18 +2,14 @@
 
 namespace app\Services;
 
-use app\Core\Database;
 use app\Models\Cart;
 use app\Models\CartItem;
 use PDO;
 
 class CartService
 {
-    private PDO $db;
-
-    public function __construct()
+    public function __construct(private PDO $db)
     {
-        $this->db = Database::getInstance();
     }
 
     public function getCartByUserId($userId): ?Cart
@@ -30,8 +26,7 @@ class CartService
     public function getCartItems($cartId)
     {
         $list = [];
-        $db = Database::getInstance();
-        $req = $db->query(
+        $req = $this->db->query(
             "SELECT 
             cart_item.id, cart_item.product_id, cart_item.cart_id, cart_item.quantity,
             cart_item.note, products.image_url, cart_item.size, products.name,

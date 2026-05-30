@@ -41,12 +41,12 @@ class AdminController extends Controller
      *
      * Registers the middleware, initializes the services.
      */
-    public function __construct()
+    public function __construct(ProductService $productService, UserService $userService, OrderService $orderService)
     {
+        $this->productService = $productService;
+        $this->userService = $userService;
+        $this->orderService = $orderService;
         $this->registerMiddleware(AdminMiddleware::class, ['index', 'profile']);
-        $this->productService = new ProductService();
-        $this->userService = new UserService();
-        $this->orderService = new OrderService();
     }
 
 

@@ -20,7 +20,7 @@ final class OrderServiceTest extends IntegrationTestCase
         parent::setUp();
         $this->seedCategory();
         $this->seedUser('user-1');
-        $this->service = new OrderService();
+        $this->service = new OrderService(self::$pdo);
     }
 
     private function seedOrder(string $id, string $status): void

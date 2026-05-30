@@ -40,12 +40,12 @@ class MenuController extends SiteController
      *
      * Initializes the services and registers the middleware.
      */
-    public function __construct()
+    public function __construct(CartService $cartService, CategoryService $categoryService, ProductService $productService)
     {
+        $this->cartService = $cartService;
+        $this->categoryService = $categoryService;
+        $this->productService = $productService;
         $this->registerMiddleware(AuthMiddleware::class, ['menu', 'search']);
-        $this->cartService = new CartService();
-        $this->categoryService = new CategoryService();
-        $this->productService = new ProductService();
     }
 
     /**

@@ -2,16 +2,13 @@
 
 namespace app\Services;
 
-use app\Core\Database;
 use app\Models\Category;
 use PDO;
 
 class CategoryService
 {
-    private PDO $db;
-    public function __construct()
+    public function __construct(private PDO $db)
     {
-        $this->db = Database::getInstance();
     }
 
     public function getAllCategories(): array

@@ -2,7 +2,6 @@
 
 namespace app\Services;
 
-use app\Core\Database;
 use app\Core\Session;
 use app\Core\Uuid;
 use app\Models\User;
@@ -13,11 +12,8 @@ class AuthService
     private const COOKIE_NAME    = 'member_login';
     private const COOKIE_DAYS    = 30;
 
-    private PDO $db;
-
-    public function __construct()
+    public function __construct(private PDO $db)
     {
-        $this->db = Database::getInstance();
     }
 
     public function login(string $email, string $password): ?User

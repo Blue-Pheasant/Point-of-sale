@@ -23,8 +23,8 @@ final class InventoryTest extends IntegrationTestCase
         parent::setUp();
         $this->seedCategory();
         $this->seedUser('user-1');
-        $this->orderService = new OrderService();
-        $this->productService = new ProductService();
+        $this->orderService = new OrderService(self::$pdo);
+        $this->productService = new ProductService(self::$pdo);
     }
 
     /** @return array<string, mixed> */

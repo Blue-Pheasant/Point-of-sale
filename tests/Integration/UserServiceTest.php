@@ -18,7 +18,7 @@ final class UserServiceTest extends IntegrationTestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->service = new UserService();
+        $this->service = new UserService(self::$pdo);
     }
 
     public function testGetUserByIdReturnsModel(): void

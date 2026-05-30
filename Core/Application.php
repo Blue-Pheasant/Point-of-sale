@@ -2,10 +2,13 @@
 
 namespace app\Core;
 
+use app\Core\Container\Container;
 use app\Exception\ForbiddenException;
 use app\Exception\ForLoginException;
 use app\Exception\NotFoundException;
 use app\Middlewares\CsrfMiddleware;
+use PDO;
+use Psr\Container\ContainerInterface;
 use Throwable;
 
 /**
@@ -27,6 +30,7 @@ class Application
     public static Application $app;
     public static string      $ROOT_DIR;
 
+    public Container   $container;
     public string      $userClass;
     public string      $layout = 'main';
     public Router      $router;
@@ -42,20 +46,41 @@ class Application
         $this->userClass = $config['userClass'];
         self::$ROOT_DIR  = $rootDir;
         self::$app       = $this;
+
+        $this->container = new Container();
+        $container       = $this->container;
+        $container->instance(Container::class, $container);
+        $container->instance(ContainerInterface::class, $container);
+        $container->instance(self::class, $this);
+
+        // Core services are shared singletons; the public properties below are
+        // kept as backward-compatible aliases pointing at the SAME instances the
+        // container holds, so `Application::$app->db` and `$container->get(...)`
+        // never diverge.
+        $this->request  = $container->instance(Request::class, new Request());
+        $this->response = $container->instance(Response::class, new Response());
+        $this->session  = $container->instance(Session::class, new Session());
+        $this->view     = $container->instance(View::class, new View());
+        $this->db       = $container->instance(Database::class, new Database($config['db']));
+        $container->instance(PDO::class, $this->db->pdo);
+
+        // Bind the payment gateway abstraction to the sandbox driver (roadmap
+        // T22). Swapping to a real gateway is a single line here — the business
+        // layer depends only on the interface, so nothing else changes.
+        $container->bind(
+            \app\Services\Payment\PaymentGatewayInterface::class,
+            \app\Services\Payment\SandboxGateway::class
+        );
+
+        $this->router     = $container->instance(Router::class, new Router($this->request, $this->response));
         $this->controller = new Controller();
-        $this->request    = new Request();
-        $this->response   = new Response();
-        $this->router     = new Router($this->request, $this->response);
-        $this->db         = new Database($config['db']);
-        $this->session    = new Session();
-        $this->view       = new View();
     }
 
     public function bootstrap(): void
     {
         $this->triggerEvent(self::EVENT_BEFORE_REQUEST);
         // CSRF check runs before routing so every mutation request is protected.
-        (new CsrfMiddleware())->execute();
+        $this->container->make(CsrfMiddleware::class)->execute();
         try {
             echo $this->router->resolve();
         } catch (Throwable $e) {

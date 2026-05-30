@@ -5,7 +5,6 @@ namespace app\Services;
 use app\Common\Pagination;
 use app\Common\Query;
 use app\Common\QueryBuilder;
-use app\Core\Database;
 use app\Exception\OutOfStockException;
 use app\Models\Order;
 use app\Models\OrderDetail;
@@ -14,11 +13,8 @@ use PDO;
 
 class OrderService
 {
-    private PDO $db;
-
-    public function __construct()
+    public function __construct(private PDO $db)
     {
-        $this->db = Database::getInstance();
     }
 
     /**
@@ -231,6 +227,44 @@ class OrderService
         }
 
         return (int) $totalIncome;
+    }
+
+    /**
+     * Total payable amount for a single order (roadmap T22).
+     *
+     * Sums each order line through {@see PricingService::lineTotal()} — the same
+     * pricing source as {@see self::getTotalIncome()} — so the charge sent to
+     * the payment gateway always matches what the order is actually worth. The
+     * order id is bound as a parameter.
+     *
+     * @param string $orderId The order to total.
+     * @return int The order total in VND.
+     */
+    public function getOrderTotal(string $orderId): int
+    {
+        $rows = Query::getAll(
+            'SELECT
+                products.price        AS price,
+                order_detail.quantity AS quantity,
+                order_detail.size     AS size
+            FROM
+                order_detail
+                INNER JOIN products ON order_detail.product_id = products.id
+            WHERE
+                order_detail.order_id = :orderId',
+            ['orderId' => $orderId]
+        );
+
+        $total = 0;
+        foreach ($rows as $row) {
+            $total += PricingService::lineTotal(
+                (float) $row['price'],
+                (string) $row['size'],
+                (int) $row['quantity']
+            );
+        }
+
+        return (int) $total;
     }
 
     public function getOrderItemsByOrderId($orderId)

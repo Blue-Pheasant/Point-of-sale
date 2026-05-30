@@ -138,7 +138,12 @@ class Router
         Application::$app->controller->action = $action;
         $this->runMiddleware($route['middleware'], $action);
 
-        $controller         = new $controllerClass();
+        $controller = Application::$app->container->make($controllerClass);
+        if (!$controller instanceof Controller) {
+            throw new \RuntimeException(
+                sprintf('Route controller "%s" must extend %s.', (string) $controllerClass, Controller::class)
+            );
+        }
         Application::$app->controller = $controller;
         $controller->action = $action;
 
@@ -150,7 +155,12 @@ class Router
     {
         foreach ($middleware as [$middlewareClass, $actions]) {
             $scoped   = empty($actions) ? [$action] : $actions;
-            $instance = new $middlewareClass($scoped);
+            $instance = Application::$app->container->make($middlewareClass, ['actions' => $scoped]);
+            if (!$instance instanceof Middleware) {
+                throw new \RuntimeException(
+                    sprintf('Middleware "%s" must extend %s.', $middlewareClass, Middleware::class)
+                );
+            }
             $instance->execute();
         }
     }

@@ -33,9 +33,9 @@ class CategoryController extends Controller
      *
      * Initializes the services and registers the middleware.
      */
-    public function __construct()
+    public function __construct(CategoryService $categoryService)
     {
-        $this->categoryService = new CategoryService();
+        $this->categoryService = $categoryService;
         $this->registerMiddleware(AdminMiddleware::class, ['index', 'create', 'delete', 'update', 'details']);
     }
 

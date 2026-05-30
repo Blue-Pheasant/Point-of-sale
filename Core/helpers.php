@@ -45,6 +45,21 @@ if (!function_exists('old')) {
     }
 }
 
+if (!function_exists('app')) {
+    /**
+     * Resolve an entry from the application container, or return the container
+     * itself when called with no argument.
+     *
+     * @return mixed The resolved entry, or the container when $id is null.
+     */
+    function app(?string $id = null): mixed
+    {
+        $container = \app\Core\Application::$app->container;
+
+        return $id === null ? $container : $container->get($id);
+    }
+}
+
 if (!function_exists('url')) {
     /**
      * Normalise a path to an absolute URL starting with /.

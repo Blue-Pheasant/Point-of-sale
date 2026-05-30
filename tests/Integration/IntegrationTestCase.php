@@ -148,6 +148,8 @@ abstract class IntegrationTestCase extends TestCase
                 delivery_phone TEXT NOT NULL DEFAULT "",
                 delivery_address TEXT NOT NULL DEFAULT "",
                 status TEXT NOT NULL DEFAULT "processing",
+                payment_status TEXT NOT NULL DEFAULT "pending",
+                transaction_id TEXT DEFAULT NULL,
                 display TEXT DEFAULT NULL,
                 created_at TEXT DEFAULT CURRENT_TIMESTAMP,
                 updated_at TEXT DEFAULT CURRENT_TIMESTAMP,

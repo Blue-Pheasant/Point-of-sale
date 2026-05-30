@@ -20,7 +20,7 @@ final class TransactionTest extends IntegrationTestCase
     {
         parent::setUp();
         $this->seedCategory();
-        $this->service = new ProductService();
+        $this->service = new ProductService(self::$pdo);
     }
 
     public function testSuccessfulCreateCommits(): void

@@ -35,10 +35,10 @@ class AuthController extends Controller
      *
      * Initializes the services and attempts to log in with cookie.
      */
-    public function __construct()
+    public function __construct(AuthService $authService, UserService $userService)
     {
-        $this->authService = new AuthService();
-        $this->userService = new UserService();
+        $this->authService = $authService;
+        $this->userService = $userService;
         $this->authService->loginWithCookie();
     }
 

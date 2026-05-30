@@ -36,9 +36,9 @@ class ProductController extends Controller
      *
      * Initializes the services and registers the middleware.
      */
-    public function __construct()
+    public function __construct(ProductService $productService)
     {
-        $this->productService = new ProductService();
+        $this->productService = $productService;
         $this->registerMiddleware(AdminMiddleware::class, ['index', 'create', 'delete', 'update', 'details', 'adjustStock']);
         $this->registerMiddleware(AuthMiddleware::class, ['product']);
     }
