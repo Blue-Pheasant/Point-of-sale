@@ -21,7 +21,7 @@ class Order extends DBModel
     public string $delivery_name = '';
     public string $delivery_phone = '';
     public string $delivery_address = '';
-    public string $display = '';
+    public ?string $display = '';
     public string $created_at = '';
 
     public function __construct($attributes = [])

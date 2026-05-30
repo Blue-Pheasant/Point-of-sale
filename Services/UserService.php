@@ -208,8 +208,9 @@ class UserService
         try {
             $this->db->beginTransaction();
 
-            $query = 'UPDATE users SET deleted_at = NOW() WHERE id = :id AND deleted_at IS NULL';
+            $query = 'UPDATE users SET deleted_at = :deleted_at WHERE id = :id AND deleted_at IS NULL';
             $statement = $this->db->prepare($query);
+            $statement->bindValue(':deleted_at', date('Y-m-d H:i:s'));
             $statement->bindValue(':id', $id);
             $result = $statement->execute();
 

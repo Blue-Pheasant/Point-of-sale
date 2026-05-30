@@ -13,7 +13,7 @@ class User extends UserModel
     public string $email = '';
     public string $password = '';
     public string $passwordConfirm = '';
-    public string $address = '';
+    public ?string $address = '';
     public string $phone_number = '';
     public string $role = '';
 

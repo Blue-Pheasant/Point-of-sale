@@ -13,6 +13,7 @@ use PDOStatement;
  *
  * @package app\Core
  */
+#[\AllowDynamicProperties]
 abstract class DBModel extends Model
 {
     /**
@@ -86,9 +87,14 @@ abstract class DBModel extends Model
             $this->id = Uuid::v4();
         }
 
+        // Only persist attributes that are actually set; unset ones fall back to
+        // their column default (e.g. a NULL `deleted_at`) instead of raising an
+        // "undefined property" warning under PHP 8.2.
         $data = [];
         foreach ($this->attributes() as $attribute) {
-            $data[$attribute] = $this->{$attribute};
+            if (isset($this->{$attribute})) {
+                $data[$attribute] = $this->{$attribute};
+            }
         }
 
         return QueryBuilder::table($this->tableName())->insert($data);
@@ -106,9 +112,11 @@ abstract class DBModel extends Model
     {
         $tableName = $this->tableName();
 
-        // `deleted_at = NOW()` is a constant SQL expression (no user value), so
-        // it is set via a raw statement while the id stays param-bound.
-        $statement = self::prepare("UPDATE $tableName SET deleted_at = NOW() WHERE id = :id");
+        // The deletion timestamp is generated in PHP and bound as a parameter so
+        // the statement is portable across drivers (MySQL has NOW(), SQLite does
+        // not) and the id stays param-bound.
+        $statement = self::prepare("UPDATE $tableName SET deleted_at = :deleted_at WHERE id = :id");
+        $statement->bindValue(':deleted_at', date('Y-m-d H:i:s'));
         $statement->bindValue(':id', $this->id);
 
         return $statement->execute();
@@ -124,9 +132,13 @@ abstract class DBModel extends Model
      */
     public function update(): bool
     {
+        // Skip attributes that are not set so an unset property never raises a
+        // warning nor overwrites a column with an uninitialised value.
         $data = [];
         foreach ($this->attributes() as $attribute) {
-            $data[$attribute] = $this->{$attribute};
+            if ($attribute !== static::primaryKey() && isset($this->{$attribute})) {
+                $data[$attribute] = $this->{$attribute};
+            }
         }
 
         return QueryBuilder::table($this->tableName())
@@ -163,10 +175,13 @@ abstract class DBModel extends Model
         $attributes = array_keys($where);
         $sql = implode(' AND ', array_map(fn ($attr) => "$attr = :$attr", $attributes));
         $statement = self::prepare("SELECT * FROM $tableName WHERE $sql");
+
         foreach ($where as $key => $item) {
             $statement->bindValue(":$key", $item);
         }
+
         $statement->execute();
+
         return $statement->fetchObject(static::class);
     }
 
@@ -202,6 +217,7 @@ abstract class DBModel extends Model
         foreach ($builder->getParams() as $name => $value) {
             $statement->bindValue(":$name", $value);
         }
+
         $statement->execute();
 
         return $statement->fetchAll(\PDO::FETCH_CLASS, static::class);

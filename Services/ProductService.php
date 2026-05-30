@@ -51,21 +51,21 @@ class ProductService
 
     public function createProduct(array $data): bool
     {
-        $db = $this->db->beginTransaction();
+        $this->db->beginTransaction();
 
         try {
             $product = new Product($data);
             $result = $product->save();
 
             if ($result) {
-                $db->commit();
+                $this->db->commit();
             } else {
-                $db->rollBack();
+                $this->db->rollBack();
             }
 
             return $result;
         } catch (\Exception $e) {
-            $db->rollBack();
+            $this->db->rollBack();
             throw $e;
         }
     }

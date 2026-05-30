@@ -141,16 +141,6 @@ parameters:
 			path: Models/Store.php
 
 		-
-			message: "#^Cannot call method commit\\(\\) on bool\\.$#"
-			count: 1
-			path: Services/ProductService.php
-
-		-
-			message: "#^Cannot call method rollBack\\(\\) on bool\\.$#"
-			count: 2
-			path: Services/ProductService.php
-
-		-
 			message: "#^Property app\\\\Core\\\\DBModel\\:\\:\\$id \\(string\\) does not accept int\\.$#"
 			count: 1
 			path: Services/ProductService.php
