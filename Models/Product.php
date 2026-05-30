@@ -12,6 +12,8 @@ class Product extends DBModel
     public float $price;
     public string $description;
     public string $image_url;
+    public int $stock_quantity = 0;
+    public int $low_stock_threshold = 0;
 
     public function __construct($attributes = [])
     {
@@ -73,6 +75,43 @@ class Product extends DBModel
         return $this->image_url;
     }
 
+    public function setStockQuantity(int $stock_quantity): void
+    {
+        $this->stock_quantity = $stock_quantity;
+    }
+
+    public function getStockQuantity(): int
+    {
+        return (int) $this->stock_quantity;
+    }
+
+    public function setLowStockThreshold(int $low_stock_threshold): void
+    {
+        $this->low_stock_threshold = $low_stock_threshold;
+    }
+
+    public function getLowStockThreshold(): int
+    {
+        return (int) $this->low_stock_threshold;
+    }
+
+    /** Whether the product is completely out of stock. */
+    public function isOutOfStock(): bool
+    {
+        return $this->getStockQuantity() <= 0;
+    }
+
+    /**
+     * Whether the on-hand quantity is low: still in stock but at or below the
+     * low-stock threshold. An out-of-stock product is reported by
+     * {@see self::isOutOfStock()}, not here.
+     */
+    public function isLowStock(): bool
+    {
+        $stock = $this->getStockQuantity();
+        return $stock > 0 && $stock <= $this->getLowStockThreshold();
+    }
+
     public static function getNameById($id): string
     {
         $productModel = Product::getProductDetail($id);
@@ -97,7 +136,7 @@ class Product extends DBModel
 
     public function attributes(): array
     {
-        return array_merge($this->defaultAttributes(), ['category_id', 'name', 'price', 'description', 'image_url']);
+        return array_merge($this->defaultAttributes(), ['category_id', 'name', 'price', 'description', 'image_url', 'stock_quantity', 'low_stock_threshold']);
     }
 
     public function labels(): array
@@ -109,6 +148,8 @@ class Product extends DBModel
             'description' => 'Mô tả sản phẩm',
             'image_url' => 'Hình ảnh sản phẩm',
             'category_id' => 'Mã mục',
+            'stock_quantity' => 'Tồn kho',
+            'low_stock_threshold' => 'Ngưỡng sắp hết',
         ];
     }
 
@@ -123,6 +164,8 @@ class Product extends DBModel
             'name' => [self::RULE_REQUIRED, [self::RULE_MAX, 'max' => 50]],
             'description' => [self::RULE_REQUIRED, [self::RULE_MIN, 'min' => 20], [self::RULE_MAX, 'max' => 100]],
             'price' => [self::RULE_REQUIRED],
+            'stock_quantity' => [self::RULE_NUMBER, [self::RULE_MIN_VALUE, 'minint' => 0]],
+            'low_stock_threshold' => [self::RULE_NUMBER, [self::RULE_MIN_VALUE, 'minint' => 0]],
         ];
     }
 

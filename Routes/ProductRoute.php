@@ -24,5 +24,6 @@ class ProductRoute extends Route
         $this->post('/admin/products/edit', [ProductController::class, 'update']);
         $this->post('/admin/products/create', [ProductController::class, 'create']);
         $this->post('/admin/products/details', [ProductController::class, 'details']);
+        $this->post('/admin/products/adjust-stock', [ProductController::class, 'adjustStock']);
     }
 }

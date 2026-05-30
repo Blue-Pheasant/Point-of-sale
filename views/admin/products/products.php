@@ -17,6 +17,7 @@
               <th>Mục</th>
               <th>Tên sản phẩm</th>
               <th>Giá</th>
+              <th>Tồn kho</th>
               <th class="no-sort"></th>
             </tr>
           </thead>
@@ -32,6 +33,14 @@
                 <td><?= e($productModel->getCategory()) ?></td>
                 <td><?= e($productModel->getName()) ?></td>
                 <td><?= e(number_format((float) $productModel->getPrice(), 0, ',', '.') . 'đ') ?></td>
+                <td>
+                  <?= e((string) $productModel->getStockQuantity()) ?>
+                  <?php if ($productModel->isOutOfStock()) { ?>
+                    <span class="badge badge-danger label label-danger">Hết hàng</span>
+                  <?php } elseif ($productModel->isLowStock()) { ?>
+                    <span class="badge badge-warning label label-warning">Sắp hết</span>
+                  <?php } ?>
+                </td>
                 <td>
                   <a class="fa fa-eye btn btn-info btn-sm" href="/admin/products/details?id=<?= e($productModel->getId()) ?>"></a>
                   <a class="fa fa-pencil btn btn-warning btn-sm" href="/admin/products/edit?id=<?= e($productModel->getId()) ?>"></a>

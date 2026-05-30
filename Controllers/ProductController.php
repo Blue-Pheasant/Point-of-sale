@@ -39,7 +39,7 @@ class ProductController extends Controller
     public function __construct()
     {
         $this->productService = new ProductService();
-        $this->registerMiddleware(AdminMiddleware::class, ['index', 'create', 'delete', 'update', 'details']);
+        $this->registerMiddleware(AdminMiddleware::class, ['index', 'create', 'delete', 'update', 'details', 'adjustStock']);
         $this->registerMiddleware(AuthMiddleware::class, ['product']);
     }
 
@@ -142,6 +142,30 @@ class ProductController extends Controller
         return $this->render('/admin/products/edit_product', [
             'productModel' => $productModel,
         ]);
+    }
+
+    /**
+     * Method adjustStock
+     *
+     * Applies a (positive or negative) stock adjustment to a product, e.g. when
+     * the admin restocks or corrects inventory. Stock can never drop below 0.
+     * Only accepts POST; redirects back to the product details afterwards.
+     *
+     * @param Request $request The request object containing the request parameters.
+     * @return array|bool|string
+     */
+    public function adjustStock(Request $request): array|bool|string
+    {
+        $id    = $request->getParam('id');
+        $delta = (int) ($request->getBody()['delta'] ?? 0);
+
+        if ($delta !== 0 && $this->productService->adjustStock($id, $delta)) {
+            $this->setFlash('success', 'Đã cập nhật tồn kho.');
+        } else {
+            $this->setFlash('fail', 'Không thể cập nhật tồn kho.');
+        }
+
+        return $this->redirect('/admin/products/details?id=' . urlencode((string) $id));
     }
 
     /**

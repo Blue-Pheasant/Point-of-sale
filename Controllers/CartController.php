@@ -10,11 +10,12 @@ use app\Auth\AuthUser;
 use app\Core\Controller;
 use app\Core\Request;
 use app\Core\Session;
+use app\Exception\OutOfStockException;
 use app\Middlewares\AuthMiddleware;
 use app\Models\CartItem;
 use app\Models\Order;
-use app\Models\OrderDetail;
 use app\Services\CartService;
+use app\Services\OrderService;
 
 /**
  * Class CartController
@@ -32,6 +33,11 @@ class CartController extends Controller
     protected CartService $cartService;
 
     /**
+     * @var OrderService $orderService Handles transactional order placement.
+     */
+    protected OrderService $orderService;
+
+    /**
      * CartController constructor.
      *
      * Initializes the services and registers the middleware.
@@ -39,6 +45,7 @@ class CartController extends Controller
     public function __construct()
     {
         $this->cartService = new CartService();
+        $this->orderService = new OrderService();
         $this->registerMiddleware(AuthMiddleware::class, ['cart', 'update', 'placeOrder']);
     }
 
@@ -151,7 +158,13 @@ class CartController extends Controller
         $deliveryAddress = $body['address'] ?? '';
         $paymentMethod = $body['payment_method'] ?? '';
 
-        // Create order
+        // Reject an empty cart up-front.
+        if (empty($items)) {
+            $this->setFlash('fail', 'Giỏ hàng của bạn đang trống.');
+            return $this->redirect('/cart');
+        }
+
+        // Validate delivery info via the Order model before touching stock.
         $order = new Order([
             'user_id' => $userId,
             'payment_method' => $paymentMethod,
@@ -161,34 +174,41 @@ class CartController extends Controller
             'delivery_address' => $deliveryAddress,
         ]);
 
-        // Reject incomplete delivery info instead of saving a broken order.
         if (!$order->validate()) {
             $this->setFlash('fail', 'Vui lòng nhập đầy đủ thông tin giao hàng hợp lệ.');
             return $this->redirect('/cart');
         }
 
-        // Save order
-        $order->save();
+        $orderData = [
+            'user_id' => $userId,
+            'payment_method' => $paymentMethod,
+            'delivery_name' => $deliveryName,
+            'delivery_phone' => $deliveryPhone,
+            'delivery_address' => $deliveryAddress,
+        ];
 
-        // Create order details
-        foreach ($items as $item) {
-            $orderDetail = new OrderDetail([
-                'product_id' => $item->product_id,
-                'order_id' => $order->id,
-                'quantity' => $item->quantity,
-                'note' => $item->note,
-                'size' => $item->size,
-            ]);
-            $orderDetail->save();
+        $lineItems = array_map(static fn ($item) => [
+            'product_id' => $item->product_id,
+            'quantity' => $item->quantity,
+            'note' => $item->note,
+            'size' => $item->size,
+        ], $items);
+
+        try {
+            // Order creation, order details and stock deduction run in a single
+            // transaction inside the service; out-of-stock rolls it all back.
+            $this->orderService->placeOrder($orderData, $lineItems);
+        } catch (OutOfStockException $e) {
+            $this->setFlash('fail', 'Một số sản phẩm đã hết hàng, vui lòng kiểm tra lại giỏ hàng.');
+            return $this->redirect('/cart');
         }
 
-        // Delete cart items
+        // Order committed — clear the cart.
         foreach ($items as $item) {
             $this->deleteItem($cartId, $item->cart_item_id);
         }
 
-        // Checkout cart
-        $this->cartService->checkoutCart($cartId);
+        $this->cartService->checkOutCart($cartId);
 
         return $this->redirect('/cart/notice');
     }

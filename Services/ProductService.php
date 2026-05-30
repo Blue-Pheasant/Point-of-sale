@@ -150,4 +150,36 @@ class ProductService
     {
         return Query::getCount('SELECT * FROM products');
     }
+
+    /**
+     * Sets a product's on-hand stock to an absolute value (roadmap T20).
+     *
+     * Used by the admin stock form. The value is clamped at 0 so a typo can
+     * never store negative stock, and the update is param-bound.
+     *
+     * @param int $quantity The new on-hand quantity (negatives clamp to 0).
+     * @return bool True when the update succeeds.
+     */
+    public function setStock(string $id, int $quantity): bool
+    {
+        return QueryBuilder::table('products')
+            ->where('id', $id)
+            ->update(['stock_quantity' => max(0, $quantity)]);
+    }
+
+    /**
+     * Adjusts a product's stock by a (positive or negative) delta, never
+     * dropping below 0. Convenience for restocking or manual corrections.
+     *
+     * @return bool True when the update succeeds.
+     */
+    public function adjustStock(string $id, int $delta): bool
+    {
+        $product = $this->getProductById($id);
+        if ($product === null) {
+            return false;
+        }
+
+        return $this->setStock($id, $product->getStockQuantity() + $delta);
+    }
 }
