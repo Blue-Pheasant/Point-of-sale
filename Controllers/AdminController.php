@@ -2,13 +2,13 @@
 
 namespace app\Controllers;
 
+use app\Auth\AuthUser;
 use app\Core\Controller;
 use app\Core\Request;
 use app\Middlewares\AdminMiddleware;
+use app\Services\OrderService;
 use app\Services\ProductService;
 use app\Services\UserService;
-use app\Services\OrderService;
-use app\Auth\AuthUser;
 
 /**
  * Class AdminController
@@ -63,14 +63,14 @@ class AdminController extends Controller
         $orders = $this->orderService->getTotalOrderNumber();
         $products = $this->productService->getProductNumber();
         $users = $this->userService->getTotalUserNumber();
-        $income = $this->orderService->getTotalIncome(); 
+        $income = $this->orderService->getTotalIncome();
 
         $this->setLayout('admin');
         return $this->render('/admin/dashboard', [
             'orders' => $orders,
             'products' => $products,
             'users' => $users,
-            'income' => $income 
+            'income' => $income,
         ]);
     }
 
@@ -89,7 +89,7 @@ class AdminController extends Controller
     public function profile(Request $request): array|bool|string
     {
         $adminModel = AuthUser::authUser();
-        if($request->getMethod() === 'post') {
+        if ($request->getMethod() === 'post') {
             $adminModel->loadData($request->getBody());
             if ($adminModel->validateUpdateProfile()) {
                 if ($adminModel->updateProfile($adminModel)) {
@@ -100,7 +100,7 @@ class AdminController extends Controller
 
         $this->setLayout('admin');
         return $this->render('/admin/profile', [
-            'user' => $adminModel
+            'user' => $adminModel,
         ]);
     }
 }

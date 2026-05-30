@@ -60,7 +60,7 @@ abstract class Route
      *
      * @return array<string, array<int, array{path: string, callback: mixed, middleware: array<int, array{0: string, 1: array<int, string>}>}>>
      */
-    public function routes() : array
+    public function routes(): array
     {
         return $this->routes;
     }

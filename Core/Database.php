@@ -118,7 +118,7 @@ class Database
 
             require_once Application::$ROOT_DIR . '/migrations/' . $migration;
             $className = pathinfo($migration, PATHINFO_FILENAME);
-            $instance = new $className;
+            $instance = new $className();
             $this->log("Applying migration $migration");
             $instance->up();
             $this->log("Applied migration $migration" . PHP_EOL);
@@ -145,13 +145,13 @@ class Database
      */
     public function createMigrationsTable(): void
     {
-        $this->pdo->exec("
+        $this->pdo->exec('
             CREATE TABLE IF NOT EXISTS migrations (
                 id INT AUTO_INCREMENT PRIMARY KEY,
                 migration VARCHAR(255),
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             ) ENGINE=INNODB;
-        ");
+        ');
     }
 
     /**
@@ -163,7 +163,7 @@ class Database
      */
     public function getAppliedMigrations(): bool|array
     {
-        $statement = $this->pdo->prepare("SELECT migration FROM migrations");
+        $statement = $this->pdo->prepare('SELECT migration FROM migrations');
         $statement->execute();
 
         return $statement->fetchAll(PDO::FETCH_COLUMN);
@@ -179,7 +179,7 @@ class Database
      */
     public function saveMigrations(array $migrations): void
     {
-        $str = implode(",", array_map(fn ($m) => "('$m')", $migrations));
+        $str = implode(',', array_map(fn ($m) => "('$m')", $migrations));
         $statement = $this->pdo->prepare("INSERT INTO migrations (migration) VALUES $str");
         $statement->execute();
     }

@@ -2,8 +2,8 @@
 
 namespace app\Routes;
 
-use app\Core\Route;
 use app\Controllers\ProductController;
+use app\Core\Route;
 
 class ProductRoute extends Route
 {

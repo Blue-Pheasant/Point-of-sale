@@ -2,14 +2,14 @@
 
 use app\Core\Application;
 use app\Models\User;
-use app\Routes\ProductRoute;
-use app\Routes\CategoryRoute;
-use app\Routes\OrderRoute;
-use app\Routes\UserRoute;
-use app\Routes\StoreRoute;
 use app\Routes\AdminRoute;
 use app\Routes\AuthRoute;
+use app\Routes\CategoryRoute;
 use app\Routes\CustomerRoute;
+use app\Routes\OrderRoute;
+use app\Routes\ProductRoute;
+use app\Routes\StoreRoute;
+use app\Routes\UserRoute;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 $dotenv = Dotenv\Dotenv::createImmutable(dirname(__DIR__));
@@ -21,7 +21,7 @@ $config = [
         'dsn' => $_ENV['DB_DSN'],
         'user' => $_ENV['DB_USER'],
         'password' => $_ENV['DB_PASSWORD'],
-    ]
+    ],
 ];
 
 $app = new Application(dirname(__DIR__), $config);

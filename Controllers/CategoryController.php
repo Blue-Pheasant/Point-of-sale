@@ -1,14 +1,16 @@
 <?php
+
 /*
     controllers/categories/index.php
 */
+
 namespace app\Controllers;
 
 use app\Core\Controller;
-use app\Models\Category;
 use app\Core\Request;
-use app\Services\CategoryService;
 use app\Middlewares\AdminMiddleware;
+use app\Models\Category;
+use app\Services\CategoryService;
 
 /**
  * Class CategoryController
@@ -19,8 +21,8 @@ use app\Middlewares\AdminMiddleware;
  *
  * @package app\Controllers
  */
-class CategoryController extends Controller {
-
+class CategoryController extends Controller
+{
     /**
      * @var CategoryService $categoryService An instance of CategoryService to handle category-related operations.
      */
@@ -31,7 +33,7 @@ class CategoryController extends Controller {
      *
      * Initializes the services and registers the middleware.
      */
-    public function __construct() 
+    public function __construct()
     {
         $this->categoryService = new CategoryService();
         $this->registerMiddleware(AdminMiddleware::class, ['index', 'create', 'delete', 'update', 'details']);
@@ -49,8 +51,8 @@ class CategoryController extends Controller {
         $categories = $this->categoryService->getAllCategories();
         $this->setLayout('admin');
         return $this->render('/admin/categories/categories', [
-            'category' => $categories
-        ]);      
+            'category' => $categories,
+        ]);
     }
 
     /**
@@ -63,12 +65,12 @@ class CategoryController extends Controller {
      */
     public function details(Request $request): array|bool|string
     {
-        if($request->getMethod() === 'get') {
+        if ($request->getMethod() === 'get') {
             $id = $request->getParam('id');
             $categoryModel = $this->categoryService->getCategoryById($id);
             $this->setLayout('admin');
             return $this->render('/admin/categories/details_category', [
-                'model' => $categoryModel
+                'model' => $categoryModel,
             ]);
         }
 
@@ -89,7 +91,7 @@ class CategoryController extends Controller {
     public function create(Request $request): array|bool|string
     {
         $categoryModel = new Category();
-        if($request->getMethod() === 'post') {
+        if ($request->getMethod() === 'post') {
             $categoryModel->loadData($request->getBody());
             $categoryModel->save();
             return $this->redirect('/admin/categories/details_category?id=' . $categoryModel->getId());
@@ -97,7 +99,7 @@ class CategoryController extends Controller {
 
         $this->setLayout('admin');
         return $this->render('/admin/categories/create_category', [
-            'model' => $categoryModel
+            'model' => $categoryModel,
         ]);
     }
 
@@ -116,14 +118,14 @@ class CategoryController extends Controller {
     {
         $id = $request->getParam('id');
         $categoryModel = $this->categoryService->getCategoryById($id);
-        if($request->getMethod() === 'post') {
+        if ($request->getMethod() === 'post') {
             $categoryModel->delete();
-            return $this->back(); 
+            return $this->back();
         }
 
         $this->setLayout('admin');
         return $this->render('/admin/categories/delete_category', [
-            'model' => $categoryModel
+            'model' => $categoryModel,
         ]);
     }
 
@@ -150,7 +152,7 @@ class CategoryController extends Controller {
 
         $this->setLayout('admin');
         return $this->render('/admin/categories/edit_category', [
-            'categoryModel' => $categoryModel
+            'categoryModel' => $categoryModel,
         ]);
     }
 }

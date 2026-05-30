@@ -5,10 +5,10 @@ namespace app\Controllers;
 use app\Core\Controller;
 use app\Core\Request;
 use app\Core\Session;
-use app\Services\AuthService;
-use app\Services\UserService;
 use app\Models\LoginForm;
 use app\Models\User;
+use app\Services\AuthService;
+use app\Services\UserService;
 
 /**
  * Class AuthController
@@ -74,7 +74,7 @@ class AuthController extends Controller
 
         $this->setLayout('auth');
         return $this->render('login', [
-            'model' => $loginForm
+            'model' => $loginForm,
         ]);
     }
 
@@ -101,7 +101,7 @@ class AuthController extends Controller
         }
         $this->setLayout('auth');
         return $this->render('register', [
-            'model' => $registerModel
+            'model' => $registerModel,
         ]);
     }
 

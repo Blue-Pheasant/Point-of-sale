@@ -2,13 +2,13 @@
 
 namespace app\Controllers;
 
-use app\Models\Product;
+use app\Auth\AuthUser;
 use app\Core\Request;
 use app\Middlewares\AuthMiddleware;
+use app\Models\Product;
 use app\Services\CartService;
 use app\Services\CategoryService;
 use app\Services\ProductService;
-use app\Auth\AuthUser;
 
 /**
  * Class MenuController
@@ -65,8 +65,8 @@ class MenuController extends SiteController
         $cartId = $this->cartService->getCartIdFromUserId($currentUser->id);
 
         // Get the products
-        $products = ($categoryId == '') 
-            ? Product::getAllProducts() 
+        $products = ($categoryId == '')
+            ? Product::getAllProducts()
             : Product::getProductsByCategory($categoryId);
 
         // Get the items in the cart
@@ -74,12 +74,12 @@ class MenuController extends SiteController
         $categories = $this->categoryService->getAllCategories();
 
         return $this->render('menu', [
-            'products' => $products, 
-            'categories' => $categories, 
+            'products' => $products,
+            'categories' => $categories,
             'items' => $items,
             'deletedItem' => false,
             'updatedItem' => false,
-            'cartId' => $cartId
+            'cartId' => $cartId,
         ]);
     }
 
@@ -93,7 +93,7 @@ class MenuController extends SiteController
      */
     public function search(Request $request): array|bool|string
     {
-        
+
         // Get the current user
         $currentUser = AuthUser::authUser();
         $cartId = $this->cartService->getCartIdFromUserId($currentUser->id);
@@ -107,11 +107,11 @@ class MenuController extends SiteController
         $products = Product::getProductsByKeyword($keyword);
 
         return $this->render('menu', [
-            'products' => $products, 
-            'categories' => $categories, 
+            'products' => $products,
+            'categories' => $categories,
             'items' => $items,
             'deletedItem' => false,
-            'updatedItem' => false
+            'updatedItem' => false,
         ]);
     }
 }

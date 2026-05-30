@@ -26,6 +26,7 @@ class Form
             htmlspecialchars($action, ENT_QUOTES, 'UTF-8'),
             htmlspecialchars($method, ENT_QUOTES, 'UTF-8')
         );
+
         // Emit CSRF hidden field for every form automatically.
         $token = CsrfMiddleware::token();
         echo sprintf('<input type="hidden" name="_csrf" value="%s">', htmlspecialchars($token, ENT_QUOTES, 'UTF-8'));

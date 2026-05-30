@@ -23,13 +23,13 @@ class LoginForm extends Model
     {
         return [
             'email' => 'Địa chỉ email',
-            'password' => 'Mật khẩu'
+            'password' => 'Mật khẩu',
         ];
     }
 
     public function login($input)
     {
-        if($input == "email") {
+        if ($input == 'email') {
             $user = User::findOne(['email' => $this->email]);
             if (!$user) {
                 $this->addError('email', self::RULE_INVALID_ID);
@@ -55,7 +55,7 @@ class LoginForm extends Model
 
         Session::set('cart_id', $userCart->id);
         Session::set('user', $user->id);
-        
+
         return true;
     }
 

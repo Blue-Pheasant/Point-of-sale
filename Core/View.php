@@ -28,8 +28,10 @@ class View
         if (Application::$app->controller) {
             $layoutName = Application::$app->controller->layout;
         }
+
         $viewContent   = $this->renderViewOnly($view, $params);
         $layoutContent = $this->renderLayout($layoutName);
+
         return str_replace('{{content}}', $viewContent, $layoutContent);
     }
 
@@ -45,8 +47,10 @@ class View
         foreach ($params as $key => $value) {
             $$key = $value;
         }
+
         ob_start();
         include Application::$ROOT_DIR . "/views/$view.php";
+
         return (string) ob_get_clean();
     }
 
@@ -62,7 +66,9 @@ class View
         if (Application::$app->controller) {
             $layoutName = Application::$app->controller->layout;
         }
+
         $layoutContent = $this->renderLayout($layoutName);
+
         return str_replace('{{content}}', $viewContent, $layoutContent);
     }
 
@@ -76,6 +82,7 @@ class View
     {
         ob_start();
         include Application::$ROOT_DIR . "/views/layouts/$layout.php";
+
         return (string) ob_get_clean();
     }
 }

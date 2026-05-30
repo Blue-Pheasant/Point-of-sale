@@ -1,16 +1,18 @@
 <?php
+
 /*
     controllers/user.php
 */
+
 namespace app\Controllers;
 
+use app\Auth\AuthUser;
 use app\Core\Controller;
 use app\Core\Request;
 use app\Middlewares\AdminMiddleware;
 use app\Middlewares\AuthMiddleware;
 use app\Models\User;
 use app\Services\UserService;
-use app\Auth\AuthUser;
 
 /**
  * Class UserController
@@ -27,13 +29,13 @@ class UserController extends Controller
      * @var UserService $userService An instance of UserService to handle user-related operations.
      */
     private UserService $userService;
-    
+
     /**
      * UserController constructor.
      *
      * Registers the middleware and initializes the UserService.
      */
-    public function __construct() 
+    public function __construct()
     {
         $this->registerMiddleware(AdminMiddleware::class, ['index', 'create', 'delete', 'update', 'details']);
         $this->registerMiddleware(AuthMiddleware::class, ['profile', 'updateProfile', 'password']);
@@ -52,7 +54,7 @@ class UserController extends Controller
         $users = User::getAllUsers();
         $this->setLayout('admin');
         return $this->render('/admin/users/users', [
-            'users' => $users
+            'users' => $users,
         ]);
     }
 
@@ -68,9 +70,9 @@ class UserController extends Controller
     public function create(Request $request): array|bool|string
     {
         $userModel = new User();
-        if($request->getMethod() === 'post') {
+        if ($request->getMethod() === 'post') {
             $userModel->loadData($request->getBody());
-            if($userModel->getRole() === 'client') {
+            if ($userModel->getRole() === 'client') {
                 $userModel->saveAdmin($userModel->getRole());
             } else {
                 $userModel->save();
@@ -79,8 +81,8 @@ class UserController extends Controller
         }
 
         $this->setLayout('admin');
-        return $this->render('/admin/users/create_user',  [
-            'userModel' => $userModel
+        return $this->render('/admin/users/create_user', [
+            'userModel' => $userModel,
         ]);
     }
 
@@ -99,14 +101,14 @@ class UserController extends Controller
         $id = $request->getParam('id');
         $userModel = $this->userService->getUserById($id);
 
-        if($request->getMethod() === 'post') {
+        if ($request->getMethod() === 'post') {
             $userModel->delete();
             return $this->back();
         }
-        
+
         $this->setLayout('admin');
         return $this->render('/admin/users/delete_user', [
-            'userModel' => $userModel
+            'userModel' => $userModel,
         ]);
     }
 
@@ -124,15 +126,15 @@ class UserController extends Controller
     {
         $id = $request->getParam('id');
         $userModel = $this->userService->getUserById($id);
-        if($request->getMethod() === 'post') {
+        if ($request->getMethod() === 'post') {
             $userModel->loadData($request->getBody());
             $userModel->update();
             return $this->refresh();
         }
-        
+
         $this->setLayout('admin');
         return $this->render('/admin/users/edit_user', [
-            'userModel' => $userModel
+            'userModel' => $userModel,
         ]);
     }
 
@@ -148,11 +150,11 @@ class UserController extends Controller
     {
         $id = $request->getParam('id');
         $userModel = $this->userService->getUserById($id);
-        
+
         $this->setLayout('admin');
         return $this->render('/admin/users/details_user', [
-            'userModel' => $userModel
-        ]);         
+            'userModel' => $userModel,
+        ]);
     }
 
     /**
@@ -171,15 +173,15 @@ class UserController extends Controller
         $id = $request->getParam('id');
         $userModel = $this->userService->getUserById($id);
 
-        if($request->getMethod() === 'post') {
+        if ($request->getMethod() === 'post') {
             $userModel->loadData($request->getBody());
             $userModel->update();
             return $this->refresh();
         }
-        
+
         $this->setLayout('admin');
         return $this->render('/admin/users/change_password', [
-            'userModel' => $userModel
+            'userModel' => $userModel,
         ]);
     }
 
