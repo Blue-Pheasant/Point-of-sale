@@ -65,12 +65,20 @@ class AdminController extends Controller
         $users = $this->userService->getTotalUserNumber();
         $income = $this->orderService->getTotalIncome();
 
+        // Time-series + ranking data for the dashboard charts (roadmap T21).
+        $revenueByDay = $this->orderService->getRevenueByDay();
+        $topProducts = $this->orderService->getTopProducts();
+        $averageOrderValue = $this->orderService->getAverageOrderValue();
+
         $this->setLayout('admin');
         return $this->render('/admin/dashboard', [
             'orders' => $orders,
             'products' => $products,
             'users' => $users,
             'income' => $income,
+            'revenueByDay' => $revenueByDay,
+            'topProducts' => $topProducts,
+            'averageOrderValue' => $averageOrderValue,
         ]);
     }
 

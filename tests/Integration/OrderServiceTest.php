@@ -90,7 +90,7 @@ final class OrderServiceTest extends IntegrationTestCase
         // An item on a non-done order must NOT contribute to revenue.
         $this->seedOrderDetail('o-processing', $productId, 5, 'Large');
 
-        $this->assertSame(56000, $this->service->getTotalInCome());
+        $this->assertSame(56000, $this->service->getTotalIncome());
     }
 
     public function testAcceptOrderUpdatesStatus(): void
@@ -126,5 +126,70 @@ final class OrderServiceTest extends IntegrationTestCase
 
         $this->assertCount(1, $orders);
         $this->assertSame('o-1', $orders[0]->getId());
+    }
+
+    public function testGetRevenueByDayGroupsDoneOrdersByDate(): void
+    {
+        $productId = $this->seedProduct(['id' => 'p-1', 'name' => 'Espresso', 'price' => 25000]);
+        $this->seedOrder('o-done', Order::STATUS_DONE);
+        $this->seedOrder('o-processing', Order::STATUS_PROCESSING);
+        // Small adds nothing → 25000 × 2 = 50000 for the done order on today.
+        $this->seedOrderDetail('o-done', $productId, 2, 'Small');
+        // A non-done order must not contribute to revenue.
+        $this->seedOrderDetail('o-processing', $productId, 5, 'Large');
+
+        $today = date('Y-m-d');
+        $revenue = $this->service->getRevenueByDay();
+
+        $this->assertCount(1, $revenue);
+        $this->assertSame($today, $revenue[0]['date']);
+        $this->assertSame(50000, $revenue[0]['revenue']);
+    }
+
+    public function testGetTopProductsRanksByQuantitySold(): void
+    {
+        $coffee = $this->seedProduct(['id' => 'p-coffee', 'name' => 'Coffee', 'price' => 25000]);
+        $tea = $this->seedProduct(['id' => 'p-tea', 'name' => 'Tea', 'price' => 20000]);
+        $this->seedOrder('o-1', Order::STATUS_DONE);
+        $this->seedOrderDetail('o-1', $tea, 7, 'Small');
+        $this->seedOrderDetail('o-1', $coffee, 3, 'Small');
+
+        $top = $this->service->getTopProducts();
+
+        $this->assertCount(2, $top);
+        $this->assertSame('p-tea', $top[0]['product_id']);
+        $this->assertSame(7, $top[0]['quantity']);
+        $this->assertSame(140000, $top[0]['revenue']);
+        $this->assertSame('p-coffee', $top[1]['product_id']);
+    }
+
+    public function testGetTopProductsHonoursTheLimit(): void
+    {
+        $this->seedOrder('o-1', Order::STATUS_DONE);
+        foreach (range(1, 3) as $i) {
+            $pid = $this->seedProduct(['id' => "p-$i", 'name' => "Product $i", 'price' => 1000 * $i]);
+            $this->seedOrderDetail('o-1', $pid, $i, 'Small');
+        }
+
+        $this->assertCount(2, $this->service->getTopProducts(2));
+    }
+
+    public function testGetAverageOrderValueDividesRevenueByDoneOrderCount(): void
+    {
+        $productId = $this->seedProduct(['id' => 'p-1', 'name' => 'Espresso', 'price' => 25000]);
+        // Two done orders: 25000 + 50000 = 75000 over 2 orders → AOV 37500.
+        $this->seedOrder('o-1', Order::STATUS_DONE);
+        $this->seedOrder('o-2', Order::STATUS_DONE);
+        $this->seedOrderDetail('o-1', $productId, 1, 'Small');
+        $this->seedOrderDetail('o-2', $productId, 2, 'Small');
+
+        $this->assertSame(37500, $this->service->getAverageOrderValue());
+    }
+
+    public function testGetAverageOrderValueIsZeroWithoutDoneOrders(): void
+    {
+        $this->seedOrder('o-1', Order::STATUS_PROCESSING);
+
+        $this->assertSame(0, $this->service->getAverageOrderValue());
     }
 }

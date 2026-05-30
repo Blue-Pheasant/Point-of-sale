@@ -199,7 +199,13 @@ class OrderService
         return (int) $stmt->fetchColumn();
     }
 
-    public function getTotalInCome(): int
+    /**
+     * Total revenue across all completed orders, with size surcharges applied
+     * through {@see PricingService::lineTotal()} (the single pricing source).
+     *
+     * @return int The total income in VND.
+     */
+    public function getTotalIncome(): int
     {
         $req = Query::getAll(
             'SELECT
@@ -242,5 +248,139 @@ class OrderService
         }
 
         return $list;
+    }
+
+    /**
+     * Revenue grouped by the day each completed order was placed (roadmap T21).
+     *
+     * The set is restricted to the last $days days. Each order line is joined to
+     * its product so the size surcharge can be applied through
+     * {@see PricingService::lineTotal()} — the same single source of truth used
+     * by {@see self::getTotalIncome()}, so the figures always agree. The day
+     * cut-off is bound as a parameter (never concatenated).
+     *
+     * @param int $days How many days back to include (defaults to 30).
+     * @return array<int, array{date: string, revenue: int}> Ascending by date.
+     */
+    public function getRevenueByDay(int $days = 30): array
+    {
+        $days = max(1, $days);
+
+        // The cut-off date is computed in PHP and bound as a value, because
+        // MySQL prepared statements cannot bind the operand of `INTERVAL n DAY`
+        // (it must be a literal). Binding a plain date keeps the query injection
+        // -safe without that limitation.
+        $since = date('Y-m-d', strtotime('-' . ($days - 1) . ' days'));
+
+        $rows = Query::getAll(
+            'SELECT
+                DATE(orders.created_at) AS order_date,
+                products.price          AS price,
+                order_detail.quantity   AS quantity,
+                order_detail.size       AS size
+            FROM
+                order_detail
+                INNER JOIN products ON order_detail.product_id = products.id
+                INNER JOIN orders   ON order_detail.order_id = orders.id
+            WHERE
+                orders.status = :status
+                AND orders.deleted_at IS NULL
+                AND orders.created_at >= :since',
+            ['status' => Order::STATUS_DONE, 'since' => $since]
+        );
+
+        $byDate = [];
+        foreach ($rows as $row) {
+            $date = (string) $row['order_date'];
+            $byDate[$date] = ($byDate[$date] ?? 0) + PricingService::lineTotal(
+                (float) $row['price'],
+                (string) $row['size'],
+                (int) $row['quantity']
+            );
+        }
+
+        ksort($byDate);
+
+        $result = [];
+        foreach ($byDate as $date => $revenue) {
+            $result[] = ['date' => $date, 'revenue' => (int) $revenue];
+        }
+
+        return $result;
+    }
+
+    /**
+     * The best-selling products across completed orders (roadmap T21).
+     *
+     * Ranks products by total quantity sold and also returns the revenue each
+     * generated (size surcharges applied via {@see PricingService}). Limited to
+     * the top $limit products; the limit is bound as an integer parameter.
+     *
+     * @param int $limit How many products to return (defaults to 5).
+     * @return array<int, array{product_id: string, name: string, quantity: int, revenue: int}>
+     */
+    public function getTopProducts(int $limit = 5): array
+    {
+        $limit = max(1, $limit);
+
+        $rows = Query::getAll(
+            'SELECT
+                products.id    AS product_id,
+                products.name  AS name,
+                products.price AS price,
+                order_detail.quantity AS quantity,
+                order_detail.size     AS size
+            FROM
+                order_detail
+                INNER JOIN products ON order_detail.product_id = products.id
+                INNER JOIN orders   ON order_detail.order_id = orders.id
+            WHERE
+                orders.status = :status
+                AND orders.deleted_at IS NULL',
+            ['status' => Order::STATUS_DONE]
+        );
+
+        $totals = [];
+        foreach ($rows as $row) {
+            $id = (string) $row['product_id'];
+            if (!isset($totals[$id])) {
+                $totals[$id] = [
+                    'product_id' => $id,
+                    'name'       => (string) $row['name'],
+                    'quantity'   => 0,
+                    'revenue'    => 0,
+                ];
+            }
+
+            $totals[$id]['quantity'] += (int) $row['quantity'];
+            $totals[$id]['revenue']  += (int) PricingService::lineTotal(
+                (float) $row['price'],
+                (string) $row['size'],
+                (int) $row['quantity']
+            );
+        }
+
+        usort($totals, fn ($a, $b) => $b['quantity'] <=> $a['quantity']);
+
+        return array_slice(array_values($totals), 0, $limit);
+    }
+
+    /**
+     * The average order value (AOV) across completed orders (roadmap T21).
+     *
+     * Computed as total completed revenue divided by the number of distinct
+     * completed orders, reusing {@see self::getTotalIncome()} so the revenue
+     * basis matches the dashboard total exactly.
+     *
+     * @return int The AOV in VND (0 when there are no completed orders).
+     */
+    public function getAverageOrderValue(): int
+    {
+        $orderCount = $this->getTotalOrderNumber(Order::STATUS_DONE);
+        if ($orderCount === 0) {
+            return 0;
+        }
+
+        return (int) ($this->getTotalIncome() / $orderCount);
     }
 }

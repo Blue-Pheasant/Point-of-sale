@@ -7,7 +7,7 @@ namespace app\Services;
  *
  * The per-size surcharges used to be hard-coded (and duplicated) in
  * {@see \app\Models\CartItem::getTotalPrice()} and
- * {@see \app\Services\OrderService::getTotalInCome()}. They now live here so a
+ * {@see \app\Services\OrderService::getTotalIncome()}. They now live here so a
  * price change happens in exactly one place.
  *
  * @package app\Services
