@@ -37,9 +37,9 @@ Khi đổi API trong `Core/`, **giữ method cũ làm wrapper `@deprecated`** đ
 | [T18](T18.md) | Integration tests | 3 · Test/CI | T06, T13 | ⬜ |
 | [T19](T19.md) | GitHub Actions CI | 3 · Test/CI | T03, T17 | ⬜ |
 | [T20](T20.md) | Tồn kho (inventory) | 4 · Feature | T06, T15 | ⬜ |
-| [T21](T21.md) | Báo cáo & analytics | 4 · Feature | T05 | ⬜ |
-| [T22](T22.md) | Thanh toán thật | 4 · Feature | T07, T20 | ⬜ |
-| [T23](T23.md) | REST API + filter tìm kiếm | 4 · Feature | T07, T08, T13 | ⬜ |
+| [T21](T21.md) | Báo cáo & analytics | 4 · Feature | T05 | ✅ Done |
+| [T22](T22.md) | Thanh toán thật | 4 · Feature | T07, T20 | ✅ Done |
+| [T23](T23.md) | REST API + filter tìm kiếm | 4 · Feature | T07, T08, T13 | ✅ Done |
 
 ## Thứ tự đề xuất
 T01 → T02 → T03 → (T04→T12 Core) → (T13→T16 quality) → (T17→T19 test/CI) → (T20→T23 features).
