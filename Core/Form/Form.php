@@ -3,6 +3,7 @@
 namespace app\Core\Form;
 
 use app\Core\Model;
+use app\Middlewares\CsrfMiddleware;
 
 /**
  * Class Field
@@ -20,7 +21,16 @@ class Form
      */
     public static function begin(string $action, string $method): Form
     {
-        echo sprintf('<form accept-charset="utf-8" action="%s" method="%s">', $action, $method);
+        echo sprintf(
+            '<form accept-charset="utf-8" action="%s" method="%s">',
+            htmlspecialchars($action, ENT_QUOTES, 'UTF-8'),
+            htmlspecialchars($method, ENT_QUOTES, 'UTF-8')
+        );
+
+        // Emit CSRF hidden field for every form automatically.
+        $token = CsrfMiddleware::token();
+        echo sprintf('<input type="hidden" name="_csrf" value="%s">', htmlspecialchars($token, ENT_QUOTES, 'UTF-8'));
+
         return new Form();
     }
 

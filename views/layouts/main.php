@@ -106,7 +106,7 @@ $currentUser = AuthUser::authUser();
                             <div class="header-image header-image-user">
                                 <img class="header-image-icon" src="/images/user.png" />
                             </div>
-                            Chào <?php echo $currentUser->getDisplayName() ?>
+                            Chào <?= e($currentUser->getDisplayName()) ?>
                         </a>
                     </li>
                     <li class="nav-item active">
@@ -140,11 +140,11 @@ $currentUser = AuthUser::authUser();
         <div class="container">
             <?php if (Session::getFlash('success')) : ?>
             <div class="alert alert-success">
-                <p><?php echo Session::getFlash('success') ?></p>
+                <p><?= e(Session::getFlash('success')) ?></p>
             </div>
-            <?php elseif(Session::getFlash('fail')) : ?>
-                <div class="alert alert-danger">
-                <p><?php echo Session::getFlash('fail') ?></p>
+            <?php elseif (Session::getFlash('fail')) : ?>
+            <div class="alert alert-danger">
+                <p><?= e(Session::getFlash('fail')) ?></p>
             </div>
             <?php endif; ?>
             {{content}}

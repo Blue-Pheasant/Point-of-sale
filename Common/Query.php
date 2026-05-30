@@ -19,7 +19,7 @@ class Query
      * @var PDO The PDO instance used to interact with the database.
      */
     private static PDO $db;
-    
+
     /**
      * Prepares a SQL query and binds the provided parameters to it.
      *
@@ -36,117 +36,132 @@ class Query
         $stmt = self::$db->prepare($query);
 
         foreach ($params as $key => $value) {
-            $stmt->bindValue(":$key", $value);
+            // Bind the correct PDO type. With PDO::ATTR_EMULATE_PREPARES = false,
+            // integers (e.g. LIMIT/OFFSET) must be bound as PARAM_INT, otherwise
+            // MySQL receives quoted strings and raises a syntax error.
+            $type = match (true) {
+                is_int($value) => PDO::PARAM_INT,
+                is_bool($value) => PDO::PARAM_BOOL,
+                is_null($value) => PDO::PARAM_NULL,
+                default => PDO::PARAM_STR,
+            };
+
+            $stmt->bindValue(":$key", $value, $type);
         }
 
         return $stmt;
     }
 
     /**
-     * Executes a SQL query and returns the number of affected rows.
+     * Starts a new fluent {@see QueryBuilder} for the given table.
      *
-     * @param string $table The table to execute the query on.
-     * @param array $columns The columns to select.
-     * @param string $query The SQL query to execute.
-     * @param array $params The parameters to bind to the query.
-     * @param int $limit The maximum number of rows to return.
-     * @param int $offset The number of rows to skip.
-     * @return int The number of affected rows.
+     * Preferred entry point for new code: it always binds values as
+     * parameters, so SQL injection is impossible by construction.
+     *
+     * @param string $table The table to operate on.
+     * @return QueryBuilder
      */
-    public static function get(string $table, array $columns = [], array $where = [], int $limit = 0, int $offset = 0): string
+    public static function table(string $table): QueryBuilder
     {
-        $query = "SELECT ";
-        if (count($columns) > 0) {
-            $query .= implode(", ", $columns);
-        } else {
-            $query .= "*";
-        }
-        $query .= " FROM $table";
+        return QueryBuilder::table($table);
+    }
 
-        if (count($where) > 0) {
-            $query .= " WHERE ";
-            $whereClause = [];
-            foreach ($where as $key => $value) {
-                $whereClause[] = "$key = '$value'";
-            }
-            $query .= implode(" AND ", $whereClause);
+    /**
+     * Fetches rows from a table.
+     *
+     * @deprecated Use {@see Query::table()} / {@see QueryBuilder} instead. This
+     *     wrapper now binds every value as a parameter (no string concatenation)
+     *     and EXECUTES the query, returning the fetched rows. Note: unlike the
+     *     previous version it returns rows, not a raw SQL string.
+     *
+     * @param string $table The table to select from.
+     * @param array<int, string> $columns The columns to select.
+     * @param array<string, mixed> $where Equality conditions (column => value).
+     * @param int $limit The maximum number of rows to return (0 for none).
+     * @param int $offset The number of rows to skip (0 for none).
+     * @return array<int, array<string, mixed>> The fetched rows.
+     */
+    public static function get(string $table, array $columns = [], array $where = [], int $limit = 0, int $offset = 0): array
+    {
+        $builder = QueryBuilder::table($table)->select($columns);
+
+        foreach ($where as $key => $value) {
+            $builder->where($key, $value);
         }
 
         if ($limit > 0) {
-            $query .= " LIMIT $limit";
+            $builder->limit($limit);
         }
 
         if ($offset > 0) {
-            $query .= " OFFSET $offset";
+            $builder->offset($offset);
         }
 
-        return $query;
+        return $builder->get();
     }
 
     /**
      * Inserts data into a table.
+     *
+     * @deprecated Use {@see Query::table()} / {@see QueryBuilder::insert()}.
+     *     This wrapper binds every value as a parameter and executes the insert.
+     *
      * @param string $table The table to insert data into.
-     * @param array $data The data to insert.
+     * @param array<string, mixed> $data The data to insert.
+     * @return bool True on success, false otherwise.
      */
-    public static function insert(string $table, array $data): string
+    public static function insert(string $table, array $data): bool
     {
-        $query = "INSERT INTO $table (";
-        $columns = [];
-        $values = [];
-        foreach ($data as $key => $value) {
-            $columns[] = $key;
-            $values[] = "'$value'";
-        }
-        $query .= implode(", ", $columns);
-        $query .= ") VALUES (";
-        $query .= implode(", ", $values);
-        $query .= ")";
-        return $query;
+        return QueryBuilder::table($table)->insert($data);
     }
 
     /**
      * Updates data in a table.
-     * @param string $table The table to update data in.
-     * @param array $data The data to update.
-     * @param array $where The conditions to update data by.
+     *
+     * @deprecated Use {@see Query::table()} / {@see QueryBuilder::update()}.
+     *     This wrapper binds every value as a parameter and executes the update.
+     *
+     * @param string $table The table to update.
+     * @param array<string, mixed> $data The data to set.
+     * @param array<string, mixed> $where Equality conditions (column => value).
+     * @return bool True on success, false otherwise.
      */
-    public static function update(string $table, array $data, array $where): string
+    public static function update(string $table, array $data, array $where): bool
     {
-        $query = "UPDATE $table SET ";
-        $set = [];
-        foreach ($data as $key => $value) {
-            $set[] = "$key = '$value'";
-        }
-        $query .= implode(", ", $set);
-        $query .= " WHERE ";
-        $whereClause = [];
+        $builder = QueryBuilder::table($table);
         foreach ($where as $key => $value) {
-            $whereClause[] = "$key = '$value'";
+            $builder->where($key, $value);
         }
-        $query .= implode(" AND ", $whereClause);
-        return $query;
+
+        return $builder->update($data);
     }
 
     /**
      * Deletes data from a table.
-     * @param string $table The table to delete data from.
-     * @param array $where The conditions to delete data by.
+     *
+     * @deprecated Use {@see Query::table()} / {@see QueryBuilder::delete()}.
+     *     This wrapper binds every value as a parameter and executes the delete.
+     *
+     * @param string $table The table to delete from.
+     * @param array<string, mixed> $where Equality conditions (column => value).
+     * @return bool True on success, false otherwise.
      */
-    public static function delete(string $table, array $where): string
+    public static function delete(string $table, array $where): bool
     {
-        $query = "DELETE FROM $table WHERE ";
-        $whereClause = [];
+        $builder = QueryBuilder::table($table);
         foreach ($where as $key => $value) {
-            $whereClause[] = "$key = '$value'";
+            $builder->where($key, $value);
         }
-        $query .= implode(" AND ", $whereClause);
-        return $query;
+
+        return $builder->delete();
     }
 
     /**
-     * Counts the number of rows in a table.
-     * @param string $table The table to count rows in.
-     * @param array $where The conditions to count rows by.
+     * Counts the number of rows returned by a (param-bound) query.
+     *
+     * @param string $query The SQL query to wrap in a COUNT(*).
+     * @param array<string, mixed> $params The parameters to bind to the query.
+     * @return int The row count.
      */
     public static function getCount(string $query, array $params = []): int
     {

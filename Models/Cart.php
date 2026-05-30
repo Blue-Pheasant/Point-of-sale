@@ -2,8 +2,6 @@
 
 namespace app\Models;
 
-use app\Core\Application;
-use app\Core\CartModel;
 use app\Core\Database;
 use app\Core\DBModel;
 
@@ -39,12 +37,15 @@ class Cart extends DBModel
 
     public function rules(): array
     {
-        return [];
+        return [
+            'user_id' => [self::RULE_REQUIRED],
+            'status'  => [self::RULE_REQUIRED],
+        ];
     }
 
     public static function create($id)
     {
-        $cart = new Cart(['id' => uniqid(), 'user_id' => $id, 'status' => 'processing']);
+        $cart = new Cart(['user_id' => $id, 'status' => 'processing']);
         $cart->save();
     }
 
@@ -52,11 +53,6 @@ class Cart extends DBModel
     {
         $db = Database::getInstance();
         $db->query("UPDATE cart SET status = 'done' WHERE id = '$id'");
-    }
-
-    public function save(): bool
-    {
-        return parent::save();
     }
 
     public static function findCart($id)

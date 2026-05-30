@@ -2,13 +2,13 @@
 
 namespace app\Controllers;
 
+use app\Auth\AuthUser;
 use app\Core\Controller;
 use app\Core\Request;
 use app\Middlewares\AdminMiddleware;
+use app\Services\OrderService;
 use app\Services\ProductService;
 use app\Services\UserService;
-use app\Services\OrderService;
-use app\Auth\AuthUser;
 
 /**
  * Class AdminController
@@ -41,12 +41,12 @@ class AdminController extends Controller
      *
      * Registers the middleware, initializes the services.
      */
-    public function __construct()
+    public function __construct(ProductService $productService, UserService $userService, OrderService $orderService)
     {
+        $this->productService = $productService;
+        $this->userService = $userService;
+        $this->orderService = $orderService;
         $this->registerMiddleware(AdminMiddleware::class, ['index', 'profile']);
-        $this->productService = new ProductService();
-        $this->userService = new UserService();
-        $this->orderService = new OrderService();
     }
 
 
@@ -63,14 +63,22 @@ class AdminController extends Controller
         $orders = $this->orderService->getTotalOrderNumber();
         $products = $this->productService->getProductNumber();
         $users = $this->userService->getTotalUserNumber();
-        $income = $this->orderService->getTotalIncome(); 
+        $income = $this->orderService->getTotalIncome();
+
+        // Time-series + ranking data for the dashboard charts (roadmap T21).
+        $revenueByDay = $this->orderService->getRevenueByDay();
+        $topProducts = $this->orderService->getTopProducts();
+        $averageOrderValue = $this->orderService->getAverageOrderValue();
 
         $this->setLayout('admin');
         return $this->render('/admin/dashboard', [
             'orders' => $orders,
             'products' => $products,
             'users' => $users,
-            'income' => $income 
+            'income' => $income,
+            'revenueByDay' => $revenueByDay,
+            'topProducts' => $topProducts,
+            'averageOrderValue' => $averageOrderValue,
         ]);
     }
 
@@ -89,7 +97,7 @@ class AdminController extends Controller
     public function profile(Request $request): array|bool|string
     {
         $adminModel = AuthUser::authUser();
-        if($request->getMethod() === 'post') {
+        if ($request->getMethod() === 'post') {
             $adminModel->loadData($request->getBody());
             if ($adminModel->validateUpdateProfile()) {
                 if ($adminModel->updateProfile($adminModel)) {
@@ -100,7 +108,7 @@ class AdminController extends Controller
 
         $this->setLayout('admin');
         return $this->render('/admin/profile', [
-            'user' => $adminModel
+            'user' => $adminModel,
         ]);
     }
 }

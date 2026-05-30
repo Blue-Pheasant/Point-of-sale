@@ -2,8 +2,8 @@
 
 namespace app\Routes;
 
-use app\Core\Route;
 use app\Controllers\UserController;
+use app\Core\Route;
 
 class UserRoute extends Route
 {
@@ -20,7 +20,7 @@ class UserRoute extends Route
         $this->get('/admin/users/create', [UserController::class, 'create']);
         $this->get('/admin/users/details', [UserController::class, 'details']);
         $this->get('/admin/users/edit/password', [UserController::class, 'password']);
-        
+
         $this->post('/admin/users/delete', [UserController::class, 'delete']);
         $this->post('/admin/users/edit', [UserController::class, 'update']);
         $this->post('/admin/users/create', [UserController::class, 'create']);

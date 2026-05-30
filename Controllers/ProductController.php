@@ -1,4 +1,5 @@
 <?php
+
 /*
     controllers/product.php
 */
@@ -6,13 +7,14 @@
 namespace app\Controllers;
 
 use app\Core\Controller;
-use app\Models\Product;
 use app\Core\Request;
 use app\Core\Session;
-use app\Models\CartItem;
-use app\Services\ProductService;
 use app\Middlewares\AdminMiddleware;
 use app\Middlewares\AuthMiddleware;
+use app\Models\CartItem;
+use app\Models\Product;
+use app\Services\ProductService;
+
 /**
  * Class ProductController
  *
@@ -34,10 +36,10 @@ class ProductController extends Controller
      *
      * Initializes the services and registers the middleware.
      */
-    public function __construct()
+    public function __construct(ProductService $productService)
     {
-        $this->productService = new ProductService();
-        $this->registerMiddleware(AdminMiddleware::class, ['index', 'create', 'delete', 'update', 'details']);
+        $this->productService = $productService;
+        $this->registerMiddleware(AdminMiddleware::class, ['index', 'create', 'delete', 'update', 'details', 'adjustStock']);
         $this->registerMiddleware(AuthMiddleware::class, ['product']);
     }
 
@@ -53,7 +55,7 @@ class ProductController extends Controller
         $products = $this->productService->getAllProducts(['limit' => 10, 'page' => 1])['list'];
         $this->setLayout('admin');
         return $this->render('/admin/products/products', [
-            'products' => $products
+            'products' => $products,
         ]);
     }
 
@@ -79,13 +81,13 @@ class ProductController extends Controller
                 $this->setFlash('fail', 'Create product fail');
             }
         }
-        
+
         // Fetch all products
         $products = Product::getAllProducts();
 
         $this->setLayout('admin');
         return $this->render('/admin/products/create_product', [
-            'productModel' => $products
+            'productModel' => $products,
         ]);
     }
 
@@ -111,7 +113,7 @@ class ProductController extends Controller
 
         $this->setLayout('admin');
         return $this->render('/admin/products/delete_product', [
-            'productModel' => $productModel
+            'productModel' => $productModel,
         ]);
     }
 
@@ -138,8 +140,32 @@ class ProductController extends Controller
 
         $this->setLayout('admin');
         return $this->render('/admin/products/edit_product', [
-            'productModel' => $productModel
+            'productModel' => $productModel,
         ]);
+    }
+
+    /**
+     * Method adjustStock
+     *
+     * Applies a (positive or negative) stock adjustment to a product, e.g. when
+     * the admin restocks or corrects inventory. Stock can never drop below 0.
+     * Only accepts POST; redirects back to the product details afterwards.
+     *
+     * @param Request $request The request object containing the request parameters.
+     * @return array|bool|string
+     */
+    public function adjustStock(Request $request): array|bool|string
+    {
+        $id    = $request->getParam('id');
+        $delta = (int) ($request->getBody()['delta'] ?? 0);
+
+        if ($delta !== 0 && $this->productService->adjustStock($id, $delta)) {
+            $this->setFlash('success', 'Đã cập nhật tồn kho.');
+        } else {
+            $this->setFlash('fail', 'Không thể cập nhật tồn kho.');
+        }
+
+        return $this->redirect('/admin/products/details?id=' . urlencode((string) $id));
     }
 
     /**
@@ -157,7 +183,7 @@ class ProductController extends Controller
 
         $this->setLayout('admin');
         return $this->render('/admin/products/details_product', [
-            'productModel' => $productModel
+            'productModel' => $productModel,
         ]);
     }
 
@@ -177,24 +203,28 @@ class ProductController extends Controller
         $addToCart = false;
 
         if ($request->getMethod() === 'post') {
-            $size = $request->getBody()['size'];
-            $note = $request->getBody()['note'];
-            $quantity = $request->getBody()['quantity'];
+            $body = $request->getBody();
+            $size = $body['size'] ?? '';
+            $note = $body['note'] ?? '';
+            $quantity = (int) ($body['quantity'] ?? 0);
             $cartId = Session::get('cart_id');
             $cartDetail = new CartItem([
-                'id' => uniqid(),
                 'product_id' => $id,
                 'cart_id' => $cartId,
                 'quantity' => $quantity,
                 'note' => $note,
-                'size' => $size
+                'size' => $size,
             ]);
 
-            $cartDetail->save();
-            $addToCart = true;
+            if ($cartDetail->validate()) {
+                $cartDetail->save();
+                $addToCart = true;
+            } else {
+                $this->setFlash('fail', 'Vui lòng chọn kích cỡ và số lượng hợp lệ.');
+            }
         }
 
-        $data = array('product' => $product, 'addToCart' => $addToCart);
+        $data = ['product' => $product, 'addToCart' => $addToCart];
         return $this->render('product_detail', $data);
     }
 }

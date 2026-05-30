@@ -2,7 +2,6 @@
 
 namespace app\Models;
 
-use app\Core\Database;
 use app\Core\DBModel;
 
 class OrderItem extends DBModel
@@ -51,12 +50,11 @@ class OrderItem extends DBModel
 
     public function rules(): array
     {
-        return [];
-    }
-
-    public function save(): bool
-    {
-        return parent::save();
+        return [
+            'product_id' => [self::RULE_REQUIRED],
+            'order_id'   => [self::RULE_REQUIRED],
+            'quantity'   => [self::RULE_REQUIRED, [self::RULE_MIN_VALUE, 'minint' => 1]],
+        ];
     }
 
     public function getDisplayInfo(): string
@@ -64,19 +62,31 @@ class OrderItem extends DBModel
         return $this->list . ' ' . $this->status;
     }
 
-    public static function getOrderItem($order_id)
+    /**
+     * Returns the order-detail items belonging to the given order id.
+     *
+     * @return array<int, OrderItem>
+     */
+    public static function getOrderItems($order_id): array
     {
-        $list = [];
-        $db = Database::getInstance();
-        $req = $db->query(
-            "SELECT *
-            FROM order_detail JOIN products ON order_detail.product_id = products.id 
-            WHERE order_detail.order_id = '$order_id';"
+        $rows = \app\Common\Query::getAll(
+            'SELECT *
+            FROM order_detail JOIN products ON order_detail.product_id = products.id
+            WHERE order_detail.order_id = :order_id',
+            ['order_id' => $order_id]
         );
 
-        foreach ($req->fetchAll() as $item) {
-            $list[] = new OrderItem($item);
-        }
-        return $list;
+        return array_map(fn ($item) => new OrderItem($item), $rows);
+    }
+
+    /**
+     * @deprecated Use {@see self::getOrderItems()}; this method returns a list,
+     *     so the plural name is correct. Kept as a backward-compatible alias.
+     *
+     * @return array<int, OrderItem>
+     */
+    public static function getOrderItem($order_id): array
+    {
+        return self::getOrderItems($order_id);
     }
 }

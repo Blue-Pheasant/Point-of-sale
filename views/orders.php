@@ -20,7 +20,8 @@ function orderStatus($status)
 }
 
 ?>
-<form action="/orders/clear", method="post">
+<form action="/orders/clear" method="post">
+    <?= csrf_field() ?>
     <button type="submit" class="password-button"><h6>Làm trống</h6></button>
 </form>
 <div class="order-page">
@@ -51,20 +52,12 @@ function orderStatus($status)
             foreach ($params['orders'] as $param) {
                 $count += 1;
                 echo '<div class="order-page__item">
-                <a href="/order?id=' . $param->id . '">
+                <a href="/order?id=' . e($param->id) . '">
                     <div class="row">
-                        <div class="col">
-                            ' . $count . '
-                        </div>
-                        <div class="col">
-                            ' . $param->id . '
-                        </div>
-                        <div class="col">
-                            ' . orderStatus($param->status) . '
-                        </div>
-                        <div class="col">
-                            ' . $param->created_at . '
-                        </div>
+                        <div class="col">' . (int) $count . '</div>
+                        <div class="col">' . e($param->id) . '</div>
+                        <div class="col">' . e(orderStatus($param->status)) . '</div>
+                        <div class="col">' . e($param->created_at) . '</div>
                     </div>
                 </a>
             </div>';

@@ -12,12 +12,14 @@ services:
     depends_on:
       - db
     environment:
-      - DB_DSN=mysql:host=db;dbname=pos
-      - DB_USER=pos
-      - DB_PASS=123456
+      - DB_DSN=mysql:host=db;dbname=${MYSQL_DATABASE:-pos}
+      - DB_USER=${MYSQL_USER:-pos}
+      - DB_PASSWORD=${MYSQL_PASSWORD:?MYSQL_PASSWORD is required}
+      - APP_ENV=${APP_ENV:-local}
+      - APP_DEBUG=${APP_DEBUG:-false}
     networks:
       - pos-network
-      
+
   db:
     image: mysql:8
     container_name: mysql
@@ -27,10 +29,10 @@ services:
       - mysql-data:/var/lib/mysql
       - ./docker/mysql-config.cnf:/etc/mysql/conf.d/config.cnf
     environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: pos
-      MYSQL_USER: pos
-      MYSQL_PASSWORD: 123456
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?MYSQL_ROOT_PASSWORD is required}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-pos}
+      MYSQL_USER: ${MYSQL_USER:-pos}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:?MYSQL_PASSWORD is required}
     networks:
       - pos-network
 

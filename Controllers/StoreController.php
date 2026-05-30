@@ -1,4 +1,5 @@
 <?php
+
 /*
     controllers/store.php
 */
@@ -7,8 +8,8 @@ namespace app\Controllers;
 
 use app\Core\Controller;
 use app\Core\Request;
-use app\Models\Store;
 use app\Middlewares\AdminMiddleware;
+use app\Models\Store;
 
 /**
  * Class StoreController
@@ -26,7 +27,7 @@ class StoreController extends Controller
      *
      * Registers the middleware.
      */
-    public function __construct() 
+    public function __construct()
     {
         $this->registerMiddleware(AdminMiddleware::class, ['index', 'add', 'delete', 'update']);
     }
@@ -43,7 +44,7 @@ class StoreController extends Controller
         $stores = Store::getAll();
         $this->setLayout('admin');
         return $this->render('/admin/stores/stores', [
-            'store' => $stores
+            'store' => $stores,
         ]);
     }
 
@@ -57,16 +58,16 @@ class StoreController extends Controller
      */
     public function add(Request $request): array|bool|string
     {
-        $storeModel = new Store;
-        if($request->getMethod() === 'post') {
+        $storeModel = new Store();
+        if ($request->getMethod() === 'post') {
             $storeModel->loadData($request->getBody());
             $storeModel->save();
             return $this->refresh();
         }
 
         $this->setLayout('admin');
-        return $this->render('/admin/stores/create_store',  [
-            'storeModel' => $storeModel
+        return $this->render('/admin/stores/create_store', [
+            'storeModel' => $storeModel,
         ]);
     }
 
@@ -82,10 +83,10 @@ class StoreController extends Controller
     {
         $storeId = $request->getParam('id');
         $storeModel = Store::get($storeId);
-        
+
         $this->setLayout('admin');
         return $this->render('/admin/stores/details_store', [
-            'model' => $storeModel
+            'model' => $storeModel,
         ]);
     }
 
@@ -108,7 +109,7 @@ class StoreController extends Controller
 
         $this->setLayout('admin');
         return $this->render('/admin/stores/delete_store', [
-            'storeModel' => $storeModel
+            'storeModel' => $storeModel,
         ]);
     }
 
@@ -132,7 +133,7 @@ class StoreController extends Controller
 
         $this->setLayout('admin');
         return $this->render('/admin/stores/edit_store', [
-            'storeModel' => $storeModel
+            'storeModel' => $storeModel,
         ]);
     }
 }

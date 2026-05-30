@@ -17,6 +17,7 @@
               <th>Mục</th>
               <th>Tên sản phẩm</th>
               <th>Giá</th>
+              <th>Tồn kho</th>
               <th class="no-sort"></th>
             </tr>
           </thead>
@@ -25,19 +26,25 @@
               foreach ($params['products'] as $productModel) { 
             ?>
               <tr>
-                <td><?=$productModel->getId()?></td>
+                <td><?= e($productModel->getId()) ?></td>
                 <td>
-                    <?php
-                         echo '<img width="60" height="60"src="' . $productModel->getImageUrl() . '">';
-                    ?>
+                    <img width="60" height="60" src="<?= e($productModel->getImageUrl()) ?>">
                 </td>
-                <td><?=$productModel->getCategory()?></td>
-                <td><?=$productModel->getName()?></td>
-                <td><?=number_format($productModel->getPrice(), 0, ',', '.') . 'đ'?></td>
+                <td><?= e($productModel->getCategory()) ?></td>
+                <td><?= e($productModel->getName()) ?></td>
+                <td><?= e(number_format((float) $productModel->getPrice(), 0, ',', '.') . 'đ') ?></td>
                 <td>
-                  <a class="fa fa-eye btn btn-info btn-sm" href="/admin/products/details?id=<?=$productModel->getId()?>"></a>
-                  <a class="fa fa-pencil btn btn-warning btn-sm" href="/admin/products/edit?id=<?=$productModel->getId()?>"></a>
-                  <a class="fa fa-trash btn btn-danger btn-sm" href="/admin/products/delete?id=<?=$productModel->getId()?>"></a>
+                  <?= e((string) $productModel->getStockQuantity()) ?>
+                  <?php if ($productModel->isOutOfStock()) { ?>
+                    <span class="badge badge-danger label label-danger">Hết hàng</span>
+                  <?php } elseif ($productModel->isLowStock()) { ?>
+                    <span class="badge badge-warning label label-warning">Sắp hết</span>
+                  <?php } ?>
+                </td>
+                <td>
+                  <a class="fa fa-eye btn btn-info btn-sm" href="/admin/products/details?id=<?= e($productModel->getId()) ?>"></a>
+                  <a class="fa fa-pencil btn btn-warning btn-sm" href="/admin/products/edit?id=<?= e($productModel->getId()) ?>"></a>
+                  <a class="fa fa-trash btn btn-danger btn-sm" href="/admin/products/delete?id=<?= e($productModel->getId()) ?>"></a>
                 </td>
               </tr>
             <?php 

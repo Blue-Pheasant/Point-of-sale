@@ -2,17 +2,16 @@
 
 namespace app\Middlewares;
 
+use app\Auth\AuthUser;
 use app\Core\Middleware;
 use app\Exception\ForbiddenException;
-use app\Auth\AuthUser;
 
 class AdminMiddleware extends Middleware
 {
-    public function execute()
+    public function execute(): void
     {
         if (!AuthUser::isAdmin() && !empty($this->actions)) {
-            if(in_array($this->currentAction(), $this->actions)) 
-            {
+            if (in_array($this->currentAction(), $this->actions)) {
                 throw new ForbiddenException();
             }
         }

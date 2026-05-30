@@ -64,7 +64,14 @@ class Controller
      */
     public function registerMiddleware(string $middleware, array $actions = []): void
     {
-        $this->middleware = new $middleware($actions);
+        $instance = Application::$app->container->make($middleware, ['actions' => $actions]);
+        if (!$instance instanceof Middleware) {
+            throw new \RuntimeException(
+                sprintf('Middleware "%s" must extend %s.', $middleware, Middleware::class)
+            );
+        }
+
+        $this->middleware = $instance;
         $this->middleware->execute();
     }
 

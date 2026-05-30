@@ -5,7 +5,6 @@ namespace app\Models;
 use app\Core\Database;
 use app\Core\DBModel;
 
-
 class Product extends DBModel
 {
     public string $category_id;
@@ -13,35 +12,110 @@ class Product extends DBModel
     public float $price;
     public string $description;
     public string $image_url;
+    public int $stock_quantity = 0;
+    public int $low_stock_threshold = 0;
 
     public function __construct($attributes = [])
     {
         parent::__construct($attributes);
     }
 
-    public function setId($id) { $this->id = $id; }
-    public function getId() { return $this->id; }
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
+    public function getId()
+    {
+        return $this->id;
+    }
 
-    public function setCategoryId($category_id) { $this->category_id = $category_id; }
-    public function getCategoryId() { return $this->category_id; }
+    public function setCategoryId($category_id)
+    {
+        $this->category_id = $category_id;
+    }
+    public function getCategoryId()
+    {
+        return $this->category_id;
+    }
 
-    
-    public function setName($name) { $this->name = $name; }
-    public function getName() { return $this->name; }
-    
-    public function setPrice($price) { $this->price = $price; }
-    public function getPrice() { return $this->price; }
-    
-    public function setDescription($description) { $this->description = $description; }
-    public function getDescription() { return $this->description; }
 
-    public function setImageUrl($image_url) { $this->image_url = $image_url; }
-    public function getImageUrl() { return $this->image_url; } 
+    public function setName($name)
+    {
+        $this->name = $name;
+    }
+    public function getName()
+    {
+        return $this->name;
+    }
 
-    public static function getNameById($id) 
+    public function setPrice($price)
+    {
+        $this->price = $price;
+    }
+    public function getPrice()
+    {
+        return $this->price;
+    }
+
+    public function setDescription($description)
+    {
+        $this->description = $description;
+    }
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    public function setImageUrl($image_url)
+    {
+        $this->image_url = $image_url;
+    }
+    public function getImageUrl()
+    {
+        return $this->image_url;
+    }
+
+    public function setStockQuantity(int $stock_quantity): void
+    {
+        $this->stock_quantity = $stock_quantity;
+    }
+
+    public function getStockQuantity(): int
+    {
+        return (int) $this->stock_quantity;
+    }
+
+    public function setLowStockThreshold(int $low_stock_threshold): void
+    {
+        $this->low_stock_threshold = $low_stock_threshold;
+    }
+
+    public function getLowStockThreshold(): int
+    {
+        return (int) $this->low_stock_threshold;
+    }
+
+    /** Whether the product is completely out of stock. */
+    public function isOutOfStock(): bool
+    {
+        return $this->getStockQuantity() <= 0;
+    }
+
+    /**
+     * Whether the on-hand quantity is low: still in stock but at or below the
+     * low-stock threshold. An out-of-stock product is reported by
+     * {@see self::isOutOfStock()}, not here.
+     */
+    public function isLowStock(): bool
+    {
+        $stock = $this->getStockQuantity();
+        return $stock > 0 && $stock <= $this->getLowStockThreshold();
+    }
+
+    public static function getNameById($id): string
     {
         $productModel = Product::getProductDetail($id);
-        return $productModel->getName();
+        return $productModel?->getName() ?? '';
     }
 
     public function getCategory()
@@ -49,7 +123,7 @@ class Product extends DBModel
         $categoryModel = Category::get($this->category_id);
         return $categoryModel->getDisplayName();
     }
-    
+
     public function getDisplayInfo(): string
     {
         return $this->id . ' ' . $this->category_id . ' ' . $this->name . ' ' . $this->price . ' ' . $this->description;
@@ -62,9 +136,9 @@ class Product extends DBModel
 
     public function attributes(): array
     {
-        return array_merge($this->defaultAttributes(), ['category_id', 'name', 'price', 'description', 'image_url']);
+        return array_merge($this->defaultAttributes(), ['category_id', 'name', 'price', 'description', 'image_url', 'stock_quantity', 'low_stock_threshold']);
     }
-   
+
     public function labels(): array
     {
         return [
@@ -73,10 +147,12 @@ class Product extends DBModel
             'price' => 'Giá',
             'description' => 'Mô tả sản phẩm',
             'image_url' => 'Hình ảnh sản phẩm',
-            'category_id' => 'Mã mục'
+            'category_id' => 'Mã mục',
+            'stock_quantity' => 'Tồn kho',
+            'low_stock_threshold' => 'Ngưỡng sắp hết',
         ];
     }
-    
+
     public function getLabel(string $attribute): string
     {
         return $this->labels()[$attribute];
@@ -85,16 +161,12 @@ class Product extends DBModel
     public function rules(): array
     {
         return [
-            'name' => [self::RULE_REQUIRED, [self::RULE_MAX, 'max' <= 50]],
-            'description' => [self::RULE_REQUIRED, [self::RULE_MIN, 'min' >= 20], [self::RULE_MAX, 'max' <= 100]],
+            'name' => [self::RULE_REQUIRED, [self::RULE_MAX, 'max' => 50]],
+            'description' => [self::RULE_REQUIRED, [self::RULE_MIN, 'min' => 20], [self::RULE_MAX, 'max' => 100]],
             'price' => [self::RULE_REQUIRED],
+            'stock_quantity' => [self::RULE_NUMBER, [self::RULE_MIN_VALUE, 'minint' => 0]],
+            'low_stock_threshold' => [self::RULE_NUMBER, [self::RULE_MIN_VALUE, 'minint' => 0]],
         ];
-    }
-
-    public function save(): bool
-    {
-        $this->id = uniqid();
-        return parent::save();
     }
 
     public static function getAllProducts()
@@ -110,36 +182,40 @@ class Product extends DBModel
         return $list;
     }
 
-    public static function getProductDetail($id)
+    public static function getProductDetail($id): ?Product
     {
-        $db = Database::getInstance();
-        $req = $db->query("SELECT * FROM products WHERE id = '$id'");
-        $item = $req->fetchAll()[0];
-        $product = new Product($item);
-        return $product;
+        $row = \app\Common\QueryBuilder::table('products')
+            ->where('id', $id)
+            ->first();
+
+        return $row ? new Product($row) : null;
     }
 
     public static function getProductsByCategory($category_id)
     {
         $list = [];
-        $db = Database::getInstance();
-        $req = $db->query("SELECT * FROM products WHERE category_id = '$category_id'");
+        $rows = \app\Common\QueryBuilder::table('products')
+            ->where('category_id', $category_id)
+            ->get();
 
-        foreach ($req->fetchAll() as $item) {
+        foreach ($rows as $item) {
             $list[] = new Product($item);
         }
+
         return $list;
     }
 
     public static function getProductsByKeyword($keyword)
     {
         $list = [];
-        $db = Database::getInstance();
-        $req = $db->query("SELECT * FROM products WHERE name LIKE '%$keyword%';");
+        $rows = \app\Common\QueryBuilder::table('products')
+            ->whereLike('name', (string) $keyword)
+            ->get();
 
-        foreach ($req->fetchAll() as $item) {
+        foreach ($rows as $item) {
             $list[] = new Product($item);
         }
+
         return $list;
     }
 }

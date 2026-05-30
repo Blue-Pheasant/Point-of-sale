@@ -25,6 +25,14 @@
             </div>
             </div>
             <div class="form-row">
+            <div class="form-group col-md-3">
+              <?php echo $form->field($productModel, 'stock_quantity') ?>
+            </div>
+            <div class="form-group col-md-3">
+              <?php echo $form->field($productModel, 'low_stock_threshold') ?>
+            </div>
+            </div>
+            <div class="form-row">
               <div class="form-group col-md-12">
                 <?php echo $form->field($productModel, 'description') ?>
             </div>

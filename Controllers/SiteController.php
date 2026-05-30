@@ -25,7 +25,7 @@ class SiteController extends Controller
     public function home(): array|bool|string
     {
         return $this->render('home', [
-            'name' => 'Buy me store'
+            'name' => 'Buy me store',
         ]);
     }
 
@@ -66,7 +66,7 @@ class SiteController extends Controller
         $stores = Store::getAll();
         $this->setLayout('main');
         return $this->render('stores', [
-            'store' => $stores
+            'store' => $stores,
         ]);
     }
 

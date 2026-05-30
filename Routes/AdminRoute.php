@@ -2,8 +2,8 @@
 
 namespace app\Routes;
 
-use app\Core\Route;
 use app\Controllers\AdminController;
+use app\Core\Route;
 
 class AdminRoute extends Route
 {

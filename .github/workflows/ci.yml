@@ -1,0 +1,69 @@
+name: CI
+
+on:
+  push:
+    branches: ['**']
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Lint, analyse & test (PHP 8.1)
+    runs-on: ubuntu-latest
+
+    # Optional MySQL service for integration tests that target a real MySQL
+    # database. The current suite (roadmap T18) uses an in-memory SQLite
+    # connection, so this service is provided for forward compatibility and is
+    # not required for the steps below to pass.
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: point_of_sale
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h localhost"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up PHP 8.1
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          extensions: pdo, pdo_mysql, pdo_sqlite, mbstring
+          coverage: none
+          tools: composer:v2
+
+      - name: Validate composer.json
+        run: composer validate --strict
+
+      - name: Cache Composer packages
+        uses: actions/cache@v4
+        with:
+          path: vendor
+          key: ${{ runner.os }}-php81-${{ hashFiles('composer.lock') }}
+          restore-keys: ${{ runner.os }}-php81-
+
+      - name: Install dependencies
+        run: composer install --no-interaction --prefer-dist --no-progress
+
+      - name: Prepare environment file
+        run: cp .env.example .env
+
+      - name: Lint (PSR-12, php-cs-fixer)
+        run: composer lint
+
+      - name: Static analysis (PHPStan)
+        run: composer analyse
+
+      - name: Tests (PHPUnit)
+        run: composer test

@@ -2,8 +2,8 @@
 
 namespace app\Routes;
 
-use app\Core\Route;
 use app\Controllers\CategoryController;
+use app\Core\Route;
 
 class CategoryRoute extends Route
 {
