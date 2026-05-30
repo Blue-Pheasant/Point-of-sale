@@ -76,4 +76,23 @@ final class PaginationTest extends TestCase
     {
         $this->assertSame(95, Pagination::paginate(10, 1, 95)['totalCount']);
     }
+
+    public function testNeighbourPageNumbersOnMiddlePage(): void
+    {
+        $result = Pagination::paginate(10, 5, 95);
+
+        $this->assertSame(4, $result['prevPageNum']);
+        $this->assertSame(6, $result['nextPageNum']);
+    }
+
+    public function testNeighbourPageNumbersClampAtEdges(): void
+    {
+        $first = Pagination::paginate(10, 1, 95);
+        // No previous page → prevPageNum stays on the current page.
+        $this->assertSame(1, $first['prevPageNum']);
+
+        $last = Pagination::paginate(10, 10, 95);
+        // No next page → nextPageNum stays on the current page.
+        $this->assertEquals(10, $last['nextPageNum']);
+    }
 }

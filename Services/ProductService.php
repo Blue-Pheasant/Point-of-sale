@@ -110,19 +110,55 @@ class ProductService
     }
 
     /**
-     * Searches products whose name matches the given keyword, with pagination.
+     * Searches products by any combination of filters, with pagination
+     * (roadmap T23). This is the single entry point for product search/filter;
+     * it replaces the old keyword-only `findProductByKeyWord`.
      *
-     * Uses the param-bound {@see QueryBuilder} (LIKE wildcards are bound, never
-     * concatenated), so the search is safe against SQL injection.
+     * Recognised filter keys (all optional):
+     *   - `q`           keyword matched against the product name (LIKE);
+     *   - `category`    exact category id;
+     *   - `min_price`   inclusive lower price bound;
+     *   - `max_price`   inclusive upper price bound.
      *
-     * @param string $keyword The keyword to match against the product name.
+     * Every filter goes through the param-bound {@see QueryBuilder} (LIKE
+     * wildcards and bounds are bound, never concatenated), so arbitrary filter
+     * values — including injection attempts in query params — are safe.
+     *
+     * For backward compatibility a plain string is still accepted and treated
+     * as the `q` keyword.
+     *
+     * @param array<string, mixed>|string $filters The filter map (or a keyword).
      * @param array<string, mixed> $pagerCondition The pagination conditions (limit, page).
      * @return array{list: array<int, Product>, pagination: array<string, mixed>}
      */
-    public function searchProducts(string $keyword, array $pagerCondition): array
+    public function searchProducts(array|string $filters, array $pagerCondition): array
     {
+        if (is_string($filters)) {
+            $filters = ['q' => $filters];
+        }
+
+        $query = QueryBuilder::table('products')->whereRaw('deleted_at IS NULL');
+
+        $keyword = trim((string) ($filters['q'] ?? ''));
+        if ($keyword !== '') {
+            $query->whereLike('name', $keyword);
+        }
+
+        $category = (string) ($filters['category'] ?? '');
+        if ($category !== '') {
+            $query->where('category_id', $category);
+        }
+
+        if (isset($filters['min_price']) && is_numeric($filters['min_price'])) {
+            $query->whereGte('price', (int) $filters['min_price']);
+        }
+
+        if (isset($filters['max_price']) && is_numeric($filters['max_price'])) {
+            $query->whereLte('price', (int) $filters['max_price']);
+        }
+
         return Pagination::paginateResults(
-            QueryBuilder::table('products')->whereLike('name', $keyword),
+            $query,
             (int) $pagerCondition['limit'],
             (int) $pagerCondition['page'],
             fn ($item) => new Product($item)

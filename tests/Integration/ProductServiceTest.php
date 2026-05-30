@@ -73,6 +73,79 @@ final class ProductServiceTest extends IntegrationTestCase
         $this->assertSame(0, $result['pagination']['totalCount']);
     }
 
+    public function testSearchFiltersByCategory(): void
+    {
+        $this->seedCategory('cat-2', 'Tea');
+        $this->seedProduct(['id' => 'p-coffee', 'name' => 'Coffee', 'category_id' => 'cat-1']);
+        $this->seedProduct(['id' => 'p-tea', 'name' => 'Tea', 'category_id' => 'cat-2']);
+
+        $result = $this->service->searchProducts(['category' => 'cat-2'], ['limit' => 10, 'page' => 1]);
+
+        $this->assertCount(1, $result['list']);
+        $this->assertSame('p-tea', $result['list'][0]->getId());
+    }
+
+    public function testSearchFiltersByPriceRange(): void
+    {
+        $this->seedProduct(['id' => 'p-cheap', 'name' => 'Cheap', 'price' => 10000]);
+        $this->seedProduct(['id' => 'p-mid', 'name' => 'Mid', 'price' => 25000]);
+        $this->seedProduct(['id' => 'p-pricey', 'name' => 'Pricey', 'price' => 50000]);
+
+        $result = $this->service->searchProducts(
+            ['min_price' => 20000, 'max_price' => 30000],
+            ['limit' => 10, 'page' => 1]
+        );
+
+        $this->assertCount(1, $result['list']);
+        $this->assertSame('p-mid', $result['list'][0]->getId());
+    }
+
+    public function testSearchCombinesKeywordCategoryAndPrice(): void
+    {
+        $this->seedCategory('cat-2', 'Tea');
+        $this->seedProduct(['id' => 'p1', 'name' => 'Iced Coffee', 'category_id' => 'cat-1', 'price' => 25000]);
+        $this->seedProduct(['id' => 'p2', 'name' => 'Iced Coffee', 'category_id' => 'cat-2', 'price' => 25000]);
+        $this->seedProduct(['id' => 'p3', 'name' => 'Iced Coffee', 'category_id' => 'cat-1', 'price' => 90000]);
+        $this->seedProduct(['id' => 'p4', 'name' => 'Hot Coffee', 'category_id' => 'cat-1', 'price' => 25000]);
+
+        $result = $this->service->searchProducts(
+            ['q' => 'Iced', 'category' => 'cat-1', 'min_price' => 20000, 'max_price' => 30000],
+            ['limit' => 10, 'page' => 1]
+        );
+
+        $this->assertCount(1, $result['list']);
+        $this->assertSame('p1', $result['list'][0]->getId());
+    }
+
+    public function testSearchIgnoresBlankFiltersAndReturnsAllNonDeleted(): void
+    {
+        $this->seedProduct(['id' => 'p1', 'name' => 'One']);
+        $this->seedProduct(['id' => 'p2', 'name' => 'Two']);
+
+        $result = $this->service->searchProducts(
+            ['q' => '', 'category' => '', 'min_price' => null, 'max_price' => null],
+            ['limit' => 10, 'page' => 1]
+        );
+
+        $this->assertCount(2, $result['list']);
+    }
+
+    public function testSearchIsSafeAgainstInjectionInFilters(): void
+    {
+        $this->seedProduct(['id' => 'p1', 'name' => 'Latte']);
+
+        // A SQL-injection attempt in the keyword must be treated as a literal
+        // (param-bound), matching nothing — never executing as SQL.
+        $result = $this->service->searchProducts(
+            ['q' => "x' OR '1'='1"],
+            ['limit' => 10, 'page' => 1]
+        );
+
+        $this->assertSame([], $result['list']);
+        // The table is intact: a normal search still works afterwards.
+        $this->assertCount(1, $this->service->searchProducts(['q' => 'Latte'], ['limit' => 10, 'page' => 1])['list']);
+    }
+
     public function testGetAllProductsPaginatesAndExcludesSoftDeleted(): void
     {
         for ($i = 0; $i < 5; $i++) {

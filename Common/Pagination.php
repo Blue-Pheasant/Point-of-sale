@@ -42,8 +42,8 @@ class Pagination
             'totalCount' => $total,
             'hasPrev' => $hasPrev,
             'hasNext' => $hasNext,
-            'prevPageNum' => $hasPrev ?? $currentPage - 1,
-            'nextPageNum' => $hasNext ?? $currentPage + 1,
+            'prevPageNum' => $hasPrev ? $currentPage - 1 : $currentPage,
+            'nextPageNum' => $hasNext ? $currentPage + 1 : $currentPage,
             'lastPageNum' => $totalPage,
         ];
     }

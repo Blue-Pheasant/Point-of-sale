@@ -130,6 +130,34 @@ class QueryBuilder
     }
 
     /**
+     * Adds a `column >= value` WHERE condition with the value bound.
+     *
+     * @param string $column The column to compare.
+     * @param mixed $value The lower bound to bind.
+     * @return self
+     */
+    public function whereGte(string $column, mixed $value): self
+    {
+        $placeholder = $this->bind($value);
+        $this->wheres[] = "$column >= :$placeholder";
+        return $this;
+    }
+
+    /**
+     * Adds a `column <= value` WHERE condition with the value bound.
+     *
+     * @param string $column The column to compare.
+     * @param mixed $value The upper bound to bind.
+     * @return self
+     */
+    public function whereLte(string $column, mixed $value): self
+    {
+        $placeholder = $this->bind($value);
+        $this->wheres[] = "$column <= :$placeholder";
+        return $this;
+    }
+
+    /**
      * Adds a raw WHERE fragment with optional bound parameters. Use only for
      * fragments that contain no caller-supplied values, or pass values through
      * the $params map so they are bound (never concatenated).

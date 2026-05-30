@@ -3,6 +3,7 @@
 use app\Core\Application;
 use app\Models\User;
 use app\Routes\AdminRoute;
+use app\Routes\ApiRoute;
 use app\Routes\AuthRoute;
 use app\Routes\CategoryRoute;
 use app\Routes\CustomerRoute;
@@ -53,6 +54,9 @@ $app->useRoute(OrderRoute::class);
 
 // payment
 $app->useRoute(PaymentRoute::class);
+
+// JSON REST API
+$app->useRoute(ApiRoute::class);
 
 // Bootstrap the application
 $app->bootstrap();

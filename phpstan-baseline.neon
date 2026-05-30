@@ -6,16 +6,6 @@ parameters:
 			path: Auth/AuthUser.php
 
 		-
-			message: "#^Variable \\$hasNext on left side of \\?\\? always exists and is not nullable\\.$#"
-			count: 1
-			path: Common/Pagination.php
-
-		-
-			message: "#^Variable \\$hasPrev on left side of \\?\\? always exists and is not nullable\\.$#"
-			count: 1
-			path: Common/Pagination.php
-
-		-
 			message: "#^Method app\\\\Controllers\\\\CartController\\:\\:deleteItem\\(\\) invoked with 2 parameters, 1 required\\.$#"
 			count: 3
 			path: Controllers/CartController.php
