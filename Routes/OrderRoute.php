@@ -2,8 +2,8 @@
 
 namespace app\Routes;
 
-use app\Core\Route;
 use app\Controllers\OrderController;
+use app\Core\Route;
 
 class OrderRoute extends Route
 {
@@ -25,7 +25,7 @@ class OrderRoute extends Route
         $this->get('/admin/orders/rejected/details', [OrderController::class, 'details']);
         $this->get('/admin/orders/accepted/delete', [OrderController::class, 'delete']);
         $this->get('/admin/orders/accepted/details', [OrderController::class, 'details']);
-        
+
         $this->post('/admin/orders/accepted', [OrderController::class, 'accepted']);
         $this->post('/admin/orders/rejected', [OrderController::class, 'rejected']);
     }

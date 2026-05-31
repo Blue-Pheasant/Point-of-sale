@@ -2,8 +2,8 @@
 
 namespace app\Routes;
 
-use app\Core\Route;
 use app\Controllers\AuthController;
+use app\Core\Route;
 
 class AuthRoute extends Route
 {

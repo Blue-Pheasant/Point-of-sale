@@ -84,12 +84,12 @@ class Field
                 </div>
             </div>
         ',
-            $this->model->getLabel($this->attribute),
-            $this->type,
-            $this->attribute,
-            $this->model->{$this->attribute},
+            htmlspecialchars((string) $this->model->getLabel($this->attribute), ENT_QUOTES, 'UTF-8'),
+            htmlspecialchars($this->type, ENT_QUOTES, 'UTF-8'),
+            htmlspecialchars($this->attribute, ENT_QUOTES, 'UTF-8'),
+            htmlspecialchars((string) ($this->model->{$this->attribute} ?? ''), ENT_QUOTES, 'UTF-8'),
             $this->model->hasError($this->attribute) ? ' is-invalid' : '',
-            $this->model->getFirstError($this->attribute)
+            htmlspecialchars((string) ($this->model->getFirstError($this->attribute) ?: ''), ENT_QUOTES, 'UTF-8')
         );
     }
 

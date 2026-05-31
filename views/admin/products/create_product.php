@@ -26,6 +26,14 @@
               <label for="image_url">Địa chỉ hình ảnh</label>
               <input type="text" class="form-control" id="image_url" name="image_url" placeholder="Địa chỉ hình ảnh">
             </div>
+            <div class="form-group col-md-4">
+              <label for="stock_quantity">Tồn kho</label>
+              <input type="number" min="0" class="form-control" id="stock_quantity" name="stock_quantity" placeholder="Số lượng tồn kho" value="0">
+            </div>
+            <div class="form-group col-md-4">
+              <label for="low_stock_threshold">Ngưỡng sắp hết</label>
+              <input type="number" min="0" class="form-control" id="low_stock_threshold" name="low_stock_threshold" placeholder="Ngưỡng cảnh báo sắp hết" value="0">
+            </div>
             <div class="form-row">
               <div class="form-group col-md-12">
                 <label for="description">Mô tả sản phẩm</label>

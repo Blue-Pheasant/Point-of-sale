@@ -2,8 +2,8 @@
 
 namespace app\Routes;
 
-use app\Core\Route;
 use app\Controllers\StoreController;
+use app\Core\Route;
 
 class StoreRoute extends Route
 {
@@ -17,7 +17,7 @@ class StoreRoute extends Route
         $this->get('/admin/stores/edit', [StoreController::class, 'update']);
         $this->get('/admin/stores/add', [StoreController::class, 'add']);
         $this->get('/admin/stores/details', [StoreController::class, 'details']);
-        
+
         $this->post('/admin/stores/delete', [StoreController::class, 'delete']);
         $this->post('/admin/stores/edit', [StoreController::class, 'update']);
         $this->post('/admin/stores/add', [StoreController::class, 'add']);

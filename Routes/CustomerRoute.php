@@ -2,11 +2,10 @@
 
 namespace app\Routes;
 
-use app\Core\Route;
-use app\Controllers\StoreController;
-use app\Controllers\SiteController;
-use app\Controllers\MenuController;
 use app\Controllers\CartController;
+use app\Controllers\MenuController;
+use app\Controllers\SiteController;
+use app\Core\Route;
 
 class CustomerRoute extends Route
 {

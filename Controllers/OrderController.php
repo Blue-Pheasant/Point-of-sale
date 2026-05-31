@@ -1,17 +1,18 @@
 <?php
+
 /*
     controllers/category/index.php
 */
 
 namespace app\Controllers;
 
+use app\Auth\AuthUser;
 use app\Core\Controller;
 use app\Core\Request;
+use app\Middlewares\AdminMiddleware;
+use app\Middlewares\AuthMiddleware;
 use app\Models\Order;
 use app\Services\OrderService;
-use app\Middlewares\AuthMiddleware;
-use app\Middlewares\AdminMiddleware;
-use app\Auth\AuthUser;
 
 /**
  * Class OrderController
@@ -34,12 +35,12 @@ class OrderController extends Controller
      *
      * Initializes the services and registers the middleware.
      */
-    public function __construct()
+    public function __construct(OrderService $orderService)
     {
-        $this->orderService = new OrderService();
+        $this->orderService = $orderService;
         $this->registerMiddleware(AuthMiddleware::class, ['orderDetail', 'clear']);
         $this->registerMiddleware(
-            AdminMiddleware::class, 
+            AdminMiddleware::class,
             ['index', 'accept', 'reject', 'accepted', 'rejected', 'delete', 'details', 'orderDetails']
         );
     }
@@ -57,7 +58,7 @@ class OrderController extends Controller
 
         $this->setLayout('admin');
         return $this->render('/admin/orders/orders', [
-            'orders' => $orders
+            'orders' => $orders,
         ]);
     }
 
@@ -73,8 +74,8 @@ class OrderController extends Controller
         $userId = AuthUser::authUser()->id;
         $orders = $this->orderService->getOrderByUserId($userId);
 
-        foreach($orders as $key => $order) {
-            if($order->display == 'none') {
+        foreach ($orders as $key => $order) {
+            if ($order->display == 'none') {
                 unset($orders[$key]);
             }
         }
@@ -93,14 +94,14 @@ class OrderController extends Controller
      * @return void
      */
     public function accept(Request $request): void
-    {   
+    {
         $orderId = $request->getParam('id');
         $orderModel = $this->orderService->getOrderById($orderId);
-        if($request->getMethod() === 'get') {
+        if ($request->getMethod() === 'get') {
             $orderModel->setStatus('done');
             $orderModel->update();
             $this->back();
-        } 
+        }
     }
 
     /**
@@ -115,7 +116,7 @@ class OrderController extends Controller
     {
         $orderId = $request->getParam('id');
         $orderModel = $this->orderService->getOrderById($orderId);
-        if($request->getMethod() === 'get') {
+        if ($request->getMethod() === 'get') {
             $orderModel->setStatus('cancel');
             $orderModel->update();
             $this->back();
@@ -130,12 +131,12 @@ class OrderController extends Controller
      * @return array|bool|string
      */
     public function accepted(): array|bool|string
-    {   
+    {
         $orders = Order::getAllOrders('done');
-        
+
         $this->setLayout('admin');
         return $this->render('/admin/orders/accept_orders', [
-            'orders' => $orders
+            'orders' => $orders,
         ]);
     }
 
@@ -152,7 +153,7 @@ class OrderController extends Controller
 
         $this->setLayout('admin');
         return $this->render('/admin/orders/reject_orders', [
-            'orders' => $orders
+            'orders' => $orders,
         ]);
     }
 
@@ -168,7 +169,7 @@ class OrderController extends Controller
     {
         $orderId = $request->getParam('id');
         $orderModel = $this->orderService->getOrderById($orderId);
-        if($request->getMethod() === 'get') {
+        if ($request->getMethod() === 'get') {
             $orderModel->delete();
             $this->back();
         }
@@ -189,7 +190,7 @@ class OrderController extends Controller
 
         $this->setLayout('admin');
         return $this->render('/admin/orders/details_order', [
-            'orders' => $orderModel
+            'orders' => $orderModel,
         ]);
     }
 
@@ -204,9 +205,9 @@ class OrderController extends Controller
     {
         $userId = AuthUser::authUser()->id;
         $orders = $this->orderService->getOrderByUserId($userId);
-        
-        foreach($orders as $order) {
-            if($order->getStatus() == 'done'|| $order->getStatus() == 'cancel') {
+
+        foreach ($orders as $order) {
+            if ($order->getStatus() == 'done' || $order->getStatus() == 'cancel') {
                 $order->setDisplay('none');
                 $order->update($order);
             }
@@ -229,12 +230,12 @@ class OrderController extends Controller
         $user = AuthUser::authUser();
         $orderId = $request->getParam('id');
         $order = $this->orderService->getOrderById($orderId);
-        $items =$this->orderService->getOrderItemsByOrderId($orderId);
+        $items = $this->orderService->getOrderItemsByOrderId($orderId);
 
         return $this->render('order_detail', [
             'order' => $order,
             'user' => $user,
-            'items' => $items
+            'items' => $items,
         ]);
     }
 
@@ -253,7 +254,7 @@ class OrderController extends Controller
 
         $this->setLayout('admin');
         return $this->render('/admin/orders/details', [
-            'model' => $items
+            'model' => $items,
         ]);
     }
 }

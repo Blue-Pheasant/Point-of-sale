@@ -79,14 +79,14 @@ use app\Models\CartItem;
                     foreach ($params['products'] as $param) {
                         echo '
                         <div class="col-xl-3 col-md-6 col-sm-4 col-12 wrapper_product">
-                            <a href="/product?id=' . $param->getId() . '">
+                            <a href="/product?id=' . e($param->getId()) . '">
                                 <div class="item-card product">
-                                    <img src="' . $param->image_url . '" alt=""
+                                    <img src="' . e($param->image_url) . '" alt=""
                                         class="item-image" />
                                     <div class="item-info">
-                                        <p class="item-name">' . $param->name . '</p>
+                                        <p class="item-name">' . e($param->name) . '</p>
                                         <div class="item-footer">
-                                            <p>' . $param->price . '</p>
+                                            <p>' . e($param->price) . '</p>
                                             <div class="item-button">
                                                 <img class="item-button-image"
                                                     src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIHZpZXdCb3g9IjAgMCAxNiAxNiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTYuODU3MTQgNi44NTcxNFYwSDkuMTQyODZWNi44NTcxNEgxNlY5LjE0Mjg2SDkuMTQyODZWMTZINi44NTcxNFY5LjE0Mjg2SDBWNi44NTcxNEg2Ljg1NzE0WiIgZmlsbD0id2hpdGUiLz4KPC9zdmc+Cg=="
@@ -115,43 +115,38 @@ use app\Models\CartItem;
             <?php
             foreach ($params['items'] as $parameter) {
                 echo '<div class="cart-page-item">
-                    <form method="post" action="/update?cart_item_id=' . $parameter->id . '">
-                        <div class="container">
+                    <form method="post" action="/update?cart_item_id=' . e($parameter->id) . '">'
+                    . csrf_field() .
+                    '<div class="container">
                             <div class="row">
                                 <div class="col-lg-2 col-md-3 col-sm-3 col-2 img_sp">
                                     <img class="cart-page__item-image"
-                                        src="' . $parameter->image_url . '" />
+                                        src="' . e($parameter->image_url) . '" />
                                 </div>
                                 <div class="col-lg-6 col-md-5 col-sm-4 col-5 name">
                                     <div class="name_sp">
-                                        <h6>' . $parameter->name . ' </h6>
+                                        <h6>' . e($parameter->name) . ' </h6>
                                     </div>
                                 </div>
                                 <div class="col-lg-3 col-md-3 col-sm-8 col-8">
                                     <div class="product-detail-footer">
                                         <div class="product-detail-footer-quantity">
-                                            <h6> 
-                                                ' . $parameter->quantity . ' 
-                                            </h6>
+                                            <h6>' . e($parameter->quantity) . '</h6>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-lg-1 col-md-1 col-sm-2 col-1">
-                                    <a href="/cart?action=deletemenu&id=' . $parameter->id . '">
+                                    <a href="/cart?action=deletemenu&id=' . e($parameter->id) . '">
                                         <img src="/images/delete.svg" class="cart-page__delete" />
                                     </a>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-lg-4 col-sm-6 col-6">
-                                    <h6>
-                                        ' . number_format($parameter->price, 0, ',', '.') . ' đ 
-                                    </h6>
+                                    <h6>' . number_format((float) $parameter->price, 0, ',', '.') . ' đ</h6>
                                 </div>
                                 <div class="col-lg-4 col-sm-6 col-6">
-                                    <h6>
-                                        ' . $parameter->size . ' 
-                                    </h6>
+                                    <h6>' . e($parameter->size) . '</h6>
                                 </div>
                             </div>
                         </div>

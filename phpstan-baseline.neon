@@ -1,0 +1,136 @@
+parameters:
+	ignoreErrors:
+		-
+			message: "#^Cannot access property \\$role on bool\\|object\\.$#"
+			count: 1
+			path: Auth/AuthUser.php
+
+		-
+			message: "#^Method app\\\\Controllers\\\\CartController\\:\\:deleteItem\\(\\) invoked with 2 parameters, 1 required\\.$#"
+			count: 3
+			path: Controllers/CartController.php
+
+		-
+			message: "#^Property app\\\\Controllers\\\\MenuController\\:\\:\\$productService is never read, only written\\.$#"
+			count: 1
+			path: Controllers/MenuController.php
+
+		-
+			message: "#^Method app\\\\Core\\\\Controller\\:\\:back\\(\\) should return array\\|bool\\|string but returns null\\.$#"
+			count: 1
+			path: Core/Controller.php
+
+		-
+			message: "#^Method app\\\\Core\\\\Controller\\:\\:intended\\(\\) should return array\\|bool\\|string but returns null\\.$#"
+			count: 1
+			path: Core/Controller.php
+
+		-
+			message: "#^Method app\\\\Core\\\\Controller\\:\\:redirect\\(\\) should return array\\|bool\\|string but returns null\\.$#"
+			count: 1
+			path: Core/Controller.php
+
+		-
+			message: "#^Method app\\\\Core\\\\Controller\\:\\:refresh\\(\\) should return array\\|bool\\|string but returns null\\.$#"
+			count: 1
+			path: Core/Controller.php
+
+		-
+			message: "#^Method app\\\\Core\\\\Controller\\:\\:setFlash\\(\\) should return array\\|bool\\|string but returns null\\.$#"
+			count: 1
+			path: Core/Controller.php
+
+		-
+			message: "#^Result of method app\\\\Core\\\\Response\\:\\:back\\(\\) \\(void\\) is used\\.$#"
+			count: 1
+			path: Core/Controller.php
+
+		-
+			message: "#^Result of method app\\\\Core\\\\Response\\:\\:redirect\\(\\) \\(void\\) is used\\.$#"
+			count: 2
+			path: Core/Controller.php
+
+		-
+			message: "#^Result of method app\\\\Core\\\\Router\\:\\:intended\\(\\) \\(void\\) is used\\.$#"
+			count: 1
+			path: Core/Controller.php
+
+		-
+			message: "#^Result of method app\\\\Core\\\\Session\\:\\:setFlash\\(\\) \\(void\\) is used\\.$#"
+			count: 1
+			path: Core/Controller.php
+
+		-
+			message: "#^PHPDoc tag @var above a method has no effect\\.$#"
+			count: 2
+			path: Core/Form/Form.php
+
+		-
+			message: "#^Access to an undefined property app\\\\Models\\\\Cart\\:\\:\\$records\\.$#"
+			count: 1
+			path: Models/Cart.php
+
+		-
+			message: "#^Access to an undefined property app\\\\Models\\\\CartItem\\:\\:\\$price\\.$#"
+			count: 1
+			path: Models/CartItem.php
+
+		-
+			message: "#^Access to an undefined property app\\\\Models\\\\CartItem\\:\\:\\$size\\.$#"
+			count: 1
+			path: Models/CartItem.php
+
+		-
+			message: "#^Cannot access property \\$id on object\\|true\\.$#"
+			count: 3
+			path: Models/LoginForm.php
+
+		-
+			message: "#^Cannot access property \\$password on object\\|true\\.$#"
+			count: 1
+			path: Models/LoginForm.php
+
+		-
+			message: "#^Access to an undefined property app\\\\Models\\\\OrderItem\\:\\:\\$list\\.$#"
+			count: 1
+			path: Models/OrderItem.php
+
+		-
+			message: "#^Access to an undefined property app\\\\Models\\\\OrderItem\\:\\:\\$status\\.$#"
+			count: 1
+			path: Models/OrderItem.php
+
+		-
+			message: "#^Access to an undefined property app\\\\Models\\\\Store\\:\\:\\$name\\.$#"
+			count: 1
+			path: Models/Store.php
+
+		-
+			message: "#^Method app\\\\Models\\\\Store\\:\\:setAddress\\(\\) is unused\\.$#"
+			count: 1
+			path: Models/Store.php
+
+		-
+			message: "#^Method app\\\\Models\\\\Store\\:\\:setHotline\\(\\) is unused\\.$#"
+			count: 1
+			path: Models/Store.php
+
+		-
+			message: "#^Method app\\\\Models\\\\Store\\:\\:setId\\(\\) is unused\\.$#"
+			count: 1
+			path: Models/Store.php
+
+		-
+			message: "#^Method app\\\\Models\\\\Store\\:\\:setOpentime\\(\\) is unused\\.$#"
+			count: 1
+			path: Models/Store.php
+
+		-
+			message: "#^Method app\\\\Models\\\\Store\\:\\:setStatus\\(\\) is unused\\.$#"
+			count: 1
+			path: Models/Store.php
+
+		-
+			message: "#^Property app\\\\Core\\\\DBModel\\:\\:\\$id \\(string\\) does not accept int\\.$#"
+			count: 1
+			path: Services/ProductService.php

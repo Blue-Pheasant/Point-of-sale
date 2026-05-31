@@ -2,20 +2,19 @@
 
 namespace app\Models;
 
-use app\Core\Database;
 use app\Core\DBModel;
 
 class Category extends DBModel
 {
     public string $id;
     public string $name;
-    
+
     public function __construct($attributes = [])
     {
         parent::__construct($attributes);
     }
 
-    public function getName() 
+    public function getName()
     {
         return $this->name;
     }
@@ -34,7 +33,7 @@ class Category extends DBModel
     {
         return $this->labels()[$attribute];
     }
-    
+
     public static function tableName(): string
     {
         return 'categories';
@@ -45,7 +44,7 @@ class Category extends DBModel
         return ['id', 'name'];
     }
 
-    
+
     public function labels(): array
     {
         return [
@@ -56,22 +55,16 @@ class Category extends DBModel
     public function rules(): array
     {
         return [
-            'name' => [self::RULE_REQUIRED, [self::RULE_MAX, 'max' <= 30]],
+            'name' => [self::RULE_REQUIRED, [self::RULE_MAX, 'max' => 30]],
         ];
-    }
-
-    public function save(): bool
-    {
-        $this->id = uniqid();
-        return parent::save();
     }
 
     public static function get($id)
     {
-        $db = Database::getInstance();
-        $req = $db->query("SELECT * FROM categories WHERE id = '$id'");
-        $item = $req->fetchAll()[0];
-        $categories = new Category($item);
-        return $categories;
-    } 
+        $row = \app\Common\QueryBuilder::table('categories')
+            ->where('id', $id)
+            ->first();
+
+        return new Category($row ?? []);
+    }
 }

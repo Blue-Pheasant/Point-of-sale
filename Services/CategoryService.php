@@ -3,20 +3,17 @@
 namespace app\Services;
 
 use app\Models\Category;
-use app\Core\Database;
 use PDO;
 
 class CategoryService
 {
-    private PDO $db;
-    public function __construct()
+    public function __construct(private PDO $db)
     {
-        $this->db = Database::getInstance();
     }
 
-    public function getAllCategories() : array
+    public function getAllCategories(): array
     {
-        $req = $this->db->query("SELECT * FROM categories WHERE deleted_at IS NULL")->fetchAll();
+        $req = $this->db->query('SELECT * FROM categories WHERE deleted_at IS NULL')->fetchAll();
         $list = [];
 
         foreach ($req as $item) {
@@ -28,12 +25,12 @@ class CategoryService
 
     public function getCategoryById($id): ?Category
     {
-        $stmt = $this->db->prepare("SELECT * FROM categories WHERE id = :id AND deleted_at IS NULL LIMIT 1");
+        $stmt = $this->db->prepare('SELECT * FROM categories WHERE id = :id AND deleted_at IS NULL LIMIT 1');
         $stmt->bindValue(':id', $id, PDO::PARAM_STR);
         $stmt->execute();
-    
+
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
-    
+
         return $result ? new Category($result) : null;
     }
 }

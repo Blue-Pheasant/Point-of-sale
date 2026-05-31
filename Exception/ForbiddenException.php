@@ -1,16 +1,9 @@
 <?php
 
 namespace app\Exception;
-use app\Core\Application;
 
-class ForbiddenException extends \Exception
+class ForbiddenException extends \RuntimeException
 {
-    protected $message = 'You don\'t have permission to access this page';
-    protected $code = 403;
-
-    public function __construct()
-    {
-        Application::$app->controller->layout = 'auth';
-        Application::$app->response->redirect('/error');
-    }
+    protected $message = "You don't have permission to access this page";
+    protected $code    = 403;
 }

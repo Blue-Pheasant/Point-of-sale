@@ -1,14 +1,16 @@
 <?php
 
 namespace app\Exception;
-use app\Core\Application;
 
-class ForLoginException extends \Exception
+class ForLoginException extends \RuntimeException
 {
-    public function __construct()
+    public function __construct(string $intended = '')
     {
-        $intended = Application::$app->request->getRequest();
-        Application::$app->router->setIntendedUrl($intended);
-        Application::$app->response->redirect('/login');
+        $this->message = 'Authentication required';
+        parent::__construct($this->message, 401);
+
+        if ($intended !== '') {
+            \app\Core\Application::$app->session->set('url.intended', $intended);
+        }
     }
 }

@@ -33,16 +33,16 @@ $user = AuthUser::authUser();
               foreach ($params['users'] as $userModel) { 
             ?>
               <tr>
-                <td><?=$userModel->getId()?></td>
-                <td><?=$userModel->getName()?></td>
-                <td><?=$userModel->getEmail()?></td>
-                <td><?=$userModel->getPhoneNumer()?></td>
-                <td><?=$userModel->getRole()?></td>
-                <td><?=$userModel->getAddress()?></td>
+                <td><?= e($userModel->getId()) ?></td>
+                <td><?= e($userModel->getName()) ?></td>
+                <td><?= e($userModel->getEmail()) ?></td>
+                <td><?= e($userModel->getPhoneNumer()) ?></td>
+                <td><?= e($userModel->getRole()) ?></td>
+                <td><?= e($userModel->getAddress()) ?></td>
                 <td>
-                  <a class="fa fa-eye btn btn-info btn-sm" href="/admin/users/details?id=<?=$userModel->getId()?>"></a>
-                  <a class="fa fa-pencil btn btn-warning btn-sm" href="/admin/users/edit?id=<?=$userModel->getId()?>"></a>
-                  <a class="fa fa-trash btn btn-danger btn-sm" href="/admin/users/delete?id=<?=$userModel->getId()?>"></a>
+                  <a class="fa fa-eye btn btn-info btn-sm" href="/admin/users/details?id=<?= e($userModel->getId()) ?>"></a>
+                  <a class="fa fa-pencil btn btn-warning btn-sm" href="/admin/users/edit?id=<?= e($userModel->getId()) ?>"></a>
+                  <a class="fa fa-trash btn btn-danger btn-sm" href="/admin/users/delete?id=<?= e($userModel->getId()) ?>"></a>
                 </td>
               </tr>
             <?php 

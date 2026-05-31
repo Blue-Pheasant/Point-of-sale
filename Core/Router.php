@@ -3,178 +3,190 @@
 namespace app\Core;
 
 /**
- * Class Router
+ * Resolves the incoming request to a route. Supports dynamic path parameters
+ * (`/{id}`), the GET/POST/PUT/PATCH/DELETE verbs (with `_method` spoofing for
+ * HTML forms), and a per-route middleware pipeline that runs BEFORE the action.
  *
- * This class is responsible for handling the routes of the application.
- * It uses the Request and Response classes to get the request and response of the application.
+ * Render logic is fully delegated to {@see View} — no duplicate layout/content
+ * rendering lives here.
  *
  * @package app\Core
  */
 class Router
 {
     /**
-     * @var array $routes The routes of the application.
+     * @var array<string, array<int, array{path: string, callback: mixed, middleware: array<int, array{0: string, 1: array<int, string>}>}>>
      */
     protected array $routes = [];
 
-    /**
-     * @var Request $request The request instance.
-     */
-    public Request $request;
+    private const METHODS = ['get', 'post', 'put', 'patch', 'delete'];
 
-    /**
-     * @var Response $response The response instance.
-     */
+    public Request  $request;
     public Response $response;
 
-    /**
-     * Router constructor.
-     *
-     * Initializes the request, response, and routes of the application.
-     *
-     * @param Request $request The request instance.
-     * @param Response $response The response instance.
-     */
     public function __construct(Request $request, Response $response)
     {
-        $this->request = $request;
+        $this->request  = $request;
         $this->response = $response;
-        $this->routes['get'] = [];
-        $this->routes['post'] = [];
+        foreach (self::METHODS as $method) {
+            $this->routes[$method] = [];
+        }
     }
 
-    /**
-     * Method get
-     *
-     * Adds a GET route to the application.
-     *
-     * @param array $routes The routes to add to the application.
-     */
+    /** @param array<string, array<int, mixed>> $routes */
     public function register(array $routes): void
     {
-        $this->routes['get'] = array_merge($this->routes['get'], $routes['get']);
-        $this->routes['post'] = array_merge($this->routes['post'], $routes['post']);
+        foreach (self::METHODS as $method) {
+            if (!empty($routes[$method])) {
+                $this->routes[$method] = array_merge($this->routes[$method], $routes[$method]);
+            }
+        }
     }
 
-    /**
-     * Method get
-     *
-     * Adds a GET route to the application.
-     *
-     * @param string $url The URL of the route.
-     */
     public function setIntendedUrl(string $url): void
     {
         Application::$app->session->set('url.intended', $url);
     }
 
-    /**
-     * Method get
-     *
-     * Adds a GET route to the application.
-     *
-     * @param string $default The default path of the route.
-     */
     public function intended(string $default = '/'): void
     {
         $path = Application::$app->session->get('url.intended');
-        if(isset($path) && strlen($path) > 0) {
+        if (isset($path) && strlen($path) > 0) {
             Application::$app->response->redirect($path);
         }
         Application::$app->response->redirect($default);
     }
 
-    /**
-     * Method get
-     *
-     * Adds a GET route to the application.
-     *
-     * @return mixed
-     */
     public function resolve(): mixed
     {
-        $path = $this->request->getPath();
+        $path   = $this->request->getPath();
         $method = $this->request->getMethod();
-        $callback = $this->routes[$method][$path] ?? false;
-        if ($callback === false) {
-            $this->response->setStateCode(404);
-            Application::$app->controller->layout = 'auth';
-            return $this->renderView('_404');
+
+        $match = $this->matchRoute($method, $path);
+        if ($match !== null) {
+            return $this->runRoute($match['route'], $match['params']);
         }
+
+        if ($this->pathExistsForOtherMethod($method, $path)) {
+            return $this->abort(405, '_404');
+        }
+
+        return $this->abort(404, '_404');
+    }
+
+    /**
+     * @return array{route: array{path: string, callback: mixed, middleware: array<int, array{0: string, 1: array<int, string>}>}, params: array<string, string>}|null
+     */
+    private function matchRoute(string $method, string $path): ?array
+    {
+        foreach ($this->routes[$method] ?? [] as $route) {
+            $params = $this->matchPath($route['path'], $path);
+            if ($params !== null) {
+                return ['route' => $route, 'params' => $params];
+            }
+        }
+        return null;
+    }
+
+    private function pathExistsForOtherMethod(string $currentMethod, string $path): bool
+    {
+        foreach (self::METHODS as $method) {
+            if ($method === $currentMethod) {
+                continue;
+            }
+            if ($this->matchRoute($method, $path) !== null) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /** @return array<string, string>|null */
+    private function matchPath(string $pattern, string $path): ?array
+    {
+        if (!str_contains($pattern, '{')) {
+            return rtrim($pattern, '/') === rtrim($path, '/') ? [] : null;
+        }
+
+        preg_match_all('#\{([a-zA-Z_][a-zA-Z0-9_]*)\}#', $pattern, $nameMatches);
+        $names = $nameMatches[1];
+
+        $regex = preg_replace('#\{[a-zA-Z_][a-zA-Z0-9_]*\}#', '([^/]+)', $pattern);
+        $regex = '#^' . rtrim((string) $regex, '/') . '/?$#';
+
+        if (preg_match($regex, rtrim($path, '/'), $matches)) {
+            array_shift($matches);
+            return array_combine($names, array_values($matches));
+        }
+
+        return null;
+    }
+
+    /** @param array<string, string> $params */
+    private function runRoute(array $route, array $params): mixed
+    {
+        $this->request->setRouteParams($params);
+
+        $callback = $route['callback'];
+
         if (is_string($callback)) {
             return $this->renderView($callback);
         }
-        if (is_array($callback)) {
-            Application::$app->controller->action = $callback[1];
-            Application::$app->controller = new $callback[0]();
 
-            $callback[0] = Application::$app->controller;
+        [$controllerClass, $action] = $callback;
+
+        Application::$app->controller->action = $action;
+        $this->runMiddleware($route['middleware'], $action);
+
+        $controller = Application::$app->container->make($controllerClass);
+        if (!$controller instanceof Controller) {
+            throw new \RuntimeException(
+                sprintf('Route controller "%s" must extend %s.', (string) $controllerClass, Controller::class)
+            );
         }
-        return call_user_func($callback, $this->request);
+        Application::$app->controller = $controller;
+        $controller->action = $action;
+
+        return call_user_func([$controller, $action], $this->request, ...array_values($params));
     }
 
-    /**
-     * Method renderView
-     *
-     * Render view with params.
-     *
-     * @param $view
-     * @param array $params
-     * @return array|bool|string
-     */
-    public function renderView($view, array $params = []): array|bool|string
+    /** @param array<int, array{0: string, 1: array<int, string>}> $middleware */
+    private function runMiddleware(array $middleware, string $action): void
     {
-        $layoutContent = $this->layoutContent();
-        $viewContent = $this->renderViewContent($view, $params);
-        // param = [[],[]]
-        return str_replace('{{content}}', $viewContent, $layoutContent);
-    }
-
-    /**
-     * Method layoutContent
-     *
-     * Renders the layout content.
-     *
-     * @return bool|string The layout content.
-     */
-    protected function layoutContent(): bool|string
-    {
-        $layout = Application::$app->controller->layout;
-        ob_start();
-        include_once __DIR__ . "/../views/layouts/$layout.php";
-        return ob_get_clean();
-    }
-
-    /**
-     * Method renderViewContent
-     *
-     * Renders the content of the view.
-     *
-     * @param $view
-     * @param array $params
-     * @return array|bool|string
-     */
-    protected function renderViewContent($view, array $params = []): array|bool|string
-    {
-        foreach ($params as $key => $param) {
-            $$key = $param;
+        foreach ($middleware as [$middlewareClass, $actions]) {
+            $scoped   = empty($actions) ? [$action] : $actions;
+            $instance = Application::$app->container->make($middlewareClass, ['actions' => $scoped]);
+            if (!$instance instanceof Middleware) {
+                throw new \RuntimeException(
+                    sprintf('Middleware "%s" must extend %s.', $middlewareClass, Middleware::class)
+                );
+            }
+            $instance->execute();
         }
-        ob_start();
-        include_once Application::$ROOT_DIR . "/views/$view.php";
-        return ob_get_clean();
+    }
+
+    private function abort(int $status, string $view): string
+    {
+        $this->response->setStatusCode($status);
+        Application::$app->controller->layout = 'auth';
+        return $this->renderView($view);
     }
 
     /**
-     * Method renderContent
+     * Render a view inside the active layout — delegates to View.
      *
-     * Renders the content of the view.
-     *
-     * @param $viewContent
-     * @return array|bool|string
+     * @param array<string, mixed> $params
      */
-    public function renderContent($viewContent): array|bool|string
+    public function renderView(string $view, array $params = []): string
     {
-        $layoutContent = $this->layoutContent();
-        return str_replace('{{content}}', $viewContent, $layoutContent);
+        return Application::$app->view->renderView($view, $params);
+    }
+
+    /**
+     * Render pre-built content inside the active layout — delegates to View.
+     */
+    public function renderContent(string $viewContent): string
+    {
+        return Application::$app->view->renderContent($viewContent);
     }
 }

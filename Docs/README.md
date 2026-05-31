@@ -15,6 +15,9 @@ This project was inspired by the Laravel framework, which is one of the most pop
 
 # Summary
 
+- Tasks (Roadmap)
+    * [Optimize Core → Lightweight Framework (T01–T23)](Tasks/README.md)
+
 - Architecture
     * [Architecture](architecture/architecture.md)  
     * [Design patterns](architecture/design-patterns.md)

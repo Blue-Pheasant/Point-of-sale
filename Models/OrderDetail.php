@@ -2,9 +2,6 @@
 
 namespace app\Models;
 
-use app\Core\CartModel;
-use app\Core\Controller;
-use app\Core\Database;
 use app\Core\DBModel;
 
 class OrderDetail extends DBModel
@@ -40,17 +37,17 @@ class OrderDetail extends DBModel
                 'order_id' => 'Order ID',
                 'quantity' => 'Quantity',
                 'note' => 'Note',
-                'size' => 'Size'
+                'size' => 'Size',
             ];
     }
 
     public function rules(): array
     {
-        return [];
-    }
-
-    public function save(): bool
-    {
-        return parent::save();
+        return [
+            'product_id' => [self::RULE_REQUIRED],
+            'order_id'   => [self::RULE_REQUIRED],
+            'size'       => [self::RULE_REQUIRED],
+            'quantity'   => [self::RULE_REQUIRED, [self::RULE_MIN_VALUE, 'minint' => 1]],
+        ];
     }
 }
